@@ -25,24 +25,12 @@ country <- data |>
   distinct()
 
 # complete the data using complete function for the missing year
-complete <- data |>
+osiris <- data |>
   select(-country) |>
   complete(year, firmID) |>
-  left_join(country)
-
-# rank the sales
-rank <- data |>
-  group_by(year) |>
-  mutate(rank = as.integer(rank(-sales)),
-         percentile = rank(-sales)/length(sales)) |>
-  ungroup()
-
-# join the table to get
-osiris <- complete |>
-  left_join(rank) |>
+  left_join(country) |>
   mutate_if(is.numeric, ~replace_na(., 0)) |>
   relocate(country, .after = firmID)
 
 
 usethis::use_data(osiris, overwrite = TRUE)
-
