@@ -13,9 +13,8 @@ raw_data <- read_csv("data-raw/osiris2021-sample1000.csv")
 
 # Prepare the data --------------------------------------------------------
 
-# filter the data with sales record in selected period (2009 - 2018)
+# select the relevant variable and remove 0 and NA value
 data <- raw_data |>
-  filter(year >= 2009 & year < 2019) |>
   select(year, country, firmID, sales) |>
   filter(!is.na(sales) & sales != 0)
 
