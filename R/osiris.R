@@ -1,8 +1,8 @@
 #'Osiris firm sales data
 #'
 #'The Osiris dataset contains information on listed, and major unlisted/delisted
-#'companies across the world from 2009-2018. This dataset only includes the year,
-#'firmID, country, and sales variables from the full Osiris dataset to give the user
+#'companies across the world. This dataset only includes the year, firmID,
+#'country, and sales variables from the full Osiris dataset to give the user
 #'an example of the dataset format.
 #'
 #'@format A data frame with 7,270 rows and 4 variables
