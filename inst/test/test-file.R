@@ -49,3 +49,4 @@ full_data <- osiris |>
   ),
   japan = ifelse(country == "JP", "Yes", "No")) |>
   select(-country)
+
