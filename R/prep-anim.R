@@ -20,7 +20,7 @@ prep_anim <- function(df, id = NULL, values = NULL, n_group = 5) {
                       rank = as.integer(rank(-!!qvalues)),
                       percentile = rank(-!!qvalues)/length(!!qvalues),
                       pos = case_when(!!!pos_case(n_group)),
-                      pos = as.factor(pos)) |>
+                      pos = as.numeric(pos)) |>
         select(-c(rank, percentile)) |>
         ungroup()
     )
@@ -34,7 +34,7 @@ prep_anim <- function(df, id = NULL, values = NULL, n_group = 5) {
         arrange(!!qid) |>
         mutate(time = row_number(),
                       time = time + floor(runif(1, 10, 100)),
-                      pos = !!qvalues)
+                      pos = as.numeric(!!qvalues))
     )
   }
 
