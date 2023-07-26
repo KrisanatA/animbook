@@ -2,5 +2,9 @@
 
 export(sigmoid)
 import(dplyr)
-import(ggplot2)
 import(rlang)
+importFrom(ggplot2,annotate)
+importFrom(ggplot2,geom_hline)
+importFrom(ggplot2,geom_point)
+importFrom(ggplot2,ggplot)
+importFrom(ggplot2,theme)

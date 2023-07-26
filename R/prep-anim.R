@@ -1,25 +1,25 @@
 #' @import dplyr
 
-prep_anim <- function(df, id = NULL, values = NULL, n_group = 5) {
+prep_anim <- function(data, id = NULL, values = NULL, group = 5) {
 
   qid <- enquo(id)
   qvalues <- enquo(values)
   col_name <- as_label(qvalues)
 
   # get the columns type
-  type <- sapply(df, class)[[col_name]]
+  type <- sapply(data, class)[[col_name]]
 
   # if the class of the values column is numeric or integer
   if (type == "numeric"|type == "integer") {
     return(
-      df |>
+      data |>
         group_by(!!qid) |>
         arrange(!!qid) |>
         mutate(time = row_number(),
                       time = time + floor(runif(1, 1, 100)),
                       rank = as.integer(rank(-!!qvalues)),
                       percentile = rank(-!!qvalues)/length(!!qvalues),
-                      pos = case_when(!!!pos_case(n_group)),
+                      pos = case_when(!!!pos_case(group)),
                       pos = as.numeric(pos)) |>
         select(-c(rank, percentile)) |>
         ungroup()
@@ -29,7 +29,7 @@ prep_anim <- function(df, id = NULL, values = NULL, n_group = 5) {
   # if the class of the values column is factor
   if (type == "factor") {
     return(
-      df |>
+      data |>
         group_by(!!qid) |>
         arrange(!!qid) |>
         mutate(time = row_number(),
