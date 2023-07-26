@@ -412,11 +412,10 @@ set.seed(123)
 p2 <- full_data |>
   group_by(firmID) |>
   mutate(time = row_number(),
-         time = time + floor(runif(1, 10, 100)),
-         start = start + runif(1, -0.1, 0.1)) |>
+         time = time + floor(runif(1, 10, 100))) |>
   arrange(firmID) |>
   ggplot() +
-  geom_point(aes(x = year, y = start, group = firmID, color = japan)) +
+  geom_jitter(aes(x = year, y = start, group = firmID, color = japan)) +
   geom_hline(yintercept = 0:5, linewidth = 5.6, alpha = 0.1) +
   annotate("text", x = 2007.5, y = 5, label = "Top 20%") +
   annotate("text", x = 2007.5, y = 4, label = "21 - 40") +
@@ -444,5 +443,5 @@ p2 <- full_data |>
   geom_line(data = tick, aes(x = x, y = y, group = id)) +
   transition_time(time)
 
-animate(p2, nframes = 1000)
+animate(p2)
 
