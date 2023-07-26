@@ -1,4 +1,5 @@
 #' @import ggplot2
+#' @import rlang
 
 anim_plot <- function(df, x, y, id) {
   data <- anim_data(df, {{id}}, {{y}})
