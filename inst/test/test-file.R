@@ -13,7 +13,7 @@ yea <- 2001:2010
 toy_dbl <- tibble(expand.grid(key, yea),
               rank = sample(rank_dbl, 300, replace = TRUE),
               group = sample(c("apple", "samsung"), 300, replace = TRUE))
-names(toy_dbl) <- c("id", "yea", "rank", "group")
+names(toy_dbl) <- c("id", "year", "rank", "group")
 
 toy_int <- tibble(expand.grid(key, year),
                   rank = sample(rank_int, 300, replace = TRUE),

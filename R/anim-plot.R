@@ -1,12 +1,17 @@
 #' @importFrom ggplot2 ggplot geom_point geom_hline annotate theme
+#' @importFrom RColorBrewer brewer.pal
 
-anim_plot <- function(data, id = NULL, values = NULL, x_axis = NULL, color = NULL) {
+anim_plot <- function(data, id = NULL, x_axis = NULL, color = NULL, palette = brewer.pal(9, "Set1")) {
 
   hline <- unique(data$pos)
 
   qx <- enquo(x_axis)
 
   x <- data[, as_label(qx)]
+
+  col_val <- palette
+
+# build plot --------------------------------------------------------------
 
   anim <- data |>
     ggplot() +
@@ -24,7 +29,9 @@ anim_plot <- function(data, id = NULL, values = NULL, x_axis = NULL, color = NUL
          axis.title.x = element_blank(),
          axis.ticks.x = element_blank(),
          plot.margin = margin(1, 1, 1, 1, "cm"),
-         legend.position = "bottom")
+         legend.position = "bottom",
+         legend.title = element_blank()) +
+    scale_colour_manual(values = col_val)
 
   #   ggplot2::annotate("text", x = 2007.5, y = 5, label = "Top 20%") +
   #   ggplot2::annotate("text", x = 2007.5, y = 4, label = "21 - 40") +
@@ -32,8 +39,4 @@ anim_plot <- function(data, id = NULL, values = NULL, x_axis = NULL, color = NUL
   #   ggplot2::annotate("text", x = 2007.5, y = 2, label = "61 - 80") +
   #   ggplot2::annotate("text", x = 2007.5, y = 1, label = "81 - 100") +
   #   ggplot2::annotate("text", x = 2007.5, y = 0, label = "Not listed") +
-  #   ggplot2::scale_colour_manual(name = "",
-  #                       breaks = c("Yes", "No"),
-  #                       labels = c("From Japan", "Not from Japan"),
-  #                       values = c("red", "blue"))
 }
