@@ -28,7 +28,7 @@ pos_case <- function(group = 5) {
       case <- paste0(".data$percentile > ", round(q, 2), " ~ ", abs(i - group))
 
       pos_list[[i]] <- case
-    }s
+    }
 
     list <- parse_exprs(paste(pos_list))
 
