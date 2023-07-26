@@ -1,3 +1,5 @@
+#' @import dplyr
+
 prep_anim <- function(df, id = NULL, values = NULL, n_group = 5) {
 
   qid <- enquo(id)
@@ -11,16 +13,16 @@ prep_anim <- function(df, id = NULL, values = NULL, n_group = 5) {
   if (type == "numeric"|type == "integer") {
     return(
       df |>
-        dplyr::group_by(!!qid) |>
-        dplyr::arrange(!!qid) |>
-        dplyr::mutate(time = row_number(),
-                      time = time + floor(runif(1, 10, 100)),
+        group_by(!!qid) |>
+        arrange(!!qid) |>
+        mutate(time = row_number(),
+                      time = time + floor(runif(1, 1, 100)),
                       rank = as.integer(rank(-!!qvalues)),
                       percentile = rank(-!!qvalues)/length(!!qvalues),
                       pos = case_when(!!!pos_case(n_group)),
                       pos = as.factor(pos)) |>
-        dplyr::select(-c(rank, percentile)) |>
-        dplyr::ungroup()
+        select(-c(rank, percentile)) |>
+        ungroup()
     )
   }
 
@@ -28,9 +30,9 @@ prep_anim <- function(df, id = NULL, values = NULL, n_group = 5) {
   if (type == "factor") {
     return(
       df |>
-        dplyr::group_by(!!qid) |>
-        dplyr::arrange(!!qid) |>
-        dplyr::mutate(time = row_number(),
+        group_by(!!qid) |>
+        arrange(!!qid) |>
+        mutate(time = row_number(),
                       time = time + floor(runif(1, 10, 100)),
                       pos = !!qvalues)
     )
