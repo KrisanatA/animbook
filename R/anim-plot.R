@@ -1,3 +1,5 @@
+#' @import ggplot2
+
 anim_plot <- function(df, x, y, id) {
   data <- anim_data(df, {{id}}, {{y}})
 
@@ -27,6 +29,5 @@ anim_plot <- function(df, x, y, id) {
           axis.title.x = element_blank(),
           axis.ticks.x = element_blank(),
           plot.margin = margin(1, 1, 1, 4, "cm"),
-          legend.position = "bottom") +
-    gganimate::transition_time(time)
+          legend.position = "bottom")
 }

@@ -2,4 +2,5 @@
 
 export(sigmoid)
 import(dplyr)
+import(ggplot2)
 import(rlang)
