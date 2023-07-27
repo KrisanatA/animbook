@@ -19,6 +19,7 @@ prep_anim <- function(data, id = NULL, values = NULL, group = 5) {
                       time = time + floor(runif(1, 1, 100)),
                       rank = as.integer(rank(-!!qvalues)),
                       percentile = rank(-!!qvalues)/length(!!qvalues),
+                      # using the non-standard evaluation to automatically assign the position on the plot
                       pos = case_when(!!!pos_case(group)),
                       pos = as.numeric(pos)) |>
         select(-c(rank, percentile)) |>
