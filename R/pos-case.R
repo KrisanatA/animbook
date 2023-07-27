@@ -1,5 +1,3 @@
-#' @import rlang
-
 pos_case <- function(group = 5) {
 
   n <- length(group)
@@ -30,7 +28,7 @@ pos_case <- function(group = 5) {
       pos_list[[i]] <- case
     }
 
-    list <- parse_exprs(paste(pos_list))
+    list <- rlang::parse_exprs(paste(pos_list))
 
     return(list)
   }

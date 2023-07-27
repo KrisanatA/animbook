@@ -1,7 +1,6 @@
 #' @importFrom ggplot2 ggplot geom_point geom_hline annotate theme
-#' @importFrom RColorBrewer brewer.pal
 
-anim_plot <- function(data, id = NULL, x_axis = NULL, color = NULL, palette = brewer.pal(9, "Set1")) {
+anim_plot <- function(data, id = NULL, x_axis = NULL, color = NULL, palette = RColorBrewer::brewer.pal(9, "Set1")) {
 
   hline <- unique(data$pos)
 

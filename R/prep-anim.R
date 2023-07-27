@@ -1,10 +1,10 @@
-#' @import dplyr
+#' @importFrom dplyr group_by arrange mutate select ungroup
 
 prep_anim <- function(data, id = NULL, values = NULL, group = 5) {
 
-  qid <- enquo(id)
-  qvalues <- enquo(values)
-  col_name <- as_label(qvalues)
+  qid <- rlang::enquo(id)
+  qvalues <- rlang::enquo(values)
+  col_name <- rlang::as_label(qvalues)
 
   # get the columns type
   type <- sapply(data, class)[[col_name]]
