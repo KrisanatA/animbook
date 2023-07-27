@@ -41,3 +41,29 @@ full_data <- osiris |>
   na.omit() |>
   select(-country)
 
+
+# test code ---------------------------------------------------------------
+
+# pos_case function demonstration
+
+pos_case()
+pos_case(c(1,2,3,4,5))
+pos_case(1:5)
+
+# full step on toy data
+data <- prep_anim(toy_dbl, id, rank)
+
+p <- anim_plot(data, id, year, group)
+p
+
+p2 <- anim_animate(p)
+animate(p2)
+
+# full step on osiris data
+data2 <- prep_anim(osiris, firmID, sales)
+
+os <- anim_plot(data2, firmID, year, japan)
+os
+
+os2 <- anim_animate(os)
+animate(os2)
