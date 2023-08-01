@@ -1,4 +1,5 @@
 library(tidyverse)
+library(gganimate)
 
 # Toy dataset -------------------------------------------------------------
 
@@ -66,9 +67,13 @@ os <- anim_plot(data2, firmID, year, japan)
 os
 
 os2 <- anim_animate(os)
-animate(os2)
+gganimate::animate(os2, nframes = 2000, fps = 60)
 
+
+# play button (still working on it)
 animation::saveHTML(gganimate::animate(os2,
-                            device = "current"),
+                                       nframes = 2000,
+                                       fps = 60,
+                                       device = "current"),
                     img.name = "gganimate_plot",
                     htmlfile = "gg.html")
