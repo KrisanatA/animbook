@@ -60,10 +60,15 @@ p2 <- anim_animate(p)
 animate(p2)
 
 # full step on osiris data
-data2 <- prep_anim(osiris, firmID, sales)
+data2 <- prep_anim(full_data, firmID, sales)
 
 os <- anim_plot(data2, firmID, year, japan)
 os
 
 os2 <- anim_animate(os)
 animate(os2)
+
+animation::saveHTML(gganimate::animate(os2,
+                            device = "current"),
+                    img.name = "gganimate_plot",
+                    htmlfile = "gg.html")
