@@ -1,6 +1,6 @@
 #' @importFrom dplyr group_by arrange mutate select ungroup
 
-prep_anim_test <- function(data, id = NULL, values = NULL, time = NULL, ngroup = 5) {
+prep_anim <- function(data, id = NULL, values = NULL, time = NULL, ngroup = 5) {
 
   qid <- enquo(id)
   qvalues <- enquo(values)
