@@ -1,42 +1,33 @@
 #' @importFrom dplyr group_by arrange mutate select ungroup
 
-prep_anim <- function(data, id = NULL, values = NULL, group = 5) {
+prep_anim_test <- function(data, id = NULL, values = NULL, time = NULL, ngroup = 5) {
 
-  qid <- rlang::enquo(id)
-  qvalues <- rlang::enquo(values)
-  col_name <- rlang::as_label(qvalues)
+  qid <- enquo(id)
+  qvalues <- enquo(values)
+  qtime <- enquo(time)
 
-  # get the columns type
-  type <- sapply(data, class)[[col_name]]
+  type <- sapply(data, class)[[as_label(qvalues)]]
 
-  # if the class of the values column is numeric or integer
-  if (type == "numeric"|type == "integer") {
+  if (type == "numeric") {
     return(
       data |>
-        group_by(!!qid) |>
-        arrange(!!qid) |>
-        mutate(time = row_number(),
-                      time = time + floor(runif(1, 1, 100)),
-                      rank = as.integer(rank(-!!qvalues)),
-                      percentile = rank(-!!qvalues)/length(!!qvalues),
-                      # using the non-standard evaluation to automatically assign the position on the plot
-                      pos = case_when(!!!pos_case(group)),
-                      pos = as.numeric(pos)) |>
-        select(-c(rank, percentile)) |>
+        # assigned the frame for each row which will be uses for the transition
+        arrange(!!qid, !!qtime) |>
+        mutate(frame = row_number(),
+               frame = frame + floor(runif(1, 1, 100))) |>
+        # split the values into groups using cut and quantile
+        group_by(!!qtime) |>
+        mutate(qtile = cut(!!qvalues,
+                           stats::quantile(!!qvalues,
+                                           probs = seq(0, 1, 1/ngroup)),
+                           include.lowest = TRUE,
+                           labels = seq(1, ngroup, 1))) |>
         ungroup()
     )
   }
 
-  # if the class of the values column is factor
-  if (type == "factor") {
-    return(
-      data |>
-        group_by(!!qid) |>
-        arrange(!!qid) |>
-        mutate(time = row_number(),
-                      time = time + floor(runif(1, 10, 100)),
-                      pos = as.numeric(!!qvalues))
-    )
+  else {
+    abort("The values must be of a numeric class")
   }
 
 }
