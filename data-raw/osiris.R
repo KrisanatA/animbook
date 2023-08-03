@@ -29,7 +29,6 @@ osiris <- data |>
   select(-country) |>
   complete(year, firmID) |>
   left_join(country) |>
-  mutate_if(is.numeric, ~replace_na(., 0)) |>
   relocate(country, .after = firmID)
 
 
