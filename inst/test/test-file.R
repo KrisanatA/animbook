@@ -35,12 +35,9 @@ rank <- osiris |>
 
 full_data <- osiris |>
   filter(year >= 2009 & year < 2019) |>
-  left_join(rank) |>
-  mutate_if(is.numeric, ~replace_na(., 0)) |>
-  mutate(japan = ifelse(country == "JP", "From Japan", "Not Japan")) |>
+  mutate(japan = ifelse(country == "JP", "From Japan", "Not Japan"))
   # CIC holdings limited NACY19950502 country is not known, and based on the sales number, I will be removing this firm
-  na.omit() |>
-  select(-country)
+
 
 
 # test code ---------------------------------------------------------------
@@ -61,7 +58,7 @@ check2 <- c("Not listed", "81-100", "61-80", "41-60", "21-40", "Top 20%")
 # full step on toy data
 data <- prep_anim(toy_dbl, id, rank)
 
-p <- anim_plot(data, id, year, group, label = rev(check2))
+p <- anim_plot(data, id, year, group, label = rev(check))
 p
 
 p2 <- anim_animate(p)
@@ -70,7 +67,7 @@ animate(p2, nframes = 2000)
 # full step on osiris data
 data2 <- prep_anim(full_data, firmID, sales)
 
-os <- anim_plot(data2, firmID, year, japan)
+os <- anim_plot(data2, firmID, year, japan, label = rev(check2))
 os
 
 os2 <- anim_animate(os)
