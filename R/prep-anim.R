@@ -40,7 +40,7 @@ prep_anim <- function(data, id = NULL, values = NULL, time = NULL, ngroup = 5) {
   }
 
   else {
-    abort("The values must be of a numeric class")
+    rlang::abort("The values must be of a numeric class")
   }
 
 }
