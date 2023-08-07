@@ -13,8 +13,10 @@ prep_anim <- function(data, id = NULL, values = NULL, time = NULL, ngroup = 5) {
       data |>
         # assigned the frame for each row which will be uses for the transition
         arrange(!!qid, !!qtime) |>
+        group_by(!!qid) |>
         mutate(frame = row_number(),
-               frame = frame + floor(runif(1, 1, 50))) |>
+               frame = frame + floor(runif(1, 1, 100))) |>
+        ungroup() |>
         # split the values into groups using cut and quantile
         group_by(!!qtime) |>
         # ranking the variable of interest
