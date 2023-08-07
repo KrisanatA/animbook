@@ -51,14 +51,21 @@ pos_case()
 pos_case(c(1,2,3,4,5))
 pos_case(1:5)
 
+# label
+
+check <- c("81-100", "61-80", "41-60", "21-40", "Top 20%")
+
+check2 <- c("Not listed", "81-100", "61-80", "41-60", "21-40", "Top 20%")
+
+
 # full step on toy data
 data <- prep_anim(toy_dbl, id, rank)
 
-p <- anim_plot(data, id, year, group)
+p <- anim_plot(data, id, year, group, label = rev(check2))
 p
 
 p2 <- anim_animate(p)
-animate(p2)
+animate(p2, nframes = 2000)
 
 # full step on osiris data
 data2 <- prep_anim(full_data, firmID, sales)
