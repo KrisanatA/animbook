@@ -65,19 +65,12 @@ p2 <- anim_animate(p)
 animate(p2, nframes = 2000)
 
 # full step on osiris data
-data2 <- prep_anim(full_data, firmID, sales)
+data2 <- prep_anim(full_data, firmID, sales, year)
 
 os <- anim_plot(data2, firmID, year, japan, label = rev(check2))
 os
 
 os2 <- anim_animate(os)
-gganimate::animate(os2, nframes = 2000, fps = 60)
+gganimate::animate(os2, nframes = 1995, fps = 50, renderer = av_renderer("inst/test.mkv"))
 
 
-# play button (still working on it)
-animation::saveHTML(gganimate::animate(os2,
-                                       nframes = 2000,
-                                       fps = 60,
-                                       device = "current"),
-                    img.name = "gganimate_plot",
-                    htmlfile = "gg.html")
