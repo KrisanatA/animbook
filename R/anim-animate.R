@@ -6,34 +6,27 @@ anim_animate <- function(plot, rendering = "gganimate", ...) {
 
   rendering_choice <- c("plotly", "gganimate")
 
-  if (rendering %in% rendering_choice) {
+  stopifnot("rendering argument can only be either gganimate or plotly")
 
-    if (rendering == "gganimate") {
+  if (rendering == "gganimate") {
 
-      if (length(params) == 0) {
-        return(
-          plot +
-            transition_time(frame)
-        )
-      }
-
-      if (length(params) > 0) {
-        return(
-          plot +
-            params)
-      }
+    if (length(params) == 0) {
+      return(
+        plot +
+          transition_time(frame)
+      )
     }
 
-    # if (rendering == "plotly") {
-    #   return(
-    #       plotly::ggplotly(plot)
-    #   )
-    # }
+    if (length(params) > 0) {
+      return(
+        plot +
+          params)
+    }
   }
 
-  else {
-    rlang::abort("rendering argument can only be either plotly or gganimate")
-  }
+  if (rendering == "plotly") {
 
+
+  }
 
 }

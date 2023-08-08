@@ -15,6 +15,9 @@ anim_plot <- function(data, id = NULL, time = NULL, color = NULL, label = NULL, 
 
   # use for annotate function
 
+  stopifnot("The length of label is not the same as the length of y-axis values" =
+              length(label) != length(y))
+
   if (is.null(label)) {
     label <- as.character(sort(unique(data$qtile), decreasing = TRUE))
   }
@@ -22,11 +25,6 @@ anim_plot <- function(data, id = NULL, time = NULL, color = NULL, label = NULL, 
   if (length(label) == length(y)) {
     label <- label
   }
-
-  if (length(label) != length(y)) {
-    rlang::abort("The length of label is not the same as the length of y-axis values")
-  }
-
 
 # build plot --------------------------------------------------------------
 
