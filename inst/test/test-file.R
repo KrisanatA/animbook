@@ -27,26 +27,14 @@ names(toy_fac) <- c("id", "year", "rank", "group")
 
 # Osiris data -------------------------------------------------------------
 
-rank <- osiris |>
-  group_by(year) |>
-  mutate(rank = as.integer(rank(-sales)),
-         percentile = rank(-sales)/length(sales)) |>
-  ungroup()
-
 full_data <- osiris |>
   filter(year >= 2009 & year < 2019) |>
   mutate(japan = ifelse(country == "JP", "From Japan", "Not Japan"))
-  # CIC holdings limited NACY19950502 country is not known, and based on the sales number, I will be removing this firm
 
 
 
 # test code ---------------------------------------------------------------
 
-# pos_case function demonstration
-
-pos_case()
-pos_case(c(1,2,3,4,5))
-pos_case(1:5)
 
 # label
 
@@ -62,7 +50,7 @@ p <- anim_plot(data, id, year, group, label = rev(check))
 p
 
 p2 <- anim_animate(p)
-animate(p2, nframes = 2000)
+animate(p2, nframes = 2000, renderer = av_renderer())
 
 # full step on osiris data
 data2 <- prep_anim(full_data, firmID, sales, year)
@@ -71,6 +59,6 @@ os <- anim_plot(data2, firmID, year, japan, label = rev(check2))
 os
 
 os2 <- anim_animate(os)
-gganimate::animate(os2, nframes = 1995, fps = 50, renderer = av_renderer("inst/test.mkv"))
+gganimate::animate(os2, nframes = 10450, fps = 50, renderer = gifski_renderer("inst/test.gif"))
 
 
