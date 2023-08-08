@@ -59,6 +59,6 @@ os <- anim_plot(data2, firmID, year, japan, label = rev(check2))
 os
 
 os2 <- anim_animate(os)
-gganimate::animate(os2, nframes = 10450, fps = 50, renderer = gifski_renderer("inst/test.gif"))
+gganimate::animate(os2, nframes = 10450, fps = 50, renderer = gifski::gifski_renderer("inst/test.gif"))
 
 
