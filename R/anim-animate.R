@@ -1,4 +1,5 @@
-#' @import gganimate
+#'@import gganimate
+#'@export
 
 anim_animate <- function(plot, rendering = "gganimate", ...) {
   params <- list(...)

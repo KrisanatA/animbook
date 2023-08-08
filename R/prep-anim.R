@@ -1,4 +1,5 @@
-#' @importFrom dplyr group_by arrange mutate select ungroup
+#'@importFrom dplyr group_by arrange mutate select ungroup
+#'@export
 
 prep_anim <- function(data, id = NULL, values = NULL, time = NULL, ngroup = 5) {
 
