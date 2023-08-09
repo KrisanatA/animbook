@@ -3,9 +3,17 @@
 #'This function prepared the data into the format the [anim_plot()] required.
 #'
 #'@param data The data frame or a tibble which contains the information of interested.
-#'@param id The name of the column that uniquely identified the elements of interested
-#'@param values The name of the column within the data frame that the user
+#'@param id Name of the column that uniquely identified the elements of interested
+#'@param values Name of the column of interested, must be a numeric column.
+#'@param time Name of the columns that will be used as time variable.
+#'@param ngroup Number of group the user want to split the values into (excluded
+#'the NA group which is the additional group).
 #'
+#'@return Return a tibble with additional frame and qtile columns (excluded the
+#'values columns which been used to calculated the qtile column)
+#'
+#'@examples
+#'prep_anim(data = osiris, id = firmID, values = sales, time = year, ngroup = 5)
 #'
 #'@importFrom dplyr group_by arrange mutate select ungroup
 #'@export
