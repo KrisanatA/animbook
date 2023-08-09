@@ -1,3 +1,8 @@
+#'
+#'
+#'
+#'
+#'
 #'@importFrom ggplot2 ggplot geom_point geom_hline annotate theme
 #'@export
 
@@ -13,10 +18,11 @@ anim_plot <- function(data, id = NULL, time = NULL, color = NULL, label = NULL, 
 
   col_val <- palette
 
+
   # use for annotate function
 
   stopifnot("The length of label is not the same as the length of y-axis values" =
-              length(label) != length(y))
+              length(label) == length(y))
 
   if (is.null(label)) {
     label <- as.character(sort(unique(data$qtile), decreasing = TRUE))
