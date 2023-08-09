@@ -1,12 +1,13 @@
-#'
-#'
-#'
-#'
-#'
 #'@importFrom ggplot2 ggplot geom_point geom_hline annotate theme
 #'@export
 
-anim_plot <- function(data, id = NULL, time = NULL, color = NULL, label = NULL, palette = RColorBrewer::brewer.pal(9, "Set1")) {
+anim_plot <- function(data,
+                      id = NULL,
+                      time = NULL,
+                      color = NULL,
+                      label = NULL,
+                      palette = RColorBrewer::brewer.pal(9, "Set1"),
+                      rendering = "gganimate") {
 
   hline <- unique(data$qtile)
 
