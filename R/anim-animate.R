@@ -6,7 +6,7 @@ anim_animate <- function(plot, rendering = "gganimate", ...) {
 
   rendering_choice <- c("plotly", "gganimate")
 
-  stopifnot("rendering argument can only be either gganimate or plotly")
+  stopifnot("rendering argument can only be either gganimate or plotly" = rendering %in% rendering_choice)
 
   if (rendering == "gganimate") {
 
