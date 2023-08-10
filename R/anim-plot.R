@@ -19,18 +19,17 @@ anim_plot <- function(data,
 
   col_val <- palette
 
-
   # use for annotate function
 
   stopifnot("The length of label is not the same as the length of y-axis values" =
-              length(label) == length(y))
+              length(label) >= length(y))
 
   if (is.null(label)) {
     label <- as.character(sort(unique(data$qtile), decreasing = TRUE))
   }
 
-  if (length(label) == length(y)) {
-    label <- label
+  if (length(label) >= length(y)) {
+    label <- label[1:length(y)]
   }
 
 # build plot --------------------------------------------------------------

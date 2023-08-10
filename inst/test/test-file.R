@@ -38,16 +38,16 @@ full_data <- osiris |>
 
 # label
 
-check <- c("81-100", "61-80", "41-60", "21-40", "Top 20%")
+check <- c("Top 20%", "21-40", "41-60", "61-80", "81-100", "Not listed", "test")
 
-check2 <- c("Not listed", "81-100", "61-80", "41-60", "21-40", "Top 20%")
 
 
 # full step on toy data
 data <- prep_anim(toy_dbl, id, rank)
 
-p <- anim_plot(data, id, year, group, label = rev(check))
+p <- anim_plot(data, id, year, group, label = check)
 p
+
 
 p2 <- anim_animate(p)
 animate(p2, nframes = 2000, renderer = av_renderer())
@@ -55,10 +55,10 @@ animate(p2, nframes = 2000, renderer = av_renderer())
 # full step on osiris data
 data2 <- prep_anim(full_data, firmID, sales, year)
 
-os <- anim_plot(data2, firmID, year, japan, label = rev(check2))
+os <- anim_plot(data2, firmID, year, japan, label = check)
 os
 
 os2 <- anim_animate(os)
-gganimate::animate(os2, nframes = 10450, fps = 50, renderer = gifski::gifski_renderer("inst/test.gif"))
+gganimate::animate(os2, nframes = 10450, fps = 50, renderer = av_renderer("inst/test.gif"))
 
 
