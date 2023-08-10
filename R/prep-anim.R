@@ -33,12 +33,12 @@ prep_anim <- function(data,
 
   type <- sapply(data, class)[[rlang::as_label(qvalues)]]
 
-  n <- unique(data[, as_label(qid)])
+  n_data <- nrow(unique(data[, as_label(qid)]))
 
   stopifnot("This function only accepted numerical values" = type %in% c("numeric", "integer"))
 
-  if (ngroup > length(n)) {
-    ngroup <- length(n)
+  if (ngroup > n_data) {
+    ngroup <- n_data
   }
 
 
@@ -49,7 +49,7 @@ prep_anim <- function(data,
       arrange(!!qid, !!qtime) |>
       group_by(!!qid) |>
       mutate(
-        frame = dplyr::row_numer(),
+        frame = dplyr::row_number(),
         # will need to make the size of the runif be automatically
         frame = frame + floor(runif(1, 1, 50))
       ) |>
