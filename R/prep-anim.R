@@ -37,7 +37,7 @@ prep_anim <- function(data,
     group_by(!!qid) |>
     mutate(
       frame = dplyr::row_number(),
-      frame = frame + floor(runif(1, 1, 100))
+      frame = frame + floor(runif(1, 1, 50))
       ) |>
     ungroup() |>
     # split the values into groups using cut and quantile
