@@ -1,5 +1,6 @@
 library(tidyverse)
 library(gganimate)
+library(animbook)
 
 # Toy dataset -------------------------------------------------------------
 
@@ -32,14 +33,10 @@ full_data <- osiris |>
   mutate(japan = ifelse(country == "JP", "From Japan", "Not Japan"))
 
 
-
 # test code ---------------------------------------------------------------
 
-
 # label
-
 check <- c("Top 20%", "21-40", "41-60", "61-80", "81-100", "Not listed", "test")
-
 
 
 # full step on toy data
@@ -48,9 +45,9 @@ data <- prep_anim(toy_dbl, id, rank)
 p <- anim_plot(data, id, year, group, label = check)
 p
 
-
 p2 <- anim_animate(p)
 animate(p2, nframes = 2000, renderer = av_renderer())
+
 
 # full step on osiris data
 data2 <- prep_anim(full_data, firmID, sales, year)
@@ -62,3 +59,49 @@ os2 <- anim_animate(os)
 gganimate::animate(os2, nframes = 10450, fps = 50, renderer = av_renderer("inst/test.gif"))
 
 
+# Function example --------------------------------------------------------
+
+set.seed(2)
+
+gfc <- osiris |>
+  filter(year == 2007 & !is.na(sales))
+
+gfc2 <- osiris |>
+  filter(year == 2008,
+         firmID %in% gfc$firmID)
+
+full_data <- as_tibble(rbind(gfc, gfc2))  |>
+  mutate(japan = ifelse(country == "JP", "From Japan", "Not Japan"))
+
+data <- prep_anim(full_data, firmID, sales, year, ngroup = 5, time_dependent = TRUE)
+
+name_move <- data |>
+  filter(year == 2007 & qtile != 0) |>
+  pull(firmID)
+
+name2_move <- data |>
+  filter(year == 2008 & qtile == 0) |>
+  pull(firmID)
+
+name_nmove <- data |>
+  mutate(lead = lead(qtile)) |>
+  filter(qtile == lead) |>
+  distinct(firmID) |>
+  pull(firmID)
+
+final_name_nmove <- sample(name_nmove, 5)
+
+
+final_name_move <- sample(intersect(name_move, name2_move), 5)
+
+
+prep_gfc <- prep_anim(full_data, firmID, sales, year, ngroup = 5, time_dependent = TRUE) |>
+  filter(firmID %in% c(final_name_move, final_name_nmove))
+
+p <- anim_plot(prep_gfc, firmID, year, japan, label = check)
+
+p2 <- anim_animate(p)
+
+animate(p2, nframes = 29)
+
+# 2320ms
