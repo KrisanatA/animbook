@@ -17,7 +17,8 @@ raw_data <- read_csv("data-raw/osiris2021-sample1000.csv")
 data <- raw_data |>
   select(year, country, firmID, sales) |>
   filter(!is.na(sales),
-         sales > 0)
+         sales > 0,
+         between(year, 2009, 2018))
 
 # pull the company name (unique)
 country <- data |>
