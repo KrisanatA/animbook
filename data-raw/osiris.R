@@ -18,7 +18,7 @@ data <- raw_data |>
   select(year, country, firmID, sales) |>
   filter(!is.na(sales),
          sales > 0,
-         between(year, 2009, 2018))
+         between(year, 2006, 2018))
 
 # pull the company name (unique)
 country <- data |>
