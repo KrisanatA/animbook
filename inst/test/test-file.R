@@ -29,8 +29,8 @@ names(toy_fac) <- c("id", "year", "rank", "group")
 # Osiris data -------------------------------------------------------------
 
 full_data <- osiris |>
-  filter(year >= 2009 & year < 2019) |>
-  mutate(japan = ifelse(country == "JP", "From Japan", "Not Japan"))
+  mutate(japan = ifelse(country == "JP", "From Japan", "Not Japan")) |>
+  filter(between(year, 2006, 2011))
 
 
 # test code ---------------------------------------------------------------
@@ -50,13 +50,13 @@ animate(p2, nframes = 2000, renderer = av_renderer())
 
 
 # full step on osiris data
-data2 <- prep_anim(full_data, firmID, sales, year)
+data2 <- prep_anim(full_data, firmID, sales, year, ngroup = 5)
 
-os <- anim_plot(data2, firmID, year, japan, label = check)
+os <- anim_plot(data2, firmID, year, japan, label = check, rendering = "plotly")
 os
 
 os2 <- anim_animate(os)
-gganimate::animate(os2, nframes = 10450, fps = 50, renderer = av_renderer("inst/test.gif"))
+gganimate::animate(os2)
 
 
 # Function example --------------------------------------------------------
@@ -98,10 +98,17 @@ final_name_move <- sample(intersect(name_move, name2_move), 5)
 prep_gfc <- prep_anim(full_data, firmID, sales, year, ngroup = 5, time_dependent = TRUE) |>
   filter(firmID %in% c(final_name_move, final_name_nmove))
 
-p <- anim_plot(prep_gfc, firmID, year, japan, label = check)
+p <- anim_plot(prep_gfc, firmID, year, japan, label = check, rendering = "gganimate")
 
 p2 <- anim_animate(p)
 
-animate(p2, nframes = 29)
+animate(p2, nframes = 49)
 
-# 2320ms
+
+
+# Explore plotly ----------------------------------------------------------
+
+p <- os +
+  plotly::animation_opts(1000)
+
+plotly::ggplotly(p2)
