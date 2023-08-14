@@ -21,9 +21,6 @@ anim_plot <- function(data,
 
   # use for annotate function
 
-  stopifnot("The length of label is not the same as the length of y-axis values" =
-              length(label) >= length(y))
-
   if (is.null(label)) {
     label <- as.character(sort(unique(data$qtile), decreasing = TRUE))
   }
@@ -32,26 +29,45 @@ anim_plot <- function(data,
     label <- label[1:length(y)]
   }
 
+  stopifnot("The length of label is not the same as the length of y-axis values" =
+              length(label) >= length(y))
+
+  rect_data <- data.frame(
+    id = y,
+    xmin = rep(min(x), length(y)),
+    xmax = rep(max(x), length(y)),
+    ymin = y - 0.15,
+    ymax = y + 0.15
+  )
+
+  gap <- 0.1 * (nrow(unique(x)) - 1)
+
+  label_data <- data.frame(
+    x = min(x) - gap,
+    y = y,
+    label = label
+  )
+
+
+
 # build plot --------------------------------------------------------------
 
-  anim <- data |>
-    ggplot() +
-    geom_jitter(aes(x = {{ time }}, y = qtile, group = {{ id }}, color = {{ color }}), height = 0.1) +
-    geom_hline(yintercept = hline, linewidth = 6, alpha = 0.1) +
+  anim <- ggplot() +
+    geom_rect(data = rect_data, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, group =  id), alpha = 0.1) +
+    geom_jitter(data = data, aes(x = {{ time }}, y = qtile, group = {{ id }}, color = {{ color }}), height = 0.1, width = 0) +
+    geom_text(data = label_data, aes(x = x, y = y, label = label)) +
     scale_x_continuous(breaks = seq(min(x), max(x), 1)) +
-    coord_cartesian(xlim = c(min(x), max(x)),
-                    clip = 'off') +
-    theme(aspect.ratio = 2/3,
-         panel.background = element_blank(),
+    coord_cartesian(clip = "off") +
+    theme(panel.background = element_blank(),
          axis.title.y = element_blank(),
          axis.text.y = element_blank(),
          axis.ticks.y = element_blank(),
          axis.line.y = element_blank(),
          axis.title.x = element_blank(),
          axis.ticks.x = element_blank(),
-         plot.margin = margin(1, 1, 1, 3, "cm"),
          legend.position = "bottom",
          legend.title = element_blank()) +
-    scale_colour_manual(values = col_val) +
-    annotate("text", x = min(x) - 1.5, y = y, label = label)
+    scale_colour_manual(values = col_val)
+
+  return(anim)
 }
