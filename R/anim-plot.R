@@ -66,7 +66,7 @@ anim_plot <- function(data,
   if (rendering == "plotly") {
     jitter <- ggplot() +
       geom_jitter(data = data, aes(x = {{ time }}, y = qtile, color = {{color}}, ids = {{ id }}, frame = frame),
-                  height = 0.2, width = 0) |>
+                  height = 0.2, width = gap) |>
       suppressWarnings()
   }
 
