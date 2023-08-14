@@ -1,3 +1,25 @@
+#'Turn the data into ggplot object for animate function
+#'
+#'This function take in the data which has been prepared by the [prep_anim()] and
+#'return the ggplot object. The user can still modified the plot the same as normal.
+#'
+#'@param data The data frame that has been prepared by the [prep_anim()]
+#'@param id Name of the column that uniquely identified the rows.
+#'@param time Name of the column that will be used as x-axis (e.g. year).
+#'@param color Name of the column that distinguish different groups or categories within your data plot.
+#'@param label The default value is null, if the vector of character is supplied, it will displayed along
+#'the y-axis for each quantile.
+#'@param palette The vector of palette used by the function to supplied the color for each group.
+#'@param rendering The choice of method used to create and display the plot, either gganimate or
+#'plotly.
+#'
+#'@return Return a ggplot object
+#'
+#'@examples
+#'label = c("Top 20%", "21-40", "41-60", "61-80", "81-100", "Not listed", "test")
+#'
+#'anim_plot(data = osiris, id = firmID, time = year, color = japan, label = label)
+#'
 #'@importFrom ggplot2 ggplot geom_point geom_hline annotate theme
 #'@export
 
