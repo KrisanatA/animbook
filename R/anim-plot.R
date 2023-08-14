@@ -19,6 +19,11 @@ anim_plot <- function(data,
 
   col_val <- palette
 
+  rendering_choice <- c("plotly", "gganimate")
+
+  stopifnot("rendering argument can only be either gganimate or plotly" =
+              rendering %in% rendering_choice)
+
   # use for annotate function
 
   if (is.null(label)) {
@@ -32,18 +37,19 @@ anim_plot <- function(data,
   stopifnot("The length of label is not the same as the length of y-axis values" =
               length(label) >= length(y))
 
-  rect_data <- data.frame(
-    id = y,
-    xmin = rep(min(x), length(y)),
-    xmax = rep(max(x), length(y)),
-    ymin = y - 0.15,
-    ymax = y + 0.15
-  )
 
   gap <- 0.1 * (nrow(unique(x)) - 1)
 
+  rect_data <- data.frame(
+    id = y,
+    xmin = rep(min(x) - gap, length(y)),
+    xmax = rep(max(x) + gap, length(y)),
+    ymin = y - 0.25,
+    ymax = y + 0.25
+  )
+
   label_data <- data.frame(
-    x = min(x) - gap,
+    x = min(x) - (2 * gap),
     y = y,
     label = label
   )
@@ -52,21 +58,32 @@ anim_plot <- function(data,
 
 # build plot --------------------------------------------------------------
 
-  anim <- ggplot() +
+  if (rendering == "gganimate") {
+    jitter <- ggplot() +
+      geom_jitter(data = data, aes(x = {{ time }}, y = qtile, group = {{ id }}, color = {{ color }}), height = 0.2, width = 0)
+  }
+
+  if (rendering == "plotly") {
+    jitter <- ggplot() +
+      geom_jitter(data = data, aes(x = {{ time }}, y = qtile, color = {{color}}, ids = {{ id }}, frame = frame),
+                  height = 0.2, width = 0) |>
+      suppressWarnings()
+  }
+
+  anim <- jitter +
     geom_rect(data = rect_data, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, group =  id), alpha = 0.1) +
-    geom_jitter(data = data, aes(x = {{ time }}, y = qtile, group = {{ id }}, color = {{ color }}), height = 0.1, width = 0) +
     geom_text(data = label_data, aes(x = x, y = y, label = label)) +
     scale_x_continuous(breaks = seq(min(x), max(x), 1)) +
     coord_cartesian(clip = "off") +
     theme(panel.background = element_blank(),
-         axis.title.y = element_blank(),
-         axis.text.y = element_blank(),
-         axis.ticks.y = element_blank(),
-         axis.line.y = element_blank(),
-         axis.title.x = element_blank(),
-         axis.ticks.x = element_blank(),
-         legend.position = "bottom",
-         legend.title = element_blank()) +
+          axis.title.y = element_blank(),
+          axis.text.y = element_blank(),
+          axis.ticks.y = element_blank(),
+          axis.line.y = element_blank(),
+          axis.title.x = element_blank(),
+          axis.ticks.x = element_blank(),
+          legend.position = "bottom",
+          legend.title = element_blank()) +
     scale_colour_manual(values = col_val)
 
   return(anim)
