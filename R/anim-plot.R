@@ -16,9 +16,11 @@
 #'@return Return a ggplot object
 #'
 #'@examples
+#'data <- prep_anim(data = osiris, id = firmID, values = sales, time = year, ngroup = 5)
+#'
 #'label = c("Top 20%", "21-40", "41-60", "61-80", "81-100", "Not listed", "test")
 #'
-#'anim_plot(data = osiris, id = firmID, time = year, color = japan, label = label)
+#'anim_plot(data = data, id = firmID, time = year, color = japan, label = label)
 #'
 #'@importFrom ggplot2 ggplot geom_point geom_hline annotate theme
 #'@export
