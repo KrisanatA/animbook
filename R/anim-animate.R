@@ -1,31 +1,58 @@
 #'@import gganimate
 #'@export
 
-anim_animate <- function(plot, rendering = "gganimate", ...) {
-  params <- list(...)
+anim_animate <- function(plot, modify = FALSE) {
 
-  rendering_choice <- c("plotly", "gganimate")
+  check <- names(p$labels[4:5]) %in% c("ids", "frame")
 
-  stopifnot("rendering argument can only be either gganimate or plotly" = rendering %in% rendering_choice)
+  plotly <- all(check == TRUE)
 
-  if (rendering == "gganimate") {
 
-    if (length(params) == 0) {
+  if (plotly == TRUE) {
+
+    if (modify == FALSE) {
+
+      message("You can now pass it to plotly::ggplotly()")
+
+      return(
+        plot |>
+          plotly::animation_opts(1000)
+      )
+
+    }
+
+    if (modify == TRUE) {
+
+      message("Please supply plotly function before pass it to plotly::ggplotly()")
+
+      return(
+        plot
+      )
+    }
+
+
+  }
+
+  if (plotly == FALSE) {
+
+    if (modify == FALSE) {
+
+      message("You can now pass it to gganimate::animate()")
+
       return(
         plot +
           transition_time(frame)
       )
     }
 
-    if (length(params) > 0) {
+    if (modify == TRUE) {
+
+      message("Please supply gganimate function before pass it to gganimate::animate()")
+
       return(
-        plot +
-          params)
+        plot
+      )
     }
-  }
-
-  if (rendering == "plotly") {
-
 
   }
 
