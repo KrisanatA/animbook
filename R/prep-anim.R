@@ -86,8 +86,7 @@ prep_anim <- function(data,
                   include.lowest = TRUE,
                   labels = rev(seq(1, ngroup, 1))),
       qtile = ifelse(is.na(qtile), 0, as.integer(levels(qtile)[qtile])),
-      .keep = "unused") |>
-    ungroup()
+      .keep = "unused")
 
   return(book)
 
