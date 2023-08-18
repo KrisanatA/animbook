@@ -108,7 +108,30 @@ animate(p2, nframes = 49)
 
 # Explore plotly ----------------------------------------------------------
 
-p <- os +
-  plotly::animation_opts(1000)
+plotly::ggplotly(os)
 
-plotly::ggplotly(p2)
+
+
+
+# Category variable -------------------------------------------------------
+
+liberal <- aes |>
+  filter(year == 2016,
+         party == "liberal") |>
+  pull(id)
+
+
+
+p <- aes |>
+  filter(id %in% liberal) |>
+  arrange(id, year) |>
+  group_by(id) |>
+  mutate(
+    frame = dplyr::row_number()
+  ) |>
+  ungroup() |>
+  ggplot() +
+  geom_jitter(aes(x = year, y = party, group = id, color = gender), width = 0.2, height = 0.1) +
+  gganimate::transition_time(frame)
+
+gganimate::animate(p)
