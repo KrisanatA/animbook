@@ -3,7 +3,6 @@ subset_plot <- function(data,
                         time = NULL,
                         color = NULL,
                         label = NULL,
-                        subset = NULL,
                         palette = RColorBrewer::brewer.pal(9, "Set1"),
                         rendering = "gganimate") {
 
