@@ -120,6 +120,9 @@ liberal <- aes |>
          party == "liberal") |>
   pull(id)
 
+order <- count(aes, party) |>
+  arrange(n) |>
+  pull(party)
 
 
 p <- aes |>
@@ -127,7 +130,8 @@ p <- aes |>
   arrange(id, year) |>
   group_by(id) |>
   mutate(
-    frame = dplyr::row_number()
+    frame = dplyr::row_number(),
+    party = factor(party, levels = order)
   ) |>
   ungroup() |>
   ggplot() +
@@ -135,3 +139,13 @@ p <- aes |>
   gganimate::transition_time(frame)
 
 gganimate::animate(p)
+
+
+
+data <- prep_cat(aes, id, party, time = year)
+
+p <- subset_plot(data, id, year, gender, label = rev(order))
+
+p2 <- anim_animate(p)
+
+gganimate::animate(p2)
