@@ -51,15 +51,18 @@ anim_plot <- function(data,
   # use for annotate function
 
   if (is.null(label)) {
-    label <- as.character(sort(unique(data$qtile), decreasing = TRUE))
+    label <- as.character(y)
   }
 
   if (length(label) >= length(y)) {
     label <- label[1:length(y)]
   }
 
-  stopifnot("The length of label is not the same as the length of y-axis values" =
-              length(label) >= length(y))
+  if (length(label) < length(y)) {
+    label <- as.character(y)
+
+    warning("length of the label provided is less that length of y")
+  }
 
 
   gap <- 0.1 * (nrow(unique(x)) - 1)
