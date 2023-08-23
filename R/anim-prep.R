@@ -3,7 +3,7 @@ anim_prep <- function(data,
                       values = NULL,
                       time = NULL,
                       label = NULL,
-                      ngroup = 5,
+                      ngroup = 5L,
                       breaks = NULL,
                       time_dependent = TRUE,
                       scaling = "rank",
@@ -42,7 +42,7 @@ scaling_choic <- c("rank", "absolute")
       group_by(!!qid) |>
       mutate(
         frame = dplyr::row_number(),
-        frame = frame + floor(runif(1, 1, 50))
+        frame = frame + floor(runif(1, runif_min, runif_max))
       ) |>
       ungroup()
   }
@@ -121,6 +121,8 @@ scaling_choic <- c("rank", "absolute")
         .keep = "unused"
       )
   }
+
+
 
 }
 
