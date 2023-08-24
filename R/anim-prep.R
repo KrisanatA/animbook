@@ -25,13 +25,17 @@ anim_prep <- function(data,
   min <- 1
 
   if (!is.null(args[["min"]])) {
+
     min <- args[["min"]]
+
   }
 
   max <- 50
 
   if (!is.null(args[["max"]])) {
+
     max <- args[["max"]]
+
   }
 
 # check column class ------------------------------------------------------
@@ -57,6 +61,7 @@ anim_prep <- function(data,
 # assign the frames -------------------------------------------------------
 
   if (time_dependent == FALSE) {
+
     data_frame <- data |>
       arrange(!!qid, !!qtime) |>
       group_by(!!qid) |>
@@ -65,9 +70,11 @@ anim_prep <- function(data,
         frame = frame + floor(runif(1, min, max))
       ) |>
       ungroup()
+
   }
 
   if (time_dependent == TRUE) {
+
     data_frame <- data |>
       arrange(!!qid, !!qtime) |>
       group_by(!!qid) |>
@@ -75,6 +82,7 @@ anim_prep <- function(data,
         frame = dplyr::row_number()
       ) |>
       ungroup()
+
   }
 
 
@@ -124,6 +132,7 @@ anim_prep <- function(data,
 
   # rank scaling
   if (scaling == "rank") {
+
     book <- gdata_frame |>
       # ranking the variable of interest
       mutate(
@@ -143,6 +152,7 @@ anim_prep <- function(data,
         qtile = ifelse(is.na(qtile), 0, as.integer(levels(qtile)[qtile])),
         .keep = "unused"
       )
+
   }
 
   # absolute scaling
@@ -189,35 +199,33 @@ anim_prep <- function(data,
 
 # rect data ---------------------------------------------------------------
 
+  x <- pull(unique(book[, as_label(qtime)]))
+
+  y <- sort(unique(book$qtile), decreasing = TRUE)
+
+  gap <- 0.1 * (length(x) - 1)
+
+  rect_data <- data_frame(
+    id = y,
+    xmin = rep(min(x) - gap, length(y)),
+    xmax = rep(max(x) + gap, length(y)),
+    ymin = y - 0.25,
+    ymax = y + 0.25
+   )
 
 
+# return a list -----------------------------------------------------------
 
+  return(
+    list(data = book,
+         rect_data = rect_data,
+         settings = list(
+           gap = gap,
+           breaks = x
+           )
+         )
+    )
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
