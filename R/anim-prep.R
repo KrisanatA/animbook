@@ -1,3 +1,7 @@
+
+
+
+
 anim_prep <- function(data,
                       id = NULL,
                       values = NULL,
@@ -7,7 +11,9 @@ anim_prep <- function(data,
                       breaks = NULL,
                       group = NULL,
                       time_dependent = TRUE,
-                      scaling = "rank", ...) {
+                      scaling = "rank",
+                      runif_min = 1,
+                      runif_max = 50) {
 
 
 # enquo -------------------------------------------------------------------
@@ -17,26 +23,6 @@ anim_prep <- function(data,
   qtime <- rlang::enquo(time)
   qgroup <- rlang::enquo(group)
 
-
-# additional arguments ----------------------------------------------------
-
-  args <- list(...)
-
-  min <- 1
-
-  if (!is.null(args[["min"]])) {
-
-    min <- args[["min"]]
-
-  }
-
-  max <- 50
-
-  if (!is.null(args[["max"]])) {
-
-    max <- args[["max"]]
-
-  }
 
 # check column class ------------------------------------------------------
 
@@ -67,7 +53,7 @@ anim_prep <- function(data,
       group_by(!!qid) |>
       mutate(
         frame = dplyr::row_number(),
-        frame = frame + floor(runif(1, min, max))
+        frame = frame + floor(runif(1, runif_min, runif_max))
       ) |>
       ungroup()
 
@@ -216,6 +202,23 @@ anim_prep <- function(data,
    )
 
 
+# labels ------------------------------------------------------------------
+
+  if (is.null(label)) {
+    label <- as.character(y)
+  }
+
+  if (length(label) >= length(y)) {
+    label <- label[1:length(y)]
+  }
+
+  if (length(label) < length(y)) {
+    label <- as.character(y)
+
+    warning("length of the label provided is less that length of y")
+  }
+
+
 # return a list -----------------------------------------------------------
 
   return(
@@ -223,7 +226,8 @@ anim_prep <- function(data,
          rect_data = rect_data,
          settings = list(
            gap = gap,
-           breaks = x
+           breaks = x,
+           labels = label
            )
          )
     )
