@@ -43,7 +43,7 @@ anim_prep <- function(data,
   type <- sapply(data, class)
 
   stopifnot("The id column need to be factor variable" =
-              type[[rlang::as_label(qid)]] == "factor",
+              type[[rlang::as_label(qid)]] %in% c("factor"),
             "The values column need to be numeric variable" =
               type[[rlang::as_label(qvalues)]] == "numeric",
             "The time column need to be integer variable" =
@@ -88,7 +88,7 @@ anim_prep <- function(data,
 
 # group scale -------------------------------------------------------------
 
-  if (!is.null(group)) {
+  if (!is.null(rlang::as_label(qgroup))) {
 
     stopifnot("The group column need to be factor variable" =
                 type[[rlang::as_label(qgroup)]] == "factor")
@@ -109,7 +109,7 @@ anim_prep <- function(data,
 
   }
 
-  if (is.null(group)) {
+  if (is.null(rlang::as_label(qgroup))) {
 
     if (scaling == "rank") {
 
@@ -126,6 +126,7 @@ anim_prep <- function(data,
 
 
   }
+
 
 
 # assign the qtile --------------------------------------------------------
@@ -176,8 +177,8 @@ anim_prep <- function(data,
                   !is.na(breaks),
                 "The breaks values is not in the range of values" =
                   all(dplyr::between(breaks,
-                                     min(data[, as_label(!!qvalues)]),
-                                     max(data[, as_label(!!qvalues)])))
+                                     min(data[, rlang::as_label(!!qvalues)]),
+                                     max(data[, rlang::as_label(!!qvalues)])))
                 )
 
       breaks <- breaks
@@ -192,7 +193,8 @@ anim_prep <- function(data,
                     labels = rev(seq(1, ngroup, 1))),
         qtile = ifelse(is.na(qtile), 0, as.integer(levels(qtile)[qtile])),
         .keep = "unused"
-      )
+      ) |>
+      ungroup()
 
   }
 
