@@ -1,6 +1,31 @@
-
-
-
+#'Prepare Data for Animated Visualizations
+#'
+#'This function prepares the data into the format the [anim_plot()] required by assigning frames,
+#'grouping data, scaling values, and creating a necessary data and settings for the [anim_plot()] function.
+#'
+#'@param data A data frame containing the data to be prepared for visualization.
+#'@param id The column name that represents the unique identifier variable.
+#'@param values The column name that contains the numeric values to be visualized.
+#'@param time The column name representing the time variable.
+#'@param label A vector of labels to be used for the y-axis in the visualization.
+#'@param ngroup The number of groups or categories to create for scaling values.
+#'@param breaks A vector of breaks for creating bins when using absolute scaling.
+#'@param group The column name that represents the grouping variable.
+#'@param time_dependent Logical. Should the visualization be time-dependent? Default is TRUE.
+#'@param scaling The scaling method to be used: "rank" or "absolute".
+#'@param runif_min The minimum value for random addition to frame numbers.
+#'@param runif_max The maximum value for random addition to frame numbers.
+#'
+#'@return A list containing the following components:
+#'  \item{data}{A data frame with prepared data for visualization.}
+#'  \item{rect_data}{A data frame that wil be used for shading in [anim_plot()].}
+#'  \item{settings}{A list of settings to be used in [anim_plot()], including gap, breaks, and labels.}
+#'
+#'@examples
+#'prep_anim(data = osiris, id = firmID, values = sales, time = year)
+#'
+#'@importFrom dplyr group_by arrange mutate select ungroup arrange
+#'@export
 
 anim_prep <- function(data,
                       id = NULL,
@@ -110,7 +135,6 @@ anim_prep <- function(data,
 
     }
 
-
   }
 
 
@@ -187,7 +211,7 @@ anim_prep <- function(data,
 
 # rect data ---------------------------------------------------------------
 
-  x <- pull(unique(book[, as_label(qtime)]))
+  x <- dplyr::pull(unique(book[, rlang::as_label(qtime)]))
 
   y <- sort(unique(book$qtile), decreasing = TRUE)
 
