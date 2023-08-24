@@ -11,6 +11,7 @@ anim_prep <- function(data,
                       runif_min = 1,
                       runif_max = 50) {
 
+
 # enquo -------------------------------------------------------------------
 
   qid <- rlang::enquo(id)
@@ -18,10 +19,10 @@ anim_prep <- function(data,
   qtime <- rlang::enquo(time)
   qgroup <- rlang::enquo(group)
 
-  type <- sapply(data, class)
-
 
 # check column class ------------------------------------------------------
+
+  type <- sapply(data, class)
 
   stopifnot("The id column need to be factor variable" =
               type[[rlang::as_label(id)]] == "factor",
@@ -33,7 +34,10 @@ anim_prep <- function(data,
 
 # scaling choice ----------------------------------------------------------
 
-scaling_choic <- c("rank", "absolute")
+  scaling_choice <- c("rank", "absolute")
+
+  stopifnot("The scaling can either be rank or absolute" =
+              scaling %in% c(scaling_choice))
 
 
 # assign the frames -------------------------------------------------------
@@ -75,6 +79,7 @@ scaling_choic <- c("rank", "absolute")
 
 # assign the qtile --------------------------------------------------------
 
+  # rank scaling
   if (scaling == "rank") {
     book <- gdata_frame |>
       # ranking the variable of interest
@@ -97,14 +102,17 @@ scaling_choic <- c("rank", "absolute")
       )
   }
 
+  # absolute scaling
   if (scaling == "absolute") {
 
+    # default setting for breaks
     if (is.null(breaks)) {
 
       breaks <- pretty(!!qvalues, ngroup)
 
     }
 
+    # if the breaks vector is provided
     else {
 
       stopifnot("The breaks argument only accepted vector" =
