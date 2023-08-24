@@ -29,7 +29,7 @@ anim_prep <- function(data,
   type <- sapply(data, class)
 
   stopifnot("The id column need to be factor variable" =
-              type[[rlang::as_label(qid)]] %in% c("factor"),
+              type[[rlang::as_label(qid)]] == "factor",
             "The values column need to be numeric variable" =
               type[[rlang::as_label(qvalues)]] == "numeric",
             "The time column need to be integer variable" =
