@@ -7,9 +7,7 @@ anim_prep <- function(data,
                       breaks = NULL,
                       group = NULL,
                       time_dependent = TRUE,
-                      scaling = "rank",
-                      runif_min = 1,
-                      runif_max = 50) {
+                      scaling = "rank", ...) {
 
 
 # enquo -------------------------------------------------------------------
@@ -20,16 +18,32 @@ anim_prep <- function(data,
   qgroup <- rlang::enquo(group)
 
 
+# additional arguments ----------------------------------------------------
+
+  args <- list(...)
+
+  min <- 1
+
+  if (!is.null(args[["min"]])) {
+    min <- args[["min"]]
+  }
+
+  max <- 50
+
+  if (!is.null(args[["max"]])) {
+    max <- args[["max"]]
+  }
+
 # check column class ------------------------------------------------------
 
   type <- sapply(data, class)
 
   stopifnot("The id column need to be factor variable" =
-              type[[rlang::as_label(id)]] == "factor",
+              type[[rlang::as_label(qid)]] == "factor",
             "The values column need to be numeric variable" =
-              type[[rlang::as_label(values)]] == "numeric",
+              type[[rlang::as_label(qvalues)]] == "numeric",
             "The time column need to be integer variable" =
-              type[[rlang::as_label(time)]] == "integer")
+              type[[rlang::as_label(qtime)]] == "integer")
 
 
 # scaling choice ----------------------------------------------------------
@@ -48,7 +62,7 @@ anim_prep <- function(data,
       group_by(!!qid) |>
       mutate(
         frame = dplyr::row_number(),
-        frame = frame + floor(runif(1, runif_min, runif_max))
+        frame = frame + floor(runif(1, min, max))
       ) |>
       ungroup()
   }
@@ -71,8 +85,37 @@ anim_prep <- function(data,
     stopifnot("The group column need to be factor variable" =
                 type[[rlang::as_label(qgroup)]] == "factor")
 
-    gdata_frame <- data_frame |>
-      group_by(!!qgroup, !!qtime)
+    if (scaling == "rank") {
+
+      gdata_frame <- data_frame |>
+        group_by(!!qgroup, !!qtime)
+
+    }
+
+    if (scaling == "absolute") {
+
+      gdata_frame <- data_frame |>
+        group_by(!!qgroup)
+
+    }
+
+  }
+
+  if (is.null(group)) {
+
+    if (scaling == "rank") {
+
+      gdata_frame <- data_frame |>
+        group_by(!!qtime)
+
+    }
+
+    if (scaling == "absolute") {
+
+      gdata_frame <- data_frame
+
+    }
+
 
   }
 
@@ -131,7 +174,7 @@ anim_prep <- function(data,
 
     }
 
-    book <- data_frame |>
+    book <- gdata_frame |>
       mutate(
         qtile = cut(!!qvalues,
                     breaks,
@@ -140,6 +183,7 @@ anim_prep <- function(data,
         qtile = ifelse(is.na(qtile), 0, as.integer(levels(qtile)[qtile])),
         .keep = "unused"
       )
+
   }
 
 
