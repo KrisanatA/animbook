@@ -5,6 +5,7 @@ anim_prep <- function(data,
                       label = NULL,
                       ngroup = 5L,
                       breaks = NULL,
+                      group = NULL,
                       time_dependent = TRUE,
                       scaling = "rank",
                       runif_min = 1,
@@ -15,6 +16,7 @@ anim_prep <- function(data,
   qid <- rlang::enquo(id)
   qvalues <- rlang::enquo(values)
   qtime <- rlang::enquo(time)
+  qgroup <- rlang::enquo(group)
 
   type <- sapply(data, class)
 
@@ -58,13 +60,23 @@ scaling_choic <- c("rank", "absolute")
   }
 
 
+# group scale -------------------------------------------------------------
+
+  if (!is.null(group)) {
+
+    stopifnot("The group column need to be factor variable" =
+                type[[rlang::as_label(qgroup)]] == "factor")
+
+    gdata_frame <- data_frame |>
+      group_by(!!qgroup, !!qtime)
+
+  }
 
 
 # assign the qtile --------------------------------------------------------
 
   if (scaling == "rank") {
-    book <- data_frame |>
-      group_by(!!qtime) |>
+    book <- gdata_frame |>
       # ranking the variable of interest
       mutate(
         rank = as.integer(rank(!!qvalues)),
@@ -121,6 +133,11 @@ scaling_choic <- c("rank", "absolute")
         .keep = "unused"
       )
   }
+
+
+# rect data ---------------------------------------------------------------
+
+
 
 
 
