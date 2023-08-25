@@ -10,8 +10,9 @@
 #'@param label A vector of labels to be used for the y-axis in the visualization.
 #'@param ngroup The number of groups or categories to create for scaling values.
 #'@param breaks A vector of breaks for creating bins when using absolute scaling.
-#'@param group The column name that represents the grouping variable.
+#'@param group_scaling The column name that represents the grouping variable.
 #'@param time_dependent Logical. Should the visualization be time-dependent? Default is TRUE.
+#'@param color The column name to used in [aes()] for the [anim_plot()].
 #'@param scaling The scaling method to be used: "rank" or "absolute".
 #'@param runif_min The minimum value for random addition to frame numbers.
 #'@param runif_max The maximum value for random addition to frame numbers.
@@ -40,29 +41,30 @@ anim_prep <- function(data,
                       label = NULL,
                       ngroup = 5L,
                       breaks = NULL,
-                      group = NULL,
+                      group_scaling = NULL,
+                      color = NULL,
                       time_dependent = TRUE,
                       scaling = "rank",
                       runif_min = 1,
                       runif_max = 50) {
-
 
 # enquo -------------------------------------------------------------------
 
   qid <- rlang::enquo(id)
   qvalues <- rlang::enquo(values)
   qtime <- rlang::enquo(time)
-  qgroup <- rlang::enquo(group)
+  qgroup_scaling <- rlang::enquo(group_scaling)
+  qcolor <- rlang::enquo(color)
 
 
 # check column class ------------------------------------------------------
 
   type <- sapply(data, class)
 
-  stopifnot("The id column need to be factor variable" =
-              type[[rlang::as_label(qid)]] == "factor",
+  stopifnot("The id column need to be factor or character variable" =
+              type[[rlang::as_label(qid)]] %in%  c("factor", "character"),
             "The values column need to be numeric variable" =
-              type[[rlang::as_label(qvalues)]] == "numeric",
+              type[[rlang::as_label(qvalues)]] %in% c("numeric", "integer"),
             "The time column need to be integer variable" =
               type[[rlang::as_label(qtime)]] == "integer")
 
@@ -103,30 +105,31 @@ anim_prep <- function(data,
   }
 
 
-# group scale -------------------------------------------------------------
+# group_scaling scale -------------------------------------------------------------
 
-  if (!is.null(rlang::as_label(qgroup))) {
 
-    stopifnot("The group column need to be factor variable" =
-                type[[rlang::as_label(qgroup)]] == "factor")
+  if (rlang::as_label(qgroup_scaling) != "NULL") {
+
+    stopifnot("The group_scaling column need to be factor variable" =
+                type[[rlang::as_label(qgroup_scaling)]] == "factor")
 
     if (scaling == "rank") {
 
       gdata_frame <- data_frame |>
-        group_by(!!qgroup, !!qtime)
+        group_by(!!qgroup_scaling, !!qtime)
 
     }
 
     if (scaling == "absolute") {
 
       gdata_frame <- data_frame |>
-        group_by(!!qgroup)
+        group_by(!!qgroup_scaling)
 
     }
 
   }
 
-  if (is.null(rlang::as_label(qgroup))) {
+  if (rlang::as_label(qgroup_scaling) == "NULL") {
 
     if (scaling == "rank") {
 
@@ -215,6 +218,37 @@ anim_prep <- function(data,
   }
 
 
+# return the selected columns with name changes ---------------------------
+
+  args_select <- c(rlang::as_label(qid),
+                   rlang::as_label(qtime),
+                   "qtile")
+
+  if (rlang::as_label(qgroup_scaling) != "NULL") {
+
+    args_select <- c(args_select, rlang::as_label(qgroup_scaling))
+
+  }
+
+  if (rlang::as_label(qcolor) != "NULL") {
+
+    args_select <- c(args_select, rlang::as_label(qcolor))
+
+  }
+
+  name <- tibble::tibble(
+    old = c(rlang::as_label(qid), rlang::as_label(qtime),
+            rlang::as_label(qgroup_scaling), rlang::as_label(qcolor)),
+    new = c("id", "time", "group", "color")
+  )
+
+  rename_vec <- stats::setNames(name$old, name$new)
+
+  animbook <- book |>
+    select(args_select) |>
+    dplyr::rename(tidyselect::any_of(rename_vec))
+
+
 # rect data ---------------------------------------------------------------
 
   x <- dplyr::pull(unique(book[, rlang::as_label(qtime)]))
@@ -223,7 +257,7 @@ anim_prep <- function(data,
 
   gap <- 0.1 * (length(x) - 1)
 
-  rect_data <- data_frame(
+  rect_data <- tibble::tibble(
     id = y,
     xmin = rep(min(x) - gap, length(y)),
     xmax = rep(max(x) + gap, length(y)),
@@ -252,7 +286,7 @@ anim_prep <- function(data,
 # return a list -----------------------------------------------------------
 
   return(
-    list(data = book,
+    list(data = animbook,
          rect_data = rect_data,
          settings = list(
            gap = gap,
