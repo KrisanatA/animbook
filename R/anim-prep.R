@@ -67,9 +67,9 @@ anim_prep <- function(data,
               rlang::as_label(qvalues) != "NULL" &
               rlang::as_label(qtime) != "NULL",
             "The id column need to be factor or character variable" =
-              type[[rlang::as_label(qid)]] %in%  c("factor", "character"),
+              type[[rlang::as_label(qid)]] == "factor",
             "The values column need to be numeric variable" =
-              type[[rlang::as_label(qvalues)]] %in% c("numeric", "integer"),
+              type[[rlang::as_label(qvalues)]] == "numeric",
             "The time column need to be integer variable" =
               type[[rlang::as_label(qtime)]] == "integer")
 
@@ -116,7 +116,7 @@ anim_prep <- function(data,
   if (rlang::as_label(qgroup_scaling) != "NULL") {
 
     stopifnot("The group_scaling column need to be factor variable" =
-                type[[rlang::as_label(qgroup_scaling)]] %in% c("factor", "character"))
+                type[[rlang::as_label(qgroup_scaling)]] == "factor")
 
     if (scaling == "rank") {
 
