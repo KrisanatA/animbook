@@ -116,7 +116,7 @@ anim_prep <- function(data,
   if (rlang::as_label(qgroup_scaling) != "NULL") {
 
     stopifnot("The group_scaling column need to be factor variable" =
-                type[[rlang::as_label(qgroup_scaling)]] == "factor")
+                type[[rlang::as_label(qgroup_scaling)]] %in% c("factor", "character"))
 
     if (scaling == "rank") {
 
