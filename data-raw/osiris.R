@@ -30,7 +30,13 @@ osiris <- data |>
   select(-country) |>
   complete(year, firmID) |>
   left_join(country) |>
-  relocate(country, .after = firmID)
+  relocate(country, .after = firmID) |>
+  mutate(year = as.integer(year),
+         firmID = as.factor(firmID),
+         country = as.factor(country),
+         sales = as.numeric(sales),
+         japan = ifelse(country == "JP", "From Japan", "Not Japan"),
+         japan = as.factor(japan))
 
 
 usethis::use_data(osiris, overwrite = TRUE)

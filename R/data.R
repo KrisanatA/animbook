@@ -5,12 +5,13 @@
 #'country, and sales variables from the full Osiris dataset to give the user
 #'an example of the dataset format.
 #'
-#'@format A data frame with 10,270 rows and 4 variables
+#'@format A data frame with 10,270 rows and 5 variables
 #'\describe{
 #'  \item{year}{Year}
 #'  \item{firmID}{Firm name + BvD(Bureau van Dijk) ID}
 #'  \item{country}{Address of incorp. - Country}
 #'  \item{sales}{Sales}
+#'  \item{japan}{Whether the firm is froom Japan or not}
 #'}
 #'
 #'@source This dataset is from the following; Bureau van Dijk
