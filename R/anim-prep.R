@@ -227,7 +227,8 @@ anim_prep <- function(data,
 
   args_select <- c(rlang::as_label(qid),
                    rlang::as_label(qtime),
-                   "qtile")
+                   "qtile",
+                   "frame")
 
   if (rlang::as_label(qgroup_scaling) != "NULL") {
 
