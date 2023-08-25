@@ -2,6 +2,7 @@
 
 export(anim_animate)
 export(anim_plot)
+export(anim_prep)
 export(prep_anim)
 export(sigmoid)
 import(gganimate)
