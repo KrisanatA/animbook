@@ -48,6 +48,7 @@ anim_prep <- function(data,
                       runif_min = 1,
                       runif_max = 50) {
 
+
 # enquo -------------------------------------------------------------------
 
   qid <- rlang::enquo(id)
@@ -61,7 +62,11 @@ anim_prep <- function(data,
 
   type <- sapply(data, class)
 
-  stopifnot("The id column need to be factor or character variable" =
+  stopifnot("The data, id, values, and time columns need to be specified" =
+              rlang::as_label(qid) != "NULL" &
+              rlang::as_label(qvalues) != "NULL" &
+              rlang::as_label(qtime) != "NULL",
+            "The id column need to be factor or character variable" =
               type[[rlang::as_label(qid)]] %in%  c("factor", "character"),
             "The values column need to be numeric variable" =
               type[[rlang::as_label(qvalues)]] %in% c("numeric", "integer"),
