@@ -165,13 +165,17 @@ anim_prep <- function(data,
         rank = ifelse(is.na(!!qvalues), NA, rank),
         .keep = "unused"
       ) |>
-      ungroup() |>
+      ungroup()
+
+    breaks <- stats::quantile(book$rank,
+                              probs = seq(0, 1, 1/ngroup),
+                              na.rm = TRUE)
+
+    book <- book |>
       # split the rank into equal size bins
       mutate(
         qtile = cut(rank,
-                    stats::quantile(rank,
-                                    probs = seq(0, 1, 1/ngroup),
-                                    na.rm = TRUE),
+                    breaks,
                     include.lowest = TRUE,
                     labels = rev(seq(1, ngroup, 1))),
         qtile = ifelse(is.na(qtile), 0, as.integer(levels(qtile)[qtile])),
