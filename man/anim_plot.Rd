@@ -6,25 +6,12 @@
 \usage{
 anim_plot(
   data,
-  id = NULL,
-  time = NULL,
-  color = NULL,
-  label = NULL,
   palette = RColorBrewer::brewer.pal(9, "Set1"),
   rendering = "gganimate"
 )
 }
 \arguments{
 \item{data}{The data frame that has been prepared by the \code{\link[=prep_anim]{prep_anim()}}}
-
-\item{id}{Name of the column that uniquely identified the rows.}
-
-\item{time}{Name of the column that will be used as x-axis (e.g. year).}
-
-\item{color}{Name of the column that distinguish different groups or categories within your data plot.}
-
-\item{label}{The default value is null, if the vector of character is supplied, it will displayed along
-the y-axis for each quantile.}
 
 \item{palette}{The vector of palette used by the function to supplied the color for each group.}
 
@@ -39,10 +26,8 @@ This function take in the data which has been prepared by the \code{\link[=prep_
 return the ggplot object. The user can still modified the plot the same as normal.
 }
 \examples{
-data <- prep_anim(data = osiris, id = firmID, values = sales, time = year, ngroup = 5)
+data <- anim_prep(data = toy_dbl, id = id, values = values, time = year, label = check, color = color)
 
-label = c("Top 20\%", "21-40", "41-60", "61-80", "81-100", "Not listed", "test")
-
-anim_plot(data = data, id = firmID, time = year, color = japan, label = label)
+anim_plot(data)
 
 }

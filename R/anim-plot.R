@@ -4,11 +4,6 @@
 #'return the ggplot object. The user can still modified the plot the same as normal.
 #'
 #'@param data The data frame that has been prepared by the [prep_anim()]
-#'@param id Name of the column that uniquely identified the rows.
-#'@param time Name of the column that will be used as x-axis (e.g. year).
-#'@param color Name of the column that distinguish different groups or categories within your data plot.
-#'@param label The default value is null, if the vector of character is supplied, it will displayed along
-#'the y-axis for each quantile.
 #'@param palette The vector of palette used by the function to supplied the color for each group.
 #'@param rendering The choice of method used to create and display the plot, either gganimate or
 #'plotly.
@@ -16,30 +11,15 @@
 #'@return Return a ggplot object
 #'
 #'@examples
-#'data <- prep_anim(data = osiris, id = firmID, values = sales, time = year, ngroup = 5)
+#'data <- anim_prep(data = toy_dbl, id = id, values = values, time = year, label = check, color = color)
 #'
-#'label = c("Top 20%", "21-40", "41-60", "61-80", "81-100", "Not listed", "test")
+#'anim_plot(data)
 #'
-#'anim_plot(data = data, id = firmID, time = year, color = japan, label = label)
-#'
-#'@importFrom ggplot2 ggplot geom_point geom_hline annotate theme
 #'@export
 
 anim_plot <- function(data,
-                      id = NULL,
-                      time = NULL,
-                      color = NULL,
-                      label = NULL,
                       palette = RColorBrewer::brewer.pal(9, "Set1"),
                       rendering = "gganimate") {
-
-  hline <- unique(data$qtile)
-
-  qx <- enquo(time)
-
-  x <- data[, as_label(qx)]
-
-  y <- sort(unique(data$qtile), decreasing = TRUE)
 
   col_val <- palette
 
@@ -48,61 +28,37 @@ anim_plot <- function(data,
   stopifnot("rendering argument can only be either gganimate or plotly" =
               rendering %in% rendering_choice)
 
-  # use for annotate function
+  x <- data[["settings"]]$breaks
 
-  if (is.null(label)) {
-    label <- as.character(y)
-  }
-
-  if (length(label) >= length(y)) {
-    label <- label[1:length(y)]
-  }
-
-  if (length(label) < length(y)) {
-    label <- as.character(y)
-
-    warning("length of the label provided is less that length of y")
-  }
-
-
-  gap <- 0.1 * (nrow(unique(x)) - 1)
-
-  rect_data <- data.frame(
-    id = y,
-    xmin = rep(min(x) - gap, length(y)),
-    xmax = rep(max(x) + gap, length(y)),
-    ymin = y - 0.25,
-    ymax = y + 0.25
-  )
+  gap <- data[["settings"]]$gap
 
   label_data <- data.frame(
     x = min(x) - (2 * gap),
-    y = y,
-    label = label
+    y = sort(unique(data[["data"]]$qtile), decreasing = TRUE),
+    label = data[["settings"]]$label
   )
 
 
-
-# build plot --------------------------------------------------------------
-
   if (rendering == "gganimate") {
-    jitter <- ggplot() +
-      geom_jitter(data = data, aes(x = {{ time }}, y = qtile, group = {{ id }}, color = {{ color }}), height = 0.2, width = 0)
+    jitter <- ggplot2::ggplot() +
+      ggplot2::geom_jitter(data = data[["data"]], ggplot2::aes(x = time, y = qtile, group = id,
+                                                               color = color), height = 0.2, width = 0)
   }
 
   if (rendering == "plotly") {
-    jitter <- ggplot() +
-      geom_jitter(data = data, aes(x = {{ time }}, y = qtile, color = {{color}}, ids = {{ id }}, frame = frame),
+    jitter <- ggplo2::ggplot() +
+      ggplot2::geom_jitter(data = data[["data"]], ggplot2::aes(x = time, y = qtile, color = color,
+                                                               ids = id , frame = frame),
                   height = 0.2, width = gap) |>
       suppressWarnings()
   }
 
   anim <- jitter +
-    geom_rect(data = rect_data, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, group =  id), alpha = 0.1) +
-    geom_text(data = label_data, aes(x = x, y = y, label = label)) +
-    scale_x_continuous(breaks = seq(min(x), max(x), 1)) +
-    coord_cartesian(clip = "off") +
-    theme(panel.background = element_blank(),
+    ggplot2::geom_rect(data = data[["rect_data"]], aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, group =  id), alpha = 0.1) +
+    ggplot2::geom_text(data = label_data, aes(x = x, y = y, label = label)) +
+    ggplot2::scale_x_continuous(breaks = seq(min(x), max(x), 1)) +
+    ggplot2::coord_cartesian(clip = "off") +
+    ggplot2::theme(panel.background = element_blank(),
           axis.title.y = element_blank(),
           axis.text.y = element_blank(),
           axis.ticks.y = element_blank(),
@@ -111,7 +67,9 @@ anim_plot <- function(data,
           axis.ticks.x = element_blank(),
           legend.position = "bottom",
           legend.title = element_blank()) +
-    scale_colour_manual(values = col_val)
+    ggplot2::scale_colour_manual(values = col_val)
 
   return(anim)
+
 }
+
