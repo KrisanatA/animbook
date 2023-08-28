@@ -46,7 +46,7 @@ anim_plot <- function(data,
   }
 
   if (rendering == "plotly") {
-    jitter <- ggplo2::ggplot() +
+    jitter <- ggplot2::ggplot() +
       ggplot2::geom_jitter(data = data[["data"]], ggplot2::aes(x = time, y = qtile, color = color,
                                                                ids = id , frame = frame),
                   height = 0.2, width = gap) |>
@@ -54,7 +54,7 @@ anim_plot <- function(data,
   }
 
   anim <- jitter +
-    ggplot2::geom_rect(data = data[["rect_data"]], aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, group =  id), alpha = 0.1) +
+    ggplot2::geom_rect(data = data[["rect_data"]], ggplot2::aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, group =  id), alpha = 0.1) +
     ggplot2::geom_text(data = label_data, aes(x = x, y = y, label = label)) +
     ggplot2::scale_x_continuous(breaks = seq(min(x), max(x), 1)) +
     ggplot2::coord_cartesian(clip = "off") +
