@@ -23,13 +23,13 @@
 #'  \item{settings}{A list of settings to be used in [anim_plot()], including gap, breaks, labels and scaling.}
 #'
 #'@examples
-#'prep_anim(data = osiris, id = firmID, values = sales, time = year)
+#'anim_prep(data = osiris, id = firmID, values = sales, time = year)
 #'
-#'prep_anim(data = osiris, id = firmID, values = sales, time = year, group_scaling = country)
+#'anim_prep(data = osiris, id = firmID, values = sales, time = year, group_scaling = country)
 #'
-#'prep_anim(data = osiris, id = firmID, values = sales, time = year, scaling = "absolute")
+#'anim_prep(data = osiris, id = firmID, values = sales, time = year, scaling = "absolute")
 #'
-#'prep_anim(data = osiris, id = firmID, values = sales, time = year, group_scaling = country, scaling = "absolute")
+#'anim_prep(data = osiris, id = firmID, values = sales, time = year, group_scaling = country, scaling = "absolute")
 #'
 #'@importFrom dplyr group_by arrange mutate select ungroup arrange
 #'@export

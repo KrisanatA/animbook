@@ -58,12 +58,12 @@ This function prepares the data into the format the \code{\link[=anim_plot]{anim
 grouping data, scaling values, and creating a necessary data and settings for the \code{\link[=anim_plot]{anim_plot()}} function.
 }
 \examples{
-prep_anim(data = osiris, id = firmID, values = sales, time = year)
+anim_prep(data = osiris, id = firmID, values = sales, time = year)
 
-prep_anim(data = osiris, id = firmID, values = sales, time = year, group_scaling = country)
+anim_prep(data = osiris, id = firmID, values = sales, time = year, group_scaling = country)
 
-prep_anim(data = osiris, id = firmID, values = sales, time = year, scaling = "absolute")
+anim_prep(data = osiris, id = firmID, values = sales, time = year, scaling = "absolute")
 
-prep_anim(data = osiris, id = firmID, values = sales, time = year, group_scaling = country, scaling = "absolute")
+anim_prep(data = osiris, id = firmID, values = sales, time = year, group_scaling = country, scaling = "absolute")
 
 }
