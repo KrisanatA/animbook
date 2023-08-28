@@ -25,11 +25,11 @@
 #'@examples
 #'prep_anim(data = osiris, id = firmID, values = sales, time = year)
 #'
-#'prep_anim(data = osiris, id = firmID, values = sales, time = year, group = country)
+#'prep_anim(data = osiris, id = firmID, values = sales, time = year, group_scaling = country)
 #'
 #'prep_anim(data = osiris, id = firmID, values = sales, time = year, scaling = "absolute")
 #'
-#'prep_anim(data = osiris, id = firmID, values = sales, time = year, group = country, scaling = "absolute")
+#'prep_anim(data = osiris, id = firmID, values = sales, time = year, group_scaling = country, scaling = "absolute")
 #'
 #'@importFrom dplyr group_by arrange mutate select ungroup arrange
 #'@export

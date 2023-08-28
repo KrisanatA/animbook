@@ -12,7 +12,8 @@ anim_prep(
   label = NULL,
   ngroup = 5L,
   breaks = NULL,
-  group = NULL,
+  group_scaling = NULL,
+  color = NULL,
   time_dependent = TRUE,
   scaling = "rank",
   runif_min = 1,
@@ -34,7 +35,9 @@ anim_prep(
 
 \item{breaks}{A vector of breaks for creating bins when using absolute scaling.}
 
-\item{group}{The column name that represents the grouping variable.}
+\item{group_scaling}{The column name that represents the grouping variable.}
+
+\item{color}{The column name to used in \code{\link[=aes]{aes()}} for the \code{\link[=anim_plot]{anim_plot()}}.}
 
 \item{time_dependent}{Logical. Should the visualization be time-dependent? Default is TRUE.}
 
@@ -57,10 +60,10 @@ grouping data, scaling values, and creating a necessary data and settings for th
 \examples{
 prep_anim(data = osiris, id = firmID, values = sales, time = year)
 
-prep_anim(data = osiris, id = firmID, values = sales, time = year, group = country)
+prep_anim(data = osiris, id = firmID, values = sales, time = year, group_scaling = country)
 
 prep_anim(data = osiris, id = firmID, values = sales, time = year, scaling = "absolute")
 
-prep_anim(data = osiris, id = firmID, values = sales, time = year, group = country, scaling = "absolute")
+prep_anim(data = osiris, id = firmID, values = sales, time = year, group_scaling = country, scaling = "absolute")
 
 }
