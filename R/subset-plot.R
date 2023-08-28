@@ -1,8 +1,21 @@
 subset_plot <- function(data,
-                        id = NULL,
-                        time = NULL,
-                        color = NULL,
-                        label = NULL,
+                        subset,
+                        palette = RColorBrewer::brewer.pal(9, "Set1"),
+                        rendering = "gganimate") {
+
+  col_val <- palette
+
+  rendering_choice <- c("plotly", "gganimate")
+
+  stopifnot("rendering argument can only be either gganimate or plotly" =
+              rendering %in% rendering_choice)
+
+}
+
+
+
+
+subset_plot <- function(data,
                         palette = RColorBrewer::brewer.pal(9, "Set1"),
                         rendering = "gganimate") {
 
