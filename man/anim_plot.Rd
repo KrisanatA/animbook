@@ -26,7 +26,7 @@ This function take in the data which has been prepared by the \code{\link[=prep_
 return the ggplot object. The user can still modified the plot the same as normal.
 }
 \examples{
-data <- anim_prep(data = toy_dbl, id = id, values = values, time = year, label = check, color = color)
+data <- anim_prep(data = osiris, id = firmID, values = sales, time = year)
 
 anim_plot(data)
 

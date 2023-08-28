@@ -11,7 +11,7 @@
 #'@return Return a ggplot object
 #'
 #'@examples
-#'data <- anim_prep(data = toy_dbl, id = id, values = values, time = year, label = check, color = color)
+#'data <- anim_prep(data = osiris, id = firmID, values = sales, time = year)
 #'
 #'anim_plot(data)
 #'
@@ -56,7 +56,7 @@ anim_plot <- function(data,
   anim <- jitter +
     ggplot2::geom_rect(data = data[["rect_data"]], ggplot2::aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, group =  id), alpha = 0.1) +
     ggplot2::geom_text(data = label_data, aes(x = x, y = y, label = label)) +
-    ggplot2::scale_x_continuous(breaks = seq(min(x), max(x), 1)) +
+    ggplot2::scale_x_continuous(breaks = x) +
     ggplot2::coord_cartesian(clip = "off") +
     ggplot2::theme(panel.background = element_blank(),
           axis.title.y = element_blank(),
