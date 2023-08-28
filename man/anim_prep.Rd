@@ -51,7 +51,7 @@ anim_prep(
 A list containing the following components:
 \item{data}{A data frame with prepared data for visualization.}
 \item{rect_data}{A data frame that wil be used for shading in \code{\link[=anim_plot]{anim_plot()}}.}
-\item{settings}{A list of settings to be used in \code{\link[=anim_plot]{anim_plot()}}, including gap, breaks, and labels.}
+\item{settings}{A list of settings to be used in \code{\link[=anim_plot]{anim_plot()}}, including gap, breaks, labels and scaling.}
 }
 \description{
 This function prepares the data into the format the \code{\link[=anim_plot]{anim_plot()}} required by assigning frames,

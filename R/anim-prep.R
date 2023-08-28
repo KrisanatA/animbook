@@ -20,7 +20,7 @@
 #'@return A list containing the following components:
 #'  \item{data}{A data frame with prepared data for visualization.}
 #'  \item{rect_data}{A data frame that wil be used for shading in [anim_plot()].}
-#'  \item{settings}{A list of settings to be used in [anim_plot()], including gap, breaks, and labels.}
+#'  \item{settings}{A list of settings to be used in [anim_plot()], including gap, breaks, labels and scaling.}
 #'
 #'@examples
 #'prep_anim(data = osiris, id = firmID, values = sales, time = year)
@@ -186,7 +186,12 @@ anim_prep <- function(data,
     # default setting for breaks
     if (is.null(breaks)) {
 
-      breaks <- pretty(!!qvalues, ngroup)
+      vector <- dplyr::pull(data, !!qvalues)
+
+      min <- min(vector, na.rm = TRUE)
+      max <- max(vector, na.rm = TRUE)
+
+      breaks <- seq(min, max, by = (max - min)/ngroup)
 
     }
 
@@ -297,7 +302,8 @@ anim_prep <- function(data,
          settings = list(
            gap = gap,
            breaks = x,
-           labels = label
+           labels = label,
+           scaling = breaks
            )
          )
     )
