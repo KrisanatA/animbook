@@ -5,12 +5,13 @@
 \alias{osiris}
 \title{Osiris firm sales data}
 \format{
-A data frame with 10,270 rows and 4 variables
+A data frame with 10,270 rows and 5 variables
 \describe{
 \item{year}{Year}
 \item{firmID}{Firm name + BvD(Bureau van Dijk) ID}
 \item{country}{Address of incorp. - Country}
 \item{sales}{Sales}
+\item{japan}{Whether the firm is froom Japan or not}
 }
 }
 \source{
