@@ -6,57 +6,42 @@ library(animbook)
 
 set.seed(29803829)
 
-rank_dbl <- as.double(runif(100, 1, 100))
-rank_int <- as.integer(runif(100, 1, 100))
-rank_fac <- as.factor(floor(runif(100, 1, 6)))
-
 toy_dbl <- tibble(expand.grid(1:30, 2001:2010),
-              rank = sample(rank_dbl, 300, replace = TRUE),
-              group = sample(c("apple", "samsung"), 300, replace = TRUE))
-names(toy_dbl) <- c("id", "year", "rank", "group")
+              values = as.double(runif(300, 1, 300)),
+              group = as.factor(sample(c("apple", "samsung"), 300, replace = TRUE)),
+              color = sample(c("1", "2", "3"), 300, replace = TRUE))
 
-toy_int <- tibble(expand.grid(1:30, 2001:2010),
-                  rank = sample(rank_int, 300, replace = TRUE),
-                  group = sample(c("apple", "samsung"), 300, replace = TRUE))
-names(toy_int) <- c("id", "year", "rank", "group")
+names(toy_dbl) <- c("id", "year", "values", "group", "color")
 
-toy_fac <- tibble(expand.grid(1:30, 2001:2010),
-                  rank = sample(rank_fac, 300, replace = TRUE),
-                  group = sample(c("apple", "samsung"), 300, replace = TRUE))
-names(toy_fac) <- c("id", "year", "rank", "group")
-
+toy_dbl$id <- as.factor(toy_dbl$id)
 
 # Osiris data -------------------------------------------------------------
 
 full_data <- osiris |>
-  mutate(japan = ifelse(country == "JP", "From Japan", "Not Japan")) |>
   filter(between(year, 2006, 2011))
 
 
 # test code ---------------------------------------------------------------
 
 # label
-check <- c("Top 20%", "21-40", "41-60", "61-80", "81-100", "Not listed", "test")
+check <- c("Top 20%", "21-40", "41-60", "61-80", "81-100", "NA")
 
+scale1 <- anim_prep(data = toy_dbl, id = id, values = values, time = year,
+                    label = check, color = color)
 
-# full step on toy data
-data <- prep_anim(toy_dbl, id, rank)
+scale2 <- anim_prep(data = toy_dbl, id = id, values = values, time = year,
+                    label = check, group_scaling = group, color = color)
 
-p <- anim_plot(data, id, year, group, label = check)
-p
+scale3 <- anim_prep(data = toy_dbl, id = id, values = values, time = year,
+                    label = check, color = color, scaling = "absolute")
 
-p2 <- anim_animate(p)
-animate(p2, nframes = 2000, renderer = av_renderer())
+scale4 <- anim_prep(data = toy_dbl, id = id, values = values, time = year,
+                    label = check, group_scaling = group, color = color,
+                    scaling = "absolute")
 
+anim_plot(scale2)
 
-# full step on osiris data
-data2 <- prep_anim(full_data, firmID, sales, year, ngroup = 5)
-
-os <- anim_plot(data2, firmID, year, japan, label = check, rendering = "plotly")
-os
-
-os2 <- anim_animate(os)
-gganimate::animate(os2)
+facet_plot(scale2)
 
 
 # Function example --------------------------------------------------------
@@ -105,12 +90,9 @@ p2 <- anim_animate(p)
 animate(p2, nframes = 49)
 
 
-
 # Explore plotly ----------------------------------------------------------
 
 plotly::ggplotly(os)
-
-
 
 
 # Category variable -------------------------------------------------------
@@ -149,3 +131,57 @@ p <- subset_plot(data, id, year, gender, label = rev(order))
 p2 <- anim_animate(p)
 
 gganimate::animate(p2)
+
+
+
+# Absolute scale ----------------------------------------------------------
+
+sales <- osiris$sales
+
+cut(sales, breaks = pretty(sales, ngroup), include.lowest = TRUE, labels = seq(1, ngroup, 1))
+
+
+min <- 1
+max <- 20
+
+v <- c(1, 5, 30)
+
+dplyr::between(v, min, max)
+
+
+# facet plot
+
+data1 <- data |>
+  filter(time > min(time)) |>
+  group_by(id) |>
+  mutate(facet = row_number())
+
+
+data2 <- data |>
+  filter(time < max(time)) |>
+  group_by(id) |>
+  mutate(facet = row_number())
+
+full <- rbind(data1, data2) |>
+  arrange(id, time)
+
+
+full |>
+  ggplot() +
+  geom_line(aes(x = time, y = qtile, group = id, color = color),
+            position = position_jitter(height = 0.2, width = 0)) +
+  scale_x_continuous(breaks = scale1[["settings"]]$breaks) +
+  facet_wrap(~facet, scales = "free")
+
+
+
+
+
+
+
+
+
+
+
+
+
