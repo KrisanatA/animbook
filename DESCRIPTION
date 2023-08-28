@@ -22,4 +22,8 @@ Imports:
     dplyr,
     gganimate,
     ggplot2,
-    rlang
+    plotly,
+    RColorBrewer,
+    rlang,
+    tibble,
+    tidyselect
