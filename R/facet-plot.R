@@ -12,6 +12,8 @@
 #'
 #'facet_plot(data)
 #'
+#'@importFrom ggplot2 element_blank
+#'
 #'@export
 
 facet_plot <- function(data,
@@ -35,7 +37,7 @@ facet_plot <- function(data,
 
   anim <- ggplot2::ggplot() +
     ggplot2::geom_line(data = full, ggplot2::aes(x = time, y = qtile, group = id, color = color),
-                       position = position_jitter(height = 0.2, width = 0)) +
+                       position = ggplot2::position_jitter(height = 0.2, width = 0)) +
     ggplot2::coord_cartesian(clip = "off") +
     ggplot2::scale_x_continuous(breaks = scale1[["settings"]]$breaks) +
     ggplot2::theme(panel.background = element_blank(),
