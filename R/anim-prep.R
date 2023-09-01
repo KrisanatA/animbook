@@ -264,21 +264,11 @@ anim_prep <- function(data,
     dplyr::rename(tidyselect::any_of(rename_vec))
 
 
-# rect data ---------------------------------------------------------------
+# gap settings ------------------------------------------------------------
 
   x <- dplyr::pull(unique(book[, rlang::as_label(qtime)]))
 
-  y <- sort(unique(book$qtile), decreasing = TRUE)
-
   gap <- 0.1 * (length(x) - 1)
-
-  rect_data <- tibble::tibble(
-    id = y,
-    xmin = rep(min(x) - gap, length(y)),
-    xmax = rep(max(x) + gap, length(y)),
-    ymin = y - 0.25,
-    ymax = y + 0.25
-   )
 
 
 # labels ------------------------------------------------------------------
@@ -302,7 +292,6 @@ anim_prep <- function(data,
 
   return(
     list(data = animbook,
-         rect_data = rect_data,
          settings = list(
            gap = gap,
            xbreaks = x,
