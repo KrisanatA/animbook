@@ -11,16 +11,15 @@
 #'@param ngroup The number of groups or categories to create for scaling values.
 #'@param breaks A vector of breaks for creating bins when using absolute scaling.
 #'@param group_scaling The column name that represents the grouping variable.
-#'@param time_dependent Logical. Should the visualization be time-dependent? Default is TRUE.
 #'@param color The column name to used in [aes()] for the [anim_plot()].
+#'@param time_dependent Logical. Should the visualization be time-dependent? Default is TRUE.
 #'@param scaling The scaling method to be used: "rank" or "absolute".
 #'@param runif_min The minimum value for random addition to frame numbers.
 #'@param runif_max The maximum value for random addition to frame numbers.
 #'
-#'@return A list containing the following components:
+#'@return An animbook object:
 #'  \item{data}{A data frame with prepared data for visualization.}
-#'  \item{rect_data}{A data frame that wil be used for shading in [anim_plot()].}
-#'  \item{settings}{A list of settings to be used in [anim_plot()], including gap, breaks, labels and scaling.}
+#'  \item{settings}{A list of settings to be used in [anim_plot()], including data, gap, xbreaks, label and scaling.}
 #'
 #'@examples
 #'anim_prep(data = osiris, id = firmID, values = sales, time = year)

@@ -48,10 +48,9 @@ anim_prep(
 \item{runif_max}{The maximum value for random addition to frame numbers.}
 }
 \value{
-A list containing the following components:
+An animbook object:
 \item{data}{A data frame with prepared data for visualization.}
-\item{rect_data}{A data frame that wil be used for shading in \code{\link[=anim_plot]{anim_plot()}}.}
-\item{settings}{A list of settings to be used in \code{\link[=anim_plot]{anim_plot()}}, including gap, breaks, labels and scaling.}
+\item{settings}{A list of settings to be used in \code{\link[=anim_plot]{anim_plot()}}, including data, gap, xbreaks, label and scaling.}
 }
 \description{
 This function prepares the data into the format the \code{\link[=anim_plot]{anim_plot()}} required by assigning frames,
