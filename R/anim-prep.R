@@ -292,15 +292,18 @@ anim_prep <- function(data,
 
 # return a list -----------------------------------------------------------
 
+  object <- list(data = animbook,
+                 settings = list(
+                   gap = gap,
+                   xbreaks = x,
+                   label = label,
+                   scaling = breaks
+                 ))
+
+  class(object) <- "animbook"
+
   return(
-    list(data = animbook,
-         settings = list(
-           gap = gap,
-           xbreaks = x,
-           label = label,
-           scaling = breaks
-           )
-         )
+    object
     )
 
 }
