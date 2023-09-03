@@ -19,46 +19,131 @@
 #'
 #'@export
 
-anim_plot <- function(data,
+anim_plot <- function(object,
+                      plot = "kangaroo",
                       palette = RColorBrewer::brewer.pal(9, "Set1"),
-                      rendering = "gganimate") {
+                      rendering = "gganimate", ...) {
 
   col_val <- palette
 
   rendering_choice <- c("plotly", "gganimate")
 
-  stopifnot("rendering argument can only be either gganimate or plotly" =
-              rendering %in% rendering_choice)
+  plot_choice <- c("kangaroo", "wallaby", "funnel_web_spider")
 
-  x <- data[["settings"]]$breaks
-
-  gap <- data[["settings"]]$gap
-
-  label_data <- data.frame(
-    x = min(x) - (2 * gap),
-    y = sort(unique(data[["data"]]$qtile), decreasing = TRUE),
-    label = data[["settings"]]$label
-  )
+  stopifnot("Rendering argument can only be either gganimate or plotly" =
+              rendering %in% rendering_choice,
+            "Please check all the plot supported" =
+              plot %in% plot_choice)
 
 
-  if (rendering == "gganimate") {
-    jitter <- ggplot2::ggplot() +
-      ggplot2::geom_jitter(data = data[["data"]], ggplot2::aes(x = time, y = qtile, group = id,
-                                                               color = color), height = 0.2, width = 0)
+# ... arguments -----------------------------------------------------------
+
+  args <- list(...)
+
+  # subset for wallaby plot
+  subset <- "top"
+
+  if (!is.null(args[["subset"]])) {
+    subset <- args[["subset"]]
   }
 
-  if (rendering == "plotly") {
-    jitter <- ggplot2::ggplot() +
-      ggplot2::geom_jitter(data = data[["data"]], ggplot2::aes(x = time, y = qtile, color = color,
-                                                               ids = id , frame = frame),
-                  height = 0.2, width = gap) |>
-      suppressWarnings()
+  # height settings for geom_jitter
+  height <- 0.2
+
+  if (!is.null(args[["height"]])) {
+    height <- args[["height"]]
   }
 
-  anim <- jitter +
-    ggplot2::geom_rect(data = data[["rect_data"]], ggplot2::aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, group =  id), alpha = 0.1) +
-    ggplot2::geom_text(data = label_data, ggplot2::aes(x = x, y = y, label = label)) +
-    ggplot2::scale_x_continuous(breaks = x) +
+  # width settings for geom_jitter
+  width <- 0
+
+  if (!is.null(args[["width"]])) {
+    width <- args[["width"]]
+  }
+
+  # alpha settings for paths shading
+  alpha <- 0.1
+
+  if (!is.null(args[["alpha"]])) {
+    alpha <- args[["alpha"]]
+  }
+
+
+# reformat data -----------------------------------------------------------
+
+  if (plot == "kangaroo") {
+    object <- kangaroo_data(object)
+  }
+
+  if (plot == "wallaby") {
+    object <- wallaby_data(object)
+  }
+
+  if (plot == "funnel_web_spider") {
+    object <- funnel_web_spider_data(object)
+  }
+
+
+# draw plot ---------------------------------------------------------------
+
+  if (plot == "kangaroo") {
+    australia <- ggplot2::ggplot() +
+      ggplot2::geom_jitter(data = object[["data"]],
+                           ggplot2::aes(x = time,
+                                        y = qtile,
+                                        group = id,
+                                        color = color),
+                           height = height, width = width) +
+      ggplot2::geom_rect(data = object[["shade_data"]],
+                         ggplot2::aes(xmin = xmin,
+                                      xmax = xmax,
+                                      ymin = ymin,
+                                      ymax = ymax,
+                                      group = id),
+                         alpha = alpha) +
+      ggplot2::geom_text(data = object[["label_data"]],
+                         ggplot2::aes(x = x,
+                                      y = y,
+                                      label = label))
+  }
+
+  if (plot == "wallaby") {
+    australia <- ggplot2::ggplot() +
+      ggplot2::geom_jitter(data = object[["data"]],
+                           ggplot2::aes(x = time,
+                                        y = qtile,
+                                        group = id,
+                                        color = color),
+                           height = height, width = width) +
+      ggplot2::geom_polygon(data = object[["shade_data"]],
+                            ggplot2::aes(x = x,
+                                         y = y,
+                                         group = id),
+                            alpha = alpha) +
+      ggplot2::geom_text(data = object[["label_data"]]$right,
+                         ggplot2::aes(x = x,
+                                      y = y,
+                                      label = label)) +
+      ggplot2::geom_text(data = object[["label_data"]]$left,
+                         ggplot2::aes(x = x,
+                                      y = y,
+                                      label = label))
+  }
+
+  if (plot == "funnel_web_spider") {
+    australia <- ggplot2::ggplot() +
+      ggplot2::geom_line(data = object[["data"]],
+                         ggplot2::aes(x = time,
+                                      y = qtile,
+                                      group = id,
+                                      color = color),
+                         position = ggplot2::position_jitter(height = height,
+                                                             width = width)) +
+      ggplot2::facet_wrap(~facet, scales = "free_x")
+  }
+
+  anim <- australia +
+    ggplot2::scale_x_continuous(breaks = object[["settings"]]$xbreaks) +
     ggplot2::coord_cartesian(clip = "off") +
     ggplot2::theme(panel.background = element_blank(),
           axis.title.y = element_blank(),
