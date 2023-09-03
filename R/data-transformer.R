@@ -2,7 +2,7 @@ kangaroo_data <- function(object) {
 
   data <- object[["data"]]
 
-  x <- unique(time)
+  x <- unique(data$time)
 
   y <- sort(unique(data$qtile), decreasing = TRUE)
 
@@ -12,10 +12,10 @@ kangaroo_data <- function(object) {
 
 # Create label data -------------------------------------------------------
 
-  label_data <- data.frame(
+  label_data <- tibble::tibble(
     x = min(x) - (2 * gap),
-    y = sort(unique_qtiles, decreasing = TRUE),
-    label = data[["settings"]]$label
+    y = y,
+    label = object[["settings"]]$label
   )
 
 
@@ -30,7 +30,9 @@ kangaroo_data <- function(object) {
   )
 
 
-  kangaroo <- append(object, c(label_data, shade_data))
+  kangaroo <- append(object, list(label_data, shade_data))
+
+  names(kangaroo) <- c("data", "settings", "label_data", "shade_data")
 
   return(kangaroo)
 
@@ -52,7 +54,7 @@ kangaroo_data <- function(object) {
 
 
 
-wallyby_data <- function(object,
+wallaby_data <- function(object,
                          subset = "top") {
 
   subset_choice <- c("top", "bottom")
@@ -64,15 +66,20 @@ wallyby_data <- function(object,
 
   unique_qtiles <- unique(data$qtile)
 
+  y <- sort(unique(data$qtile), decreasing = TRUE)
 
 # Subset the data ---------------------------------------------------------
 
   if (subset == "top") {
     subset <- max(data$qtile)
+
+    label_left <- object[["settings"]]$label[1]
   }
 
   if (subset == "bottom") {
     subset <- min(data$qtile)
+
+    label_left <- object[["settings"]]$label[length(unique_qtiles)]
   }
 
   subset_id <- data |>
@@ -95,19 +102,23 @@ wallyby_data <- function(object,
 
 # Create label data -------------------------------------------------------
 
-  left_label <- data.frame(
-    id = sort(unique_qtiles, decreasing = TRUE),
-    x = min(subset_data$time),
-    y = max(sort(unique_qtiles))
+  gap <- 0.1 * length(unique(subset_data$time) - 1)
+
+  object[["settings"]]$gap <- gap
+
+  left <- tibble::tibble(
+    x = min(subset_data$time) - gap,
+    y = max(y),
+    label = label_left
   )
 
-  right_label <- data.frame(
-    id = sort(unique_qtiles, decreasing = TRUE),
-    x = max(subset_data$time),
-    y = sort(unique(data$qitle), decreasing = TRUE)
+  right <- tibble::tibble(
+    x = max(subset_data$time) + gap,
+    y = y,
+    label = object[["settings"]]$label
   )
 
-  label_data <- list(left_label, right_label)
+  label_data <- list(left, right)
 
 
 # Create shading data -----------------------------------------------------
@@ -115,22 +126,26 @@ wallyby_data <- function(object,
   max_qtile <- max(unique_qtiles)
   min_qtile <- min(unique_qtiles)
 
-  point0 <- data.frame(
+  point0 <- tibble::tibble(
     id = rep(unique_qtiles, each = 2),
     x = 0,
-    y = rep(c(max_qtile + 0.1, max_qtile - 0.1), length(unique_qtiles))
+    y = rep(c(max_qtile + 0.25, max_qtile - 0.25), length(unique_qtiles))
   )
 
-  point1 <- data.frame(
+  point1 <- tibble::tibble(
     id = rep(unique_qtiles, 2),
     x = 1,
-    y = rep(c(unique_qtiles - 0.1, unique_qtiles + 0.1), 2)
+    y = c(unique_qtiles - 0.25, unique_qtiles + 0.25)
   )
 
   shade_data <- rbind(point0, point1)
 
 
-  wallaby <- append(object, c(label_data, shade_data))
+  wallaby <- append(object, list(label_data, shade_data))
+
+  names(wallaby) <- c("data", "settings", "label_data", "shade_data")
+
+  names(wallaby$label_data) <- c("left", "right")
 
   return(wallaby)
 
