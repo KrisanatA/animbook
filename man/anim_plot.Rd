@@ -5,25 +5,38 @@
 \title{Turn the data into ggplot object for animate function}
 \usage{
 anim_plot(
-  data,
+  object,
+  plot = "kangaroo",
   palette = RColorBrewer::brewer.pal(9, "Set1"),
-  rendering = "gganimate"
+  rendering = "gganimate",
+  ...
 )
 }
 \arguments{
-\item{data}{The data frame that has been prepared by the \code{\link[=prep_anim]{prep_anim()}}}
+\item{object}{The data frame that has been prepared by the \code{\link[=anim_prep]{anim_prep()}}}
+
+\item{plot}{The type of plot to generate. Choose from "kangaroo," "wallaby," or
+"funnel_web_spider."}
 
 \item{palette}{The vector of palette used by the function to supplied the color for each group.}
 
 \item{rendering}{The choice of method used to create and display the plot, either gganimate or
 plotly.}
+
+\item{...}{Additional arguments for customization.}
 }
 \value{
 Return a ggplot object
 }
 \description{
-This function take in the data which has been prepared by the \code{\link[=prep_anim]{prep_anim()}} and
+This function take in the data which has been prepared by the \code{\link[=anim_prep]{anim_prep()}} and
 return the ggplot object. The user can still modified the plot the same as normal.
+}
+\details{
+This function takes prepared data and generates a ggplot object.
+Users can specify the type of plot to create ("kangaroo," "wallaby," or
+"funnel_web_spider") and customize the appearance of the plot using additional
+arguments.
 }
 \examples{
 data <- anim_prep(data = osiris, id = firmID, values = sales, time = year)

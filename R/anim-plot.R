@@ -4,11 +4,20 @@
 #'return the ggplot object. The user can still modified the plot the same as normal.
 #'
 #'@param object The data frame that has been prepared by the [anim_prep()]
+#'@param plot The type of plot to generate. Choose from "kangaroo," "wallaby," or
+#'"funnel_web_spider."
 #'@param palette The vector of palette used by the function to supplied the color for each group.
 #'@param rendering The choice of method used to create and display the plot, either gganimate or
 #'plotly.
+#'@param ... Additional arguments for customization.
 #'
 #'@return Return a ggplot object
+#'
+#'@details
+#'This function takes prepared data and generates a ggplot object.
+#'Users can specify the type of plot to create ("kangaroo," "wallaby," or
+#'"funnel_web_spider") and customize the appearance of the plot using additional
+#'arguments.
 #'
 #'@examples
 #'data <- anim_prep(data = osiris, id = firmID, values = sales, time = year)
