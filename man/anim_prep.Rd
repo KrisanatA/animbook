@@ -56,6 +56,11 @@ An animbook object:
 This function prepares the data into the format the \code{\link[=anim_plot]{anim_plot()}} required by assigning frames,
 grouping data, scaling values, and creating a necessary data and settings for the \code{\link[=anim_plot]{anim_plot()}} function.
 }
+\details{
+The function takes the input data and performs several operations to prepare it for visualizations.
+It assigns frames, groups data, scales values, and creates necessary data and settings for the \code{\link[=anim_plot]{anim_plot()}}
+function.
+}
 \examples{
 anim_prep(data = osiris, id = firmID, values = sales, time = year)
 

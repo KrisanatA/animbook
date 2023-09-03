@@ -21,6 +21,11 @@
 #'  \item{data}{A data frame with prepared data for visualization.}
 #'  \item{settings}{A list of settings to be used in [anim_plot()], including data, gap, xbreaks, label and scaling.}
 #'
+#'@details
+#'The function takes the input data and performs several operations to prepare it for visualizations.
+#'It assigns frames, groups data, scales values, and creates necessary data and settings for the [anim_plot()]
+#'function.
+#'
 #'@examples
 #'anim_prep(data = osiris, id = firmID, values = sales, time = year)
 #'
