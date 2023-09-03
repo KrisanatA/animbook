@@ -90,6 +90,8 @@ wallyby_data <- function(object,
 
   object[["data"]] <- subset_data
 
+  object[["settings"]]$xbreaks <- c(0, 1)
+
 
 # Create label data -------------------------------------------------------
 
@@ -146,7 +148,7 @@ wallyby_data <- function(object,
 
 
 
-funnel_web_spider <- function(object) {
+funnel_web_spider_data <- function(object) {
 
   data <- object[["data"]]
 
