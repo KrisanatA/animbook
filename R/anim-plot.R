@@ -1,9 +1,9 @@
 #'Turn the data into ggplot object for animate function
 #'
-#'This function take in the data which has been prepared by the [prep_anim()] and
+#'This function take in the data which has been prepared by the [anim_prep()] and
 #'return the ggplot object. The user can still modified the plot the same as normal.
 #'
-#'@param data The data frame that has been prepared by the [prep_anim()]
+#'@param object The data frame that has been prepared by the [anim_prep()]
 #'@param palette The vector of palette used by the function to supplied the color for each group.
 #'@param rendering The choice of method used to create and display the plot, either gganimate or
 #'plotly.
@@ -33,7 +33,9 @@ anim_plot <- function(object,
   stopifnot("Rendering argument can only be either gganimate or plotly" =
               rendering %in% rendering_choice,
             "Please check all the plot supported" =
-              plot %in% plot_choice)
+              plot %in% plot_choice,
+            "Please use the anim_prep function to converted data into animbook class object" =
+              class(object) == "animbook")
 
 
 # ... arguments -----------------------------------------------------------
