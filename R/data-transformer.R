@@ -1,3 +1,19 @@
+#'Kangaroo plot data
+#'
+#'This function performs data manipulation and formatting tasks
+#'from the original object with additional data components for labeling and shading.
+#'
+#'@param object An animbook object
+#'
+#'@return A modified animbook object with addition data components
+#'
+#'@details The function takes the animbook object and create a new label data and
+#'shading data used for the plot then appends them to the original object.
+#'
+#'@keywords internal
+#'
+#'@export
+
 kangaroo_data <- function(object) {
 
   data <- object[["data"]]
@@ -42,17 +58,22 @@ kangaroo_data <- function(object) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
+#'Wallaby plot data
+#'
+#'This function performs data manipulation and formatting tasks
+#'from the original object with additional data components for labeling and shading.
+#'
+#'@param object An animbook object
+#'
+#'@return A modified animbook object with addition data components
+#'
+#'@details The function takes the animbook object then subset the data based on the users.
+#'Additionaly, it create a label data and shading data for the [anim_plot()] function. All
+#'of this then replaced the original data and append new data to the object.
+#'
+#'@keywords internal
+#'
+#'@export
 
 wallaby_data <- function(object,
                          subset = "top") {
@@ -155,13 +176,20 @@ wallaby_data <- function(object,
 
 
 
-
-
-
-
-
-
-
+#'Funnel web spider plot data
+#'
+#'This function performs data manipulation for facetting.
+#'
+#'@param object An animbook object
+#'
+#'@return A modified animbook object
+#'
+#'@details The function takes the animbook object and manipulate the data into the
+#'format where it can be further facetting.
+#'
+#'@keywords internal
+#'
+#'@export
 
 funnel_web_spider_data <- function(object) {
 
@@ -188,8 +216,5 @@ funnel_web_spider_data <- function(object) {
 
   return(object)
 }
-
-
-
 
 
