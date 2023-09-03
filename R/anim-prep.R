@@ -273,6 +273,8 @@ anim_prep <- function(data,
 
 # labels ------------------------------------------------------------------
 
+  y <- sort(unique(animbook$qtile), decreasing = TRUE)
+
   if (is.null(label)) {
     label <- as.character(y)
   }
@@ -295,7 +297,7 @@ anim_prep <- function(data,
          settings = list(
            gap = gap,
            xbreaks = x,
-           labels = label,
+           label = label,
            scaling = breaks
            )
          )
