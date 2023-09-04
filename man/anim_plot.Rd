@@ -39,8 +39,8 @@ Users can specify the type of plot to create ("kangaroo," "wallaby," or
 arguments.
 }
 \examples{
-data <- anim_prep(data = osiris, id = firmID, values = sales, time = year)
+animbook <- anim_prep(data = osiris, id = firmID, values = sales, time = year, color = japan)
 
-anim_plot(data)
+anim_plot(animbook)
 
 }
