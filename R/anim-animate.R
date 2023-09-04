@@ -11,20 +11,20 @@
 #'the rendering is plotly.
 #'
 #'@examples
-#'data <- prep_anim(data = osiris, id = firmID, values = sales, time = year, ngroup = 5)
+#'animbook <- anim_prep(data = osiris, id = firmID, values = sales, time = year, color = japan)
 #'
-#'label = c("Top 20%", "21-40", "41-60", "61-80", "81-100", "Not listed", "test")
+#'plot <- anim_plot(animbook, plot = "wallaby", rendering = "plotly")
 #'
-#'p <- anim_plot(data = data, id = firmID, time = year, color = japan, label = label)
+#'animate <- anim_animate(plot)
 #'
-#'p2 <- anim_animate(p)
+#'plotly::ggplotly(animate)
 #'
 #'@import gganimate plotly
 #'@export
 
 anim_animate <- function(plot, modify = FALSE) {
 
-  check <- names(p$labels[4:5]) %in% c("ids", "frame")
+  check <- names(plot$labels[4:5]) %in% c("ids", "frame")
 
   plotly <- all(check == TRUE)
 
@@ -62,7 +62,7 @@ anim_animate <- function(plot, modify = FALSE) {
 
       return(
         plot +
-          transition_time(frame)
+          gganimate::transition_time(frame)
       )
     }
 
