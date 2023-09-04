@@ -8,7 +8,7 @@ anim_plot(
   object,
   plot = "kangaroo",
   palette = RColorBrewer::brewer.pal(9, "Set1"),
-  rendering = "gganimate",
+  rendering = "ggplot",
   ...
 )
 }
@@ -19,6 +19,9 @@ anim_plot(
 "funnel_web_spider."}
 
 \item{palette}{The vector of palette used by the function to supplied the color for each group.}
+
+\item{rendering}{The choice of method used to create and display the plot, either gganimate or
+plotly.}
 
 \item{...}{Additional arguments for customization.}
 }

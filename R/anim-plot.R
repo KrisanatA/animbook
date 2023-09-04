@@ -7,6 +7,8 @@
 #'@param plot The type of plot to generate. Choose from "kangaroo," "wallaby," or
 #'"funnel_web_spider."
 #'@param palette The vector of palette used by the function to supplied the color for each group.
+#'@param rendering The choice of method used to create and display the plot, either gganimate or
+#'plotly.
 #'@param ... Additional arguments for customization.
 #'
 #'@return Return a ggplot object
@@ -29,16 +31,29 @@
 anim_plot <- function(object,
                       plot = "kangaroo",
                       palette = RColorBrewer::brewer.pal(9, "Set1"),
-                      rendering = "gganimate", ...) {
+                      rendering = "ggplot",
+                      ...) {
 
   col_val <- palette
 
   plot_choice <- c("kangaroo", "wallaby", "funnel_web_spider")
 
+  rendering_choice <- c("ggplot", "plotly")
+
+  if (plot == "funnel_web_spider") {
+    funnel <- ifelse(rendering == "ggplot", TRUE, FALSE)
+  }
+
+  else {
+    funnel <- TRUE
+  }
+
   stopifnot("Please use the anim_prep function to converted data into animbook class object" =
               class(object) == "animbook",
             "Please check all the plot supported" =
-              plot %in% plot_choice
+              plot %in% plot_choice,
+            "Funnel web spider does not support plotly" =
+              funnel == TRUE
             )
 
 
@@ -92,21 +107,46 @@ anim_plot <- function(object,
 
 # variable main aes() -----------------------------------------------------
 
-  if ("color" %in% colnames(object[["data"]])) {
-    aes_list <- list(
-      x = quote(time),
-      y = quote(qtile),
-      group = quote(id),
-      color = quote(color)
-    )
+  if (rendering == "ggplot") {
+
+    if ("color" %in% colnames(object[["data"]])) {
+      aes_list <- list(
+        x = quote(time),
+        y = quote(qtile),
+        group = quote(id),
+        color = quote(color)
+      )
+    }
+
+    else {
+      aes_list <- list(
+        x = quote(time),
+        y = quote(qtile),
+        group = quote(id)
+      )
+    }
   }
 
-  else {
-    aes_list <- list(
-      x = quote(time),
-      y = quote(qtile),
-      group = quote(id)
-    )
+  if (rendering == "plotly") {
+
+    if ("color" %in% colnames(object[["data"]])) {
+      aes_list <- list(
+        x = quote(time),
+        y = quote(qtile),
+        color = quote(color),
+        ids = quote(id),
+        frame = quote(frame)
+      )
+    }
+
+    else {
+      aes_list <- list(
+        x = quote(time),
+        y = quote(qtile),
+        ids = quote(id),
+        frame = quote(frame)
+      )
+    }
   }
 
 
@@ -116,7 +156,10 @@ anim_plot <- function(object,
     australia <- ggplot2::ggplot() +
       ggplot2::geom_jitter(data = object[["data"]],
                            mapping = ggplot2::aes(!!!aes_list),
-                           height = height, width = width) +
+                           height = height, width = width) |>
+      suppressWarnings()
+
+    australia <- australia +
       ggplot2::geom_rect(data = object[["shade_data"]],
                          ggplot2::aes(xmin = xmin,
                                       xmax = xmax,
@@ -134,7 +177,10 @@ anim_plot <- function(object,
     australia <- ggplot2::ggplot() +
       ggplot2::geom_jitter(data = object[["data"]],
                            mapping = ggplot2::aes(!!!aes_list),
-                           height = height, width = width) +
+                           height = height, width = width) |>
+      suppressWarnings()
+
+    australia <- australia +
       ggplot2::geom_polygon(data = object[["shade_data"]],
                             ggplot2::aes(x = x,
                                          y = y,
@@ -147,7 +193,8 @@ anim_plot <- function(object,
       ggplot2::geom_text(data = object[["label_data"]]$left,
                          ggplot2::aes(x = x,
                                       y = y,
-                                      label = label))
+                                      label = label)) |>
+      suppressWarnings()
   }
 
   if (plot == "funnel_web_spider") {
