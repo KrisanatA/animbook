@@ -1,12 +1,10 @@
-library(tidyverse)
-library(gganimate)
 library(animbook)
 
 # Toy dataset -------------------------------------------------------------
 
 set.seed(29803829)
 
-toy_dbl <- tibble(expand.grid(1:30, 2001:2010),
+toy_dbl <- tibble::tibble(expand.grid(1:30, 2001:2010),
               values = as.double(runif(300, 1, 300)),
               group = as.factor(sample(c("apple", "samsung"), 300, replace = TRUE)),
               color = sample(c("1", "2", "3"), 300, replace = TRUE))
@@ -15,10 +13,10 @@ names(toy_dbl) <- c("id", "year", "values", "group", "color")
 
 toy_dbl$id <- as.factor(toy_dbl$id)
 
-# Osiris data -------------------------------------------------------------
-
-full_data <- osiris |>
-  filter(between(year, 2006, 2011))
+# # Osiris data -------------------------------------------------------------
+#
+# full_data <- osiris |>
+#   filter(between(year, 2006, 2011))
 
 
 # test code ---------------------------------------------------------------
@@ -26,8 +24,10 @@ full_data <- osiris |>
 # label
 check <- c("Top 20%", "21-40", "41-60", "61-80", "81-100", "NA")
 
+
+# toy dataset
 scale1 <- anim_prep(data = toy_dbl, id = id, values = values, time = year,
-                    label = check, color = color)
+                    label = check, color = color, time_dependent = FALSE)
 
 scale2 <- anim_prep(data = toy_dbl, id = id, values = values, time = year,
                     label = check, group_scaling = group, color = color)
@@ -39,55 +39,66 @@ scale4 <- anim_prep(data = toy_dbl, id = id, values = values, time = year,
                     label = check, group_scaling = group, color = color,
                     scaling = "absolute")
 
-anim_plot(scale2)
+p <- anim_plot(scale1)
 
-facet_plot(scale2)
+facet_plot(scale1)
+
+p2 <- anim_animate(p)
+
+gganimate::animate(p2, nframes = 200)
+
+# osiris dataset
+scale1 <- anim_prep(data = osiris |> dplyr::mutate(sales = log(sales)),
+                    id = firmID, values = sales, time = year,
+                    label = check,
+                    color = japan, scaling = "absolute")
+
 
 
 # Function example --------------------------------------------------------
 
-set.seed(2)
-
-gfc <- osiris |>
-  filter(year == 2007 & !is.na(sales))
-
-gfc2 <- osiris |>
-  filter(year == 2008,
-         firmID %in% gfc$firmID)
-
-full_data <- as_tibble(rbind(gfc, gfc2))  |>
-  mutate(japan = ifelse(country == "JP", "From Japan", "Not Japan"))
-
-data <- prep_anim(full_data, firmID, sales, year, ngroup = 5, time_dependent = TRUE)
-
-name_move <- data |>
-  filter(year == 2007 & qtile != 0) |>
-  pull(firmID)
-
-name2_move <- data |>
-  filter(year == 2008 & qtile == 0) |>
-  pull(firmID)
-
-name_nmove <- data |>
-  mutate(lead = lead(qtile)) |>
-  filter(qtile == lead) |>
-  distinct(firmID) |>
-  pull(firmID)
-
-final_name_nmove <- sample(name_nmove, 5)
-
-
-final_name_move <- sample(intersect(name_move, name2_move), 5)
-
-
-prep_gfc <- prep_anim(full_data, firmID, sales, year, ngroup = 5, time_dependent = TRUE) |>
-  filter(firmID %in% c(final_name_move, final_name_nmove))
-
-p <- anim_plot(prep_gfc, firmID, year, japan, label = check, rendering = "gganimate")
-
-p2 <- anim_animate(p)
-
-animate(p2, nframes = 49)
+# set.seed(2)
+#
+# gfc <- osiris |>
+#   filter(year == 2007 & !is.na(sales))
+#
+# gfc2 <- osiris |>
+#   filter(year == 2008,
+#          firmID %in% gfc$firmID)
+#
+# full_data <- as_tibble(rbind(gfc, gfc2))  |>
+#   mutate(japan = ifelse(country == "JP", "From Japan", "Not Japan"))
+#
+# data <- prep_anim(full_data, firmID, sales, year, ngroup = 5, time_dependent = TRUE)
+#
+# name_move <- data |>
+#   filter(year == 2007 & qtile != 0) |>
+#   pull(firmID)
+#
+# name2_move <- data |>
+#   filter(year == 2008 & qtile == 0) |>
+#   pull(firmID)
+#
+# name_nmove <- data |>
+#   mutate(lead = lead(qtile)) |>
+#   filter(qtile == lead) |>
+#   distinct(firmID) |>
+#   pull(firmID)
+#
+# final_name_nmove <- sample(name_nmove, 5)
+#
+#
+# final_name_move <- sample(intersect(name_move, name2_move), 5)
+#
+#
+# prep_gfc <- prep_anim(full_data, firmID, sales, year, ngroup = 5, time_dependent = TRUE) |>
+#   filter(firmID %in% c(final_name_move, final_name_nmove))
+#
+# p <- anim_plot(prep_gfc, firmID, year, japan, label = check, rendering = "gganimate")
+#
+# p2 <- anim_animate(p)
+#
+# animate(p2, nframes = 49)
 
 
 # Explore plotly ----------------------------------------------------------
@@ -177,7 +188,13 @@ full |>
 
 
 
+animbook <- anim_prep(data = osiris, id = firmID, values = sales, time = year, color = japan)
 
+p <- anim_plot(animbook, plot = "wallaby")
+
+p2 <- anim_animate(p)
+
+animate(p2, nframes = 29)
 
 
 
