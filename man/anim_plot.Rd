@@ -20,9 +20,6 @@ anim_plot(
 
 \item{palette}{The vector of palette used by the function to supplied the color for each group.}
 
-\item{rendering}{The choice of method used to create and display the plot, either gganimate or
-plotly.}
-
 \item{...}{Additional arguments for customization.}
 }
 \value{

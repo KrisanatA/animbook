@@ -7,8 +7,6 @@
 #'@param plot The type of plot to generate. Choose from "kangaroo," "wallaby," or
 #'"funnel_web_spider."
 #'@param palette The vector of palette used by the function to supplied the color for each group.
-#'@param rendering The choice of method used to create and display the plot, either gganimate or
-#'plotly.
 #'@param ... Additional arguments for customization.
 #'
 #'@return Return a ggplot object
@@ -35,16 +33,13 @@ anim_plot <- function(object,
 
   col_val <- palette
 
-  rendering_choice <- c("plotly", "gganimate")
-
   plot_choice <- c("kangaroo", "wallaby", "funnel_web_spider")
 
-  stopifnot("Rendering argument can only be either gganimate or plotly" =
-              rendering %in% rendering_choice,
+  stopifnot("Please use the anim_prep function to converted data into animbook class object" =
+              class(object) == "animbook",
             "Please check all the plot supported" =
-              plot %in% plot_choice,
-            "Please use the anim_prep function to converted data into animbook class object" =
-              class(object) == "animbook")
+              plot %in% plot_choice
+            )
 
 
 # ... arguments -----------------------------------------------------------
