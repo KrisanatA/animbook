@@ -95,15 +95,32 @@ anim_plot <- function(object,
   }
 
 
+# variable main aes() -----------------------------------------------------
+
+  if ("color" %in% colnames(object[["data"]])) {
+    aes_list <- list(
+      x = quote(time),
+      y = quote(qtile),
+      group = quote(id),
+      color = quote(color)
+    )
+  }
+
+  else {
+    aes_list <- list(
+      x = quote(time),
+      y = quote(qtile),
+      group = quote(id)
+    )
+  }
+
+
 # draw plot ---------------------------------------------------------------
 
   if (plot == "kangaroo") {
     australia <- ggplot2::ggplot() +
       ggplot2::geom_jitter(data = object[["data"]],
-                           ggplot2::aes(x = time,
-                                        y = qtile,
-                                        group = id,
-                                        color = color),
+                           mapping = ggplot2::aes(!!!aes_list),
                            height = height, width = width) +
       ggplot2::geom_rect(data = object[["shade_data"]],
                          ggplot2::aes(xmin = xmin,
@@ -121,10 +138,7 @@ anim_plot <- function(object,
   if (plot == "wallaby") {
     australia <- ggplot2::ggplot() +
       ggplot2::geom_jitter(data = object[["data"]],
-                           ggplot2::aes(x = time,
-                                        y = qtile,
-                                        group = id,
-                                        color = color),
+                           mapping = ggplot2::aes(!!!aes_list),
                            height = height, width = width) +
       ggplot2::geom_polygon(data = object[["shade_data"]],
                             ggplot2::aes(x = x,
@@ -144,10 +158,7 @@ anim_plot <- function(object,
   if (plot == "funnel_web_spider") {
     australia <- ggplot2::ggplot() +
       ggplot2::geom_line(data = object[["data"]],
-                         ggplot2::aes(x = time,
-                                      y = qtile,
-                                      group = id,
-                                      color = color),
+                         mapping = ggplot2::aes(!!!aes_list),
                          position = ggplot2::position_jitter(height = height,
                                                              width = width)) +
       ggplot2::facet_wrap(~facet, scales = "free_x")
