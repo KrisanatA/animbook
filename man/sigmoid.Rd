@@ -30,7 +30,7 @@ to the ending point (x_end, y_end) with the sigmoid shape.
 \examples{
 path <- sigmoid()
 
-ggplot(data = path, aes(x = x, y = y)) + geom_point()
+ggplot2::ggplot(data = path, ggplot2::aes(x = x, y = y)) + ggplot2::geom_point()
 
 }
 \references{
