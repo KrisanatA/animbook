@@ -171,9 +171,36 @@ anim_prep <- function(data,
       ) |>
       ungroup()
 
+    # default setting for breaks
+    if (is.null(breaks)) {
+
+      breaks <- stats::quantile(book$rank,
+                                probs = seq(0, 1, 1/ngroup),
+                                na.rm = TRUE)
+
+    }
+
+    # if the breaks vector is provided
+    if (!is.null(breaks)) {
+
+      stopifnot("The breaks argument only accepted vector" =
+                  is.vector(breaks),
+                "The breaks vector must have the same number of group as ngroup argument" =
+                  length(breaks) - 1 == ngroup,
+                "The breaks vector should not contains NA" =
+                  !is.na(breaks),
+                "The breaks values must be between 0 and 1" =
+                  all(dplyr::between(breaks, 0, 1))
+      )
+
     breaks <- stats::quantile(book$rank,
-                              probs = seq(0, 1, 1/ngroup),
+                              probs = sort(breaks),
                               na.rm = TRUE)
+
+    }
+
+
+
 
     book <- book |>
       # split the rank into equal size bins
@@ -204,12 +231,12 @@ anim_prep <- function(data,
     }
 
     # if the breaks vector is provided
-    else {
+    if (!is.null(breaks)) {
 
       stopifnot("The breaks argument only accepted vector" =
                   is.vector(breaks),
-                "The breaks vector must have a length greater than two" =
-                  length(breaks) > 2,
+                "The breaks vector must have the same number of group as ngroup argument" =
+                  length(breaks) - 1 == ngroup,
                 "The breaks vector should not contains NA" =
                   !is.na(breaks),
                 "The breaks values is not in the range of values" =
@@ -218,7 +245,7 @@ anim_prep <- function(data,
                                      max(data[, rlang::as_label(!!qvalues)])))
                 )
 
-      breaks <- breaks
+      breaks <- sort(breaks)
 
     }
 
