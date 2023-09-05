@@ -181,7 +181,7 @@ anim_prep <- function(data,
     }
 
     # if the breaks vector is provided
-    if (!is.null(breaks)) {
+    else {
 
       stopifnot("The breaks argument only accepted vector" =
                   is.vector(breaks),
@@ -231,7 +231,7 @@ anim_prep <- function(data,
     }
 
     # if the breaks vector is provided
-    if (!is.null(breaks)) {
+    else {
 
       stopifnot("The breaks argument only accepted vector" =
                   is.vector(breaks),
