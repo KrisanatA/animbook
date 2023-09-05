@@ -33,7 +33,7 @@ anim_prep(
 
 \item{ngroup}{The number of groups or categories to create for scaling values.}
 
-\item{breaks}{A vector of breaks for creating bins when using absolute scaling.}
+\item{breaks}{A vector of breaks for creating bins.}
 
 \item{group_scaling}{The column name that represents the grouping variable.}
 

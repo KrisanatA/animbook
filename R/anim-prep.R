@@ -9,7 +9,7 @@
 #'@param time The column name representing the time variable.
 #'@param label A vector of labels to be used for the y-axis in the visualization.
 #'@param ngroup The number of groups or categories to create for scaling values.
-#'@param breaks A vector of breaks for creating bins when using absolute scaling.
+#'@param breaks A vector of breaks for creating bins.
 #'@param group_scaling The column name that represents the grouping variable.
 #'@param color The column name to used in [aes()] for the [anim_plot()].
 #'@param time_dependent Logical. Should the visualization be time-dependent? Default is TRUE.
