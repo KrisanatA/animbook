@@ -108,17 +108,17 @@ plotly::ggplotly(os)
 
 # Category variable -------------------------------------------------------
 
-liberal <- aes |>
+liberal <- aeles |>
   filter(year == 2016,
          party == "liberal") |>
   pull(id)
 
-order <- count(aes, party) |>
+order <- count(aeles, party) |>
   arrange(n) |>
   pull(party)
 
 
-p <- aes |>
+p <- aeles |>
   filter(id %in% liberal) |>
   arrange(id, year) |>
   group_by(id) |>
@@ -135,7 +135,7 @@ gganimate::animate(p)
 
 
 
-data <- prep_cat(aes, id, party, time = year)
+data <- prep_cat(aeles, id, party, time = year)
 
 p <- subset_plot(data, id, year, gender, label = rev(order))
 
