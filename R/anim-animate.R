@@ -11,7 +11,7 @@
 #'the rendering is plotly.
 #'
 #'@examples
-#'animbook <- anim_prep(data = osiris, id = firmID, values = sales, time = year, color = japan)
+#'animbook <- anim_prep(data = osiris, id = ID, values = sales, time = year, color = japan)
 #'
 #'plot <- anim_plot(animbook, plot = "wallaby", rendering = "plotly")
 #'

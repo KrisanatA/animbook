@@ -21,7 +21,7 @@ This function by default will modified the ggplot object before the user can
 pass it to the rendering of choice.
 }
 \examples{
-animbook <- anim_prep(data = osiris, id = firmID, values = sales, time = year, color = japan)
+animbook <- anim_prep(data = osiris, id = ID, values = sales, time = year, color = japan)
 
 plot <- anim_plot(animbook, plot = "wallaby", rendering = "plotly")
 

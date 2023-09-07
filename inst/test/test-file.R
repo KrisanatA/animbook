@@ -49,7 +49,7 @@ gganimate::animate(p2, nframes = 200)
 
 # osiris dataset
 scale1 <- anim_prep(data = osiris |> dplyr::mutate(sales = log(sales)),
-                    id = firmID, values = sales, time = year,
+                    id = ID, values = sales, time = year,
                     label = check,
                     color = japan, scaling = "absolute")
 
@@ -64,26 +64,26 @@ scale1 <- anim_prep(data = osiris |> dplyr::mutate(sales = log(sales)),
 #
 # gfc2 <- osiris |>
 #   filter(year == 2008,
-#          firmID %in% gfc$firmID)
+#          ID %in% gfc$ID)
 #
 # full_data <- as_tibble(rbind(gfc, gfc2))  |>
 #   mutate(japan = ifelse(country == "JP", "From Japan", "Not Japan"))
 #
-# data <- prep_anim(full_data, firmID, sales, year, ngroup = 5, time_dependent = TRUE)
+# data <- prep_anim(full_data, ID, sales, year, ngroup = 5, time_dependent = TRUE)
 #
 # name_move <- data |>
 #   filter(year == 2007 & qtile != 0) |>
-#   pull(firmID)
+#   pull(ID)
 #
 # name2_move <- data |>
 #   filter(year == 2008 & qtile == 0) |>
-#   pull(firmID)
+#   pull(ID)
 #
 # name_nmove <- data |>
 #   mutate(lead = lead(qtile)) |>
 #   filter(qtile == lead) |>
-#   distinct(firmID) |>
-#   pull(firmID)
+#   distinct(ID) |>
+#   pull(ID)
 #
 # final_name_nmove <- sample(name_nmove, 5)
 #
@@ -91,10 +91,10 @@ scale1 <- anim_prep(data = osiris |> dplyr::mutate(sales = log(sales)),
 # final_name_move <- sample(intersect(name_move, name2_move), 5)
 #
 #
-# prep_gfc <- prep_anim(full_data, firmID, sales, year, ngroup = 5, time_dependent = TRUE) |>
-#   filter(firmID %in% c(final_name_move, final_name_nmove))
+# prep_gfc <- prep_anim(full_data, ID, sales, year, ngroup = 5, time_dependent = TRUE) |>
+#   filter(ID %in% c(final_name_move, final_name_nmove))
 #
-# p <- anim_plot(prep_gfc, firmID, year, japan, label = check, rendering = "gganimate")
+# p <- anim_plot(prep_gfc, ID, year, japan, label = check, rendering = "gganimate")
 #
 # p2 <- anim_animate(p)
 #
@@ -188,7 +188,7 @@ full |>
 
 
 
-animbook <- anim_prep(data = osiris, id = firmID, values = sales, time = year, color = japan)
+animbook <- anim_prep(data = osiris, id = ID, values = sales, time = year, color = japan)
 
 p <- anim_plot(animbook, plot = "wallaby")
 

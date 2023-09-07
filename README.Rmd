@@ -46,12 +46,12 @@ In this stage, we first need to prepare the data structure to a specific format.
 
 The data needs to contain the following variable for the function to work:
 
-- id: `firmID`, it needs to be a factor variable.
+- id: `ID`, it needs to be a factor variable.
 - values: `sales`, it need to be a numeric variable.
 - time: `year`, it needs to be an integer variable.
 
 ```{r}
-animbook <- anim_prep(osiris, firmID, sales, year)
+animbook <- anim_prep(osiris, ID, sales, year)
 ```
 
 There are also additional options that allow the user to customize.
@@ -70,18 +70,18 @@ The function can calculate four different scales using these options.
 
 ```{r}
 # rank scaling
-rank_scaling <- anim_prep(data = osiris, id = firmID, values = sales, time = year)
+rank_scaling <- anim_prep(data = osiris, id = ID, values = sales, time = year)
 
 # absolute scaling
-absolute_scaling <- anim_prep(data = osiris, id = firmID, values = sales, time = year,
+absolute_scaling <- anim_prep(data = osiris, id = ID, values = sales, time = year,
                               scaling = "absolute")
 
 # rank scaling by group
-rank_group_scaling <- anim_prep(data = osiris, id = firmID, values = sales, time = year, 
+rank_group_scaling <- anim_prep(data = osiris, id = ID, values = sales, time = year, 
                                 group = country)
 
 # absolute scaling by group
-absolute_group_scaling <- anim_prep(data = osiris, id = firmID, values = sales, time = year,
+absolute_group_scaling <- anim_prep(data = osiris, id = ID, values = sales, time = year,
                                     group = country, scaling = "absolute")
 
 rank_scaling
@@ -99,7 +99,7 @@ After preparing the data, we can not plot it. There are three plots available in
 - `funnel_web_spider`, which is a faceted plot by time variable.
 
 ```{r}
-animbook <- anim_prep(data = osiris, id = firmID, values = sales, time = year, color = japan)
+animbook <- anim_prep(data = osiris, id = ID, values = sales, time = year, color = japan)
 
 # kangaroo plot
 anim_plot(animbook, plot = "kangaroo")
@@ -119,7 +119,7 @@ The `kangaroo` and `wallaby` plots can be animated using the function of the nex
 To animate the plot, we need to save the plot into an object, which then can be passed on to the function.
 
 ```{r}
-animbook <- anim_prep(data = osiris, id = firmID, values = sales, time = year, color = japan)
+animbook <- anim_prep(data = osiris, id = ID, values = sales, time = year, color = japan)
 
 p <- anim_plot(animbook, plot = "wallaby", width = 0.01)
 
