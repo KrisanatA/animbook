@@ -66,11 +66,11 @@ anim_prep <- function(data,
 
   type <- sapply(data, class)
 
-  stopifnot("The data, id, values, and time columns need to be specified" =
+  stopifnot("The id, values, and time columns need to be specified" =
               rlang::as_label(qid) != "NULL" &
               rlang::as_label(qvalues) != "NULL" &
               rlang::as_label(qtime) != "NULL",
-            "The id column need to be factor or character variable" =
+            "The id column need to be factor variable" =
               type[[rlang::as_label(qid)]] == "factor",
             "The values column need to be numeric variable" =
               type[[rlang::as_label(qvalues)]] == "numeric",
@@ -291,7 +291,7 @@ anim_prep <- function(data,
   rename_vec <- stats::setNames(name$old, name$new)
 
   animbook <- book |>
-    select(args_select) |>
+    dplyr::select(args_select) |>
     dplyr::rename(tidyselect::any_of(rename_vec))
 
 
@@ -317,7 +317,7 @@ anim_prep <- function(data,
   if (length(label) < length(y)) {
     label <- as.character(y)
 
-    warning("length of the label provided is less that length of y")
+    warning("length of the label provided is less than length of y")
   }
 
 
@@ -333,10 +333,183 @@ anim_prep <- function(data,
 
   class(object) <- "animbook"
 
-  return(
-    object
-    )
+  return(object)
 
 }
 
+
+
+
+
+
+anim_prep_cat <- function(data,
+                          id = NULL,
+                          values = NULL,
+                          time = NULL,
+                          label = NULL,
+                          order = NULL,
+                          color = NULL,
+                          time_dependent = TRUE,
+                          runif_min = 1,
+                          runif_max = 50) {
+
+# enquo -------------------------------------------------------------------
+
+  qid <- rlang::enquo(id)
+  qvalues <- rlang::enquo(values)
+  qtime <- rlang::enquo(time)
+  qcolor <- rlang::enquo(color)
+
+
+# check column class ------------------------------------------------------
+
+  type <- sapply(data, class)
+
+  stopifnot("The id, values, and time columns need to be specified" =
+              rlang::as_label(qid) != "NULL" &
+              rlang::as_label(qvalues) != "NULL" &
+              rlang::as_label(qtime) != "NULL",
+            "The id column need to be factor variable" =
+              type[[rlang::as_label(qid)]] == "factor",
+            "The values column need to be factor variable" =
+              type[[rlang::as_label(qvalues)]] == "factor",
+            "The time column need to be integer variable" =
+              type[[rlang::as_label(qtime)]] == "integer")
+
+
+# assign the frames -------------------------------------------------------
+
+  if (time_dependent == FALSE) {
+
+    data_frame <- data |>
+      dplyr::arrange(!!qid, !!qtime) |>
+      dplyr::group_by(!!qid) |>
+      dplyr::mutate(
+        frame = dplyr::row_number(),
+        frame = frame + floor(runif(1, runif_min, runif_max))
+      ) |>
+      ungroup()
+
+  }
+
+  if (time_dependent == TRUE) {
+
+    data_frame <- data |>
+      dplyr::arrange(!!qid, !!qtime) |>
+      dplyr::group_by(!!qid) |>
+      dplyr::mutate(
+        frame = dplyr::row_number()
+      ) |>
+      ungroup()
+
+  }
+
+# order -------------------------------------------------------------------
+
+  n_group <- nrow(unique(data[, rlang::as_label(qvalues)]))
+
+  if (is.null(order)) {
+
+    order <- data |>
+      dplyr::count(!!qvalues) |>
+      dplyr::arrange(n) |>
+      dplyr::pull(!!qvalues)
+
+  }
+
+  else {
+
+    stopifnot("The order argument only accepted vector" =
+                is.vector(order),
+              "The order vector must have the same number as the unique values element" =
+                length(order) == n_group,
+              "The breaks vector should not contains NA" =
+                !is.na(order),
+              "The order vector must be the elements of the values column" =
+                all(order %in% unique(data[, rlang::as_label(qvalues)]))
+    )
+
+    order <- order
+
+  }
+
+
+# assign the qtile --------------------------------------------------------
+
+  book <- data_frame |>
+    dplyr::mutate(
+      qtile = factor(!!qvalues, levels = order),
+      qtile = ifelse(is.na(qtile), 0, as.numeric(qtile)),
+      .keep = "unused"
+    )
+
+
+# return the selected columns with name changes ---------------------------
+
+  args_select <- c(rlang::as_label(qid),
+                   rlang::as_label(qtime),
+                   "qtile",
+                   "frame")
+
+  if (rlang::as_label(qcolor) != "NULL") {
+
+    args_select <- c(args_select, rlang::as_label(qcolor))
+
+  }
+
+  name <- tibble::tibble(
+    old = c(rlang::as_label(qid), rlang::as_label(qtime),
+            rlang::as_label(qcolor)),
+    new = c("id", "time", "color")
+  )
+
+  rename_vec <- stats::setNames(name$old, name$new)
+
+  animbook <- book |>
+    dplyr::select(args_select) |>
+    dplyr::rename(tidyselect::any_of(rename_vec))
+
+
+# gap settings ------------------------------------------------------------
+
+  x <- dplyr::pull(unique(book[, rlang::as_label(qtime)]))
+
+  gap <- 0.1 * (length(x) - 1)
+
+
+# labels ------------------------------------------------------------------
+
+  y <- sort(unique(animbook$qtile), decreasing = TRUE)
+
+  if (is.null(label)) {
+    label <- order
+  }
+
+  if (length(label) >= length(y)) {
+    label <- label[1:length(y)]
+  }
+
+  if (length(label) < length(y)) {
+    label <- order
+
+    warning("length of the label provided is less than length of y")
+  }
+
+
+# return a list -----------------------------------------------------------
+
+  object <- list(data = animbook,
+                 settings = list(
+                   gap = gap,
+                   xbreaks = x,
+                   label = rev(label),
+                   order = rev(order)
+
+                 ))
+
+  class(object) <- "animbook"
+
+  return(object)
+
+}
 
