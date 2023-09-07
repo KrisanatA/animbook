@@ -504,7 +504,6 @@ anim_prep_cat <- function(data,
                    xbreaks = x,
                    label = rev(label),
                    order = rev(order)
-
                  ))
 
   class(object) <- "animbook"
