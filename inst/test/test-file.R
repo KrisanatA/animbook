@@ -134,10 +134,15 @@ p <- aeles |>
 gganimate::animate(p)
 
 
+aeles <- aeles |>
+  mutate(id = as.factor(id),
+         party = as.factor(party),
+         year = as.integer(year))
 
-data <- prep_cat(aeles, id, party, time = year)
 
-p <- subset_plot(data, id, year, gender, label = rev(order))
+data <- anim_prep_cat(aeles, id, party, time = year, color = gender, time_dependent = FALSE)
+
+p <- anim_plot(data, plot = "wallaby", width = 0.01)
 
 p2 <- anim_animate(p)
 
