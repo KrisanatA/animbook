@@ -27,7 +27,7 @@ osiris <- data |>
   dplyr::left_join(country) |>
   dplyr::relocate(country, .after = ID) |>
   dplyr::mutate(year = as.integer(year),
-         firmID = as.factor(ID),
+         ID = as.factor(ID),
          country = as.factor(country),
          sales = as.numeric(sales),
          japan = ifelse(country == "JP", "yes", "no"),
