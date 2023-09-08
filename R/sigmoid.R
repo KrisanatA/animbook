@@ -13,6 +13,8 @@
 #'
 #'@return Return a path in a data frame format
 #'
+#'@keywords internal
+#'
 #'@examples
 #'path <- sigmoid()
 #'
