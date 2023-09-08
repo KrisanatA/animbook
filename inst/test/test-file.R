@@ -140,7 +140,7 @@ aeles <- aeles |>
          year = as.integer(year))
 
 
-data <- anim_prep_cat(aeles, id, party, time = year, color = gender, time_dependent = FALSE)
+data <- anim_prep_cat(aeles, id, party, time = year, color = gender)
 
 p <- anim_plot(data, plot = "wallaby", width = 0.01)
 
@@ -205,5 +205,145 @@ animate(p2, nframes = 29)
 
 
 
+# subset with sankey ------------------------------------------------------
+
+test11 <- tibble::tibble(id = rep(1:4, each = 2),
+                       prob = rep(c(0.4, 0.2, 0.2, 0.2), each = 2),
+                       mid = prob/2,
+                       x = 0,
+                       y = 4 - cumsum(mid) + mid) |>
+  dplyr::group_by(id) |>
+  dplyr::slice_head(n = 1)
+
+test12 <- tibble::tibble(id = rep(1:4, each = 2),
+                       prob = rep(c(0.4, 0.2, 0.2, 0.2), each = 2),
+                       mid = prob/2,
+                       x = 0,
+                       y = 4 - cumsum(mid) - mid) |>
+  dplyr::group_by(id) |>
+  dplyr::slice_head(n = 1)
+
+test21 <- tibble::tibble(id = rep(1:4, each = 2),
+                        prob = rep(c(0.4, 0.2, 0.2, 0.2), each = 2),
+                        mid = prob/2,
+                        x = 1,
+                        y = 4 - cumsum(mid) + mid) |>
+  dplyr::group_by(id) |>
+  dplyr::slice_head(n = 1)
+
+test22 <- tibble::tibble(id = rep(1:4, each = 2),
+                         prob = rep(c(0.4, 0.2, 0.2, 0.2), each = 2),
+                         mid = prob/2,
+                         x = 1,
+                         y = 4 - cumsum(mid) - mid) |>
+  dplyr::group_by(id) |>
+  dplyr::slice_head(n = 1)
+
+test31 <- tibble::tibble(id = rep(1:4, each = 2),
+                        prob = rep(c(0.4, 0.2, 0.2, 0.2), each = 2),
+                        mid = prob/2,
+                        x = 9,
+                        y = rep(4:1, each = 2)) |>
+  dplyr::group_by(id) |>
+  dplyr::slice_head(n = 1)
+
+test32 <- tibble::tibble(id = rep(1:4, each = 2),
+                         prob = rep(c(0.4, 0.2, 0.2, 0.2), each = 2),
+                         mid = prob/2,
+                         x = 9,
+                         y = rep(4:1, each = 2) - prob) |>
+  dplyr::group_by(id) |>
+  dplyr::slice_head(n = 1)
+
+test41 <- tibble::tibble(id = rep(1:4, each = 2),
+                         prob = rep(c(0.4, 0.2, 0.2, 0.2), each = 2),
+                         mid = prob/2,
+                         x = 10,
+                         y = rep(4:1, each = 2)) |>
+  dplyr::group_by(id) |>
+  dplyr::slice_head(n = 1)
+
+test42 <- tibble::tibble(id = rep(1:4, each = 2),
+                         prob = rep(c(0.4, 0.2, 0.2, 0.2), each = 2),
+                         mid = prob/2,
+                         x = 10,
+                         y = rep(4:1, each = 2) - prob) |>
+  dplyr::group_by(id) |>
+  dplyr::slice_head(n = 1)
+
+
+test <- rbind(test11, test21, test31, test41, test42, test32, test22, test12)
+
+test |>
+  ggplot2::ggplot(ggplot2::aes(x = x, y = y, group = id)) +
+  ggplot2::geom_polygon()
+
+
+
+
+prob <- c(0.4, 0.2, 0.2, 0.2)
+
+
+test1 <- tibble::tibble(id = rep(1:4, each = 2),
+                        prob = rep(prob, each = 2),
+                        mid = prob/2,
+                        xstart = 0,
+                        ystart = 4 - cumsum(mid)) |>
+  dplyr::group_by(id) |>
+  dplyr::slice_head(n = 1)
+
+test2 <- tibble::tibble(id = rep(1:4),
+                         prob = rep(prob),
+                         mid = prob/2,
+                         xend = 1,
+                         yend = rep(4:1) - mid)
+
+full <- test1 |>
+  left_join(test2,
+            by = c("id", "prob", "mid"))
+
+map <- map_dfr(seq_len(nrow(full)),
+               ~ sigmoid(as.numeric(full[.x, 4]), as.numeric(full[.x, 6]),
+                         as.numeric(full[.x, 5]), as.numeric(full[.x, 7])) |>
+                 mutate(id = .x))
+
+map <- split(map, f = map$id)
+
+class(map)
+
+ggplot2::ggplot() +
+  geom_ribbon(data= map[[1]], aes(x = x, y = y, ymin = y - 0.2, ymax = y + 0.2)) +
+  geom_ribbon(data= map[[2]], aes(x = x, y = y, ymin = y - 0.11, ymax = y + 0.11)) +
+  geom_ribbon(data= map[[3]], aes(x = x, y = y, ymin = y - 0.11, ymax = y + 0.11)) +
+  geom_ribbon(data= map[[4]], aes(x = x, y = y, ymin = y - 0.11, ymax = y + 0.11))
+
+
+
+test <- split(test, f = test$id)
+
+
+
+
+
+
+subset <- osiris |>
+  dplyr::filter(country == "JP") |>
+  dplyr::slice_head(n = 3) |>
+  dplyr::pull(ID)
+
+osiris |>
+  dplyr::filter(ID %in% subset) |>
+  ggplot2::ggplot(ggplot2::aes(x = year, y = sales, group = ID)) +
+  ggplot2::geom_ribbon(ggplot2::aes(ymax = sales, ymin = sales - 100000), fill = "blue") +
+  ggplot2::geom_line()
+
+data <- anim_prep(osiris, id = ID, values = sales, time = year)
+
+
+point0 <- tibble::tibble(
+  id = unique(data[["data"]]$qtile),
+  x = 0,
+  y = min(data[["data"]]$time)
+)
 
 
