@@ -11,7 +11,7 @@
 #'@param ngroup The number of groups or categories to create for scaling values.
 #'@param breaks A vector of breaks for creating bins.
 #'@param group_scaling The column name that represents the grouping variable.
-#'@param color The column name to used in [aes()] for the [anim_plot()].
+#'@param color The column name to used in [ggplot2::aes()] for the [anim_plot()].
 #'@param time_dependent Logical. Should the visualization be time-dependent? Default is TRUE.
 #'@param scaling The scaling method to be used: "rank" or "absolute".
 #'@param runif_min The minimum value for random addition to frame numbers.
@@ -19,7 +19,7 @@
 #'
 #'@return An animbook object:
 #'  \item{data}{A data frame with prepared data for visualization.}
-#'  \item{settings}{A list of settings to be used in [anim_plot()], including data, gap, xbreaks, label and scaling.}
+#'  \item{settings}{A list of settings to be used in [anim_plot()], including gap, xbreaks, label and scaling.}
 #'
 #'@details
 #'The function takes the input data and performs several operations to prepare it for visualizations.
@@ -35,7 +35,6 @@
 #'
 #'anim_prep(data = osiris, id = ID, values = sales, time = year, group_scaling = country, scaling = "absolute")
 #'
-#'@importFrom dplyr group_by arrange mutate select ungroup arrange
 #'@export
 
 anim_prep <- function(data,
@@ -91,9 +90,9 @@ anim_prep <- function(data,
   if (time_dependent == FALSE) {
 
     data_frame <- data |>
-      arrange(!!qid, !!qtime) |>
-      group_by(!!qid) |>
-      mutate(
+      dplyr::arrange(!!qid, !!qtime) |>
+      dplyr::group_by(!!qid) |>
+      dplyr::mutate(
         frame = dplyr::row_number(),
         frame = frame + floor(runif(1, runif_min, runif_max))
       ) |>
@@ -104,12 +103,12 @@ anim_prep <- function(data,
   if (time_dependent == TRUE) {
 
     data_frame <- data |>
-      arrange(!!qid, !!qtime) |>
-      group_by(!!qid) |>
-      mutate(
+      dplyr::arrange(!!qid, !!qtime) |>
+      dplyr::group_by(!!qid) |>
+      dplyr::mutate(
         frame = dplyr::row_number()
       ) |>
-      ungroup()
+      dplyr::ungroup()
 
   }
 
@@ -125,14 +124,14 @@ anim_prep <- function(data,
     if (scaling == "rank") {
 
       gdata_frame <- data_frame |>
-        group_by(!!qgroup_scaling, !!qtime)
+        dplyr::group_by(!!qgroup_scaling, !!qtime)
 
     }
 
     if (scaling == "absolute") {
 
       gdata_frame <- data_frame |>
-        group_by(!!qgroup_scaling)
+        dplyr::group_by(!!qgroup_scaling)
 
     }
 
@@ -143,7 +142,7 @@ anim_prep <- function(data,
     if (scaling == "rank") {
 
       gdata_frame <- data_frame |>
-        group_by(!!qtime)
+        dplyr::group_by(!!qtime)
 
     }
 
@@ -164,12 +163,12 @@ anim_prep <- function(data,
 
     book <- gdata_frame |>
       # ranking the variable of interest
-      mutate(
+      dplyr::mutate(
         rank = as.integer(rank(!!qvalues)),
         rank = ifelse(is.na(!!qvalues), NA, rank),
         .keep = "unused"
       ) |>
-      ungroup()
+      dplyr::ungroup()
 
     # default setting for breaks
     if (is.null(breaks)) {
@@ -204,7 +203,7 @@ anim_prep <- function(data,
 
     book <- book |>
       # split the rank into equal size bins
-      mutate(
+      dplyr::mutate(
         qtile = cut(rank,
                     breaks,
                     include.lowest = TRUE,
@@ -250,7 +249,7 @@ anim_prep <- function(data,
     }
 
     book <- gdata_frame |>
-      mutate(
+      dplyr::mutate(
         qtile = cut(!!qvalues,
                     breaks,
                     include.lowest = TRUE,
@@ -258,7 +257,7 @@ anim_prep <- function(data,
         qtile = ifelse(is.na(qtile), 0, as.integer(levels(qtile)[qtile])),
         .keep = "unused"
       ) |>
-      ungroup()
+      dplyr::ungroup()
 
   }
 
@@ -364,181 +363,6 @@ anim_prep <- function(data,
                    xbreaks = x,
                    label = label,
                    scaling = breaks
-                 ))
-
-  class(object) <- "animbook"
-
-  return(object)
-
-}
-
-
-
-
-
-
-anim_prep_cat <- function(data,
-                          id = NULL,
-                          values = NULL,
-                          time = NULL,
-                          label = NULL,
-                          order = NULL,
-                          color = NULL,
-                          time_dependent = TRUE,
-                          runif_min = 1,
-                          runif_max = 50) {
-
-# enquo -------------------------------------------------------------------
-
-  qid <- rlang::enquo(id)
-  qvalues <- rlang::enquo(values)
-  qtime <- rlang::enquo(time)
-  qcolor <- rlang::enquo(color)
-
-
-# check column class ------------------------------------------------------
-
-  type <- sapply(data, class)
-
-  stopifnot("The id, values, and time columns need to be specified" =
-              rlang::as_label(qid) != "NULL" &
-              rlang::as_label(qvalues) != "NULL" &
-              rlang::as_label(qtime) != "NULL",
-            "The id column need to be factor variable" =
-              type[[rlang::as_label(qid)]] == "factor",
-            "The values column need to be factor variable" =
-              type[[rlang::as_label(qvalues)]] == "factor",
-            "The time column need to be integer variable" =
-              type[[rlang::as_label(qtime)]] == "integer")
-
-
-# assign the frames -------------------------------------------------------
-
-  if (time_dependent == FALSE) {
-
-    data_frame <- data |>
-      dplyr::arrange(!!qid, !!qtime) |>
-      dplyr::group_by(!!qid) |>
-      dplyr::mutate(
-        frame = dplyr::row_number(),
-        frame = frame + floor(runif(1, runif_min, runif_max))
-      ) |>
-      ungroup()
-
-  }
-
-  if (time_dependent == TRUE) {
-
-    data_frame <- data |>
-      dplyr::arrange(!!qid, !!qtime) |>
-      dplyr::group_by(!!qid) |>
-      dplyr::mutate(
-        frame = dplyr::row_number()
-      ) |>
-      ungroup()
-
-  }
-
-# order -------------------------------------------------------------------
-
-  n_group <- nrow(unique(data[, rlang::as_label(qvalues)]))
-
-  if (is.null(order)) {
-
-    order <- data |>
-      dplyr::count(!!qvalues) |>
-      dplyr::arrange(n) |>
-      dplyr::pull(!!qvalues)
-
-  }
-
-  else {
-
-    stopifnot("The order argument only accepted vector" =
-                is.vector(order),
-              "The order vector must have the same number as the unique values element" =
-                length(order) == n_group,
-              "The breaks vector should not contains NA" =
-                !is.na(order),
-              "The order vector must be the elements of the values column" =
-                all(order %in% unique(data[, rlang::as_label(qvalues)]))
-    )
-
-    order <- order
-
-  }
-
-
-# assign the qtile --------------------------------------------------------
-
-  book <- data_frame |>
-    dplyr::mutate(
-      qtile = factor(!!qvalues, levels = order),
-      qtile = ifelse(is.na(qtile), 0, as.numeric(qtile)),
-      .keep = "unused"
-    )
-
-
-# return the selected columns with name changes ---------------------------
-
-  args_select <- c(rlang::as_label(qid),
-                   rlang::as_label(qtime),
-                   "qtile",
-                   "frame")
-
-  if (rlang::as_label(qcolor) != "NULL") {
-
-    args_select <- c(args_select, rlang::as_label(qcolor))
-
-  }
-
-  name <- tibble::tibble(
-    old = c(rlang::as_label(qid), rlang::as_label(qtime),
-            rlang::as_label(qcolor)),
-    new = c("id", "time", "color")
-  )
-
-  rename_vec <- stats::setNames(name$old, name$new)
-
-  animbook <- book |>
-    dplyr::select(args_select) |>
-    dplyr::rename(tidyselect::any_of(rename_vec))
-
-
-# gap settings ------------------------------------------------------------
-
-  x <- dplyr::pull(unique(book[, rlang::as_label(qtime)]))
-
-  gap <- 0.1 * (length(x) - 1)
-
-
-# labels ------------------------------------------------------------------
-
-  y <- sort(unique(animbook$qtile), decreasing = TRUE)
-
-  if (is.null(label)) {
-    label <- order
-  }
-
-  if (length(label) >= length(y)) {
-    label <- label[1:length(y)]
-  }
-
-  if (length(label) < length(y)) {
-    label <- order
-
-    warning("length of the label provided is less than length of y")
-  }
-
-
-# return a list -----------------------------------------------------------
-
-  object <- list(data = animbook,
-                 settings = list(
-                   gap = gap,
-                   xbreaks = x,
-                   label = rev(label),
-                   order = rev(order)
                  ))
 
   class(object) <- "animbook"

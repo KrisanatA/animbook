@@ -37,7 +37,7 @@ anim_prep(
 
 \item{group_scaling}{The column name that represents the grouping variable.}
 
-\item{color}{The column name to used in \code{\link[=aes]{aes()}} for the \code{\link[=anim_plot]{anim_plot()}}.}
+\item{color}{The column name to used in \code{\link[ggplot2:aes]{ggplot2::aes()}} for the \code{\link[=anim_plot]{anim_plot()}}.}
 
 \item{time_dependent}{Logical. Should the visualization be time-dependent? Default is TRUE.}
 
@@ -50,7 +50,7 @@ anim_prep(
 \value{
 An animbook object:
 \item{data}{A data frame with prepared data for visualization.}
-\item{settings}{A list of settings to be used in \code{\link[=anim_plot]{anim_plot()}}, including data, gap, xbreaks, label and scaling.}
+\item{settings}{A list of settings to be used in \code{\link[=anim_plot]{anim_plot()}}, including gap, xbreaks, label and scaling.}
 }
 \description{
 This function prepares the data into the format the \code{\link[=anim_plot]{anim_plot()}} required by assigning frames,
