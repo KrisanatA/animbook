@@ -43,8 +43,10 @@ aeles <- raw_data |>
   tidyr::pivot_longer(c(vote_2019, vote_2016),
                names_to = "year",
                values_to = "party") |>
-  dplyr::mutate(year = as.numeric(stringr::str_extract(year, "(\\d+)"))) |>
-  dplyr::select(id, year, party, gender)
+  dplyr::mutate(year = as.integer(stringr::str_extract(year, "(\\d+)"))) |>
+  dplyr::select(id, year, party, gender) |>
+  dplyr::mutate(id = as.factor(id),
+                party = as.factor(party))
 
 
 
