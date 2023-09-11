@@ -265,23 +265,6 @@ anim_prep <- function(data,
 
 # return the selected columns with name changes ---------------------------
 
-  args_select <- c(rlang::as_label(qid),
-                   rlang::as_label(qtime),
-                   "qtile",
-                   "frame")
-
-  if (rlang::as_label(qgroup_scaling) != "NULL") {
-
-    args_select <- c(args_select, rlang::as_label(qgroup_scaling))
-
-  }
-
-  if (rlang::as_label(qcolor) != "NULL") {
-
-    args_select <- c(args_select, rlang::as_label(qcolor))
-
-  }
-
   name <- tibble::tibble(
     old = c(rlang::as_label(qid), rlang::as_label(qtime),
             rlang::as_label(qgroup_scaling), rlang::as_label(qcolor)),
@@ -290,9 +273,61 @@ anim_prep <- function(data,
 
   rename_vec <- stats::setNames(name$old, name$new)
 
-  animbook <- book |>
-    dplyr::select(args_select) |>
-    dplyr::rename(tidyselect::any_of(rename_vec))
+
+  args_select <- c(rlang::as_label(qid),
+                   rlang::as_label(qtime),
+                   "qtile",
+                   "frame")
+
+  # if group_scaling is not the same as color
+  if (rlang::as_label(qgroup_scaling) != rlang::as_label(qcolor)) {
+
+    # check if group_scaling is null or not
+    if (rlang::as_label(qgroup_scaling) != "NULL") {
+
+      args_select <- c(args_select, rlang::as_label(qgroup_scaling))
+
+    }
+
+    # check if color is null or not
+    if (rlang::as_label(qcolor) != "NULL") {
+
+      args_select <- c(args_select, rlang::as_label(qcolor))
+
+    }
+
+    # return animbook
+    animbook <- book |>
+      dplyr::select(args_select) |>
+      dplyr::rename(tidyselect::any_of(rename_vec))
+
+  }
+
+  # if group_scaling is the same as color
+  if (rlang::as_label(qgroup_scaling) == rlang::as_label(qcolor)) {
+
+    # if both is null
+    if (rlang::as_label(qgroup_scaling) == "NULL") {
+
+      animbook <- book |>
+        dplyr::select(args_select) |>
+        dplyr::rename(tidyselect::any_of(rename_vec))
+
+    }
+
+    # if both is not null
+    else {
+
+      args_select <- c(args_select, rlang::as_label(qgroup_scaling))
+
+      animbook <- book |>
+        dplyr::select(args_select) |>
+        dplyr::rename(tidyselect::any_of(rename_vec)) |>
+        dplyr::mutate(color = group)
+
+    }
+
+  }
 
 
 # gap settings ------------------------------------------------------------
