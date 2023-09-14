@@ -111,7 +111,7 @@ anim_prep_cat <- function(data,
               "The breaks vector should not contains NA" =
                 !is.na(order),
               "The order vector must be the elements of the values column" =
-                all(order %in% unique(data[, rlang::as_label(qvalues)]))
+                all(order %in% dplyr::pull(data, !!qvalues))
     )
 
     order <- order
@@ -123,7 +123,7 @@ anim_prep_cat <- function(data,
 
   book <- data_frame |>
     dplyr::mutate(
-      qtile = factor(!!qvalues, levels = order),
+      qtile = factor(!!qvalues, levels = rev(order)),
       qtile = ifelse(is.na(qtile), 0, as.numeric(qtile)),
       .keep = "unused"
     )
@@ -187,8 +187,8 @@ anim_prep_cat <- function(data,
                  settings = list(
                    gap = gap,
                    xbreaks = x,
-                   label = rev(label),
-                   order = rev(order)
+                   label = label,
+                   order = order
                  ))
 
   class(object) <- "animbook"
