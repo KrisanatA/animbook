@@ -280,8 +280,32 @@ test |>
 
 
 
+wallaby <- wallaby_data(data)
 
-prob <- c(0.4, 0.2, 0.2, 0.2)
+test <- wallaby[["data"]]
+
+
+prob <- c(0.4, 0.2, 0.3, 0.1)
+
+left <- tibble::tibble(id = 1:6,
+                       xstart = 0,
+                       ystart = 6)
+
+right <- tibble::tibble(id = 1:6,
+                        xend = 10,
+                        yend = 1:6)
+
+full <- left |>
+  dplyr::left_join(right,
+            by = "id")
+
+
+lookup <- test |>
+  dplyr::filter(time == 1) |>
+  dplyr::count(qtile) |>
+  mutate(prob = n/sum(n),
+         len = prob/2) |>
+  select(qtile, len)
 
 
 test1 <- tibble::tibble(id = rep(1:4, each = 2),
@@ -299,27 +323,109 @@ test2 <- tibble::tibble(id = rep(1:4),
                          yend = rep(4:1) - mid)
 
 full <- test1 |>
-  left_join(test2,
+  dplyr::left_join(test2,
             by = c("id", "prob", "mid"))
 
-map <- map_dfr(seq_len(nrow(full)),
-               ~ sigmoid(as.numeric(full[.x, 4]), as.numeric(full[.x, 6]),
-                         as.numeric(full[.x, 5]), as.numeric(full[.x, 7])) |>
-                 mutate(id = .x))
+map <- purrr::map_dfr(seq_len(nrow(full)),
+               ~ sigmoid(as.numeric(full[.x, 2]), as.numeric(full[.x, 4]),
+                         as.numeric(full[.x, 3]), as.numeric(full[.x, 5]),
+                         5) |>
+                 dplyr::mutate(id = .x))
 
-map <- split(map, f = map$id)
+table <- map |>
+  dplyr::left_join(lookup,
+                   by = c("id" = "qtile")) |>
+  na.omit()
 
-class(map)
+split <- split(table, f = table$id)
 
 ggplot2::ggplot() +
-  geom_ribbon(data= map[[1]], aes(x = x, y = y, ymin = y - 0.2, ymax = y + 0.2)) +
-  geom_ribbon(data= map[[2]], aes(x = x, y = y, ymin = y - 0.11, ymax = y + 0.11)) +
-  geom_ribbon(data= map[[3]], aes(x = x, y = y, ymin = y - 0.11, ymax = y + 0.11)) +
-  geom_ribbon(data= map[[4]], aes(x = x, y = y, ymin = y - 0.11, ymax = y + 0.11))
+  ggplot2::geom_ribbon(data = split[[1]], ggplot2::aes(x = x, y = y, ymin = y - len, ymax = y + len), alpha = 0.1) +
+  ggplot2::geom_ribbon(data = split[[2]], ggplot2::aes(x = x, y = y, ymin = y - len, ymax = y + len), alpha = 0.1) +
+  ggplot2::geom_ribbon(data = split[[3]], ggplot2::aes(x = x, y = y, ymin = y - len, ymax = y + len), alpha = 0.1) +
+  ggplot2::geom_ribbon(data = split[[4]], ggplot2::aes(x = x, y = y, ymin = y - len, ymax = y + len), alpha = 0.1) +
+  ggplot2::geom_ribbon(data = split[[5]], ggplot2::aes(x = x, y = y, ymin = y - len, ymax = y + len), alpha = 0.1)
 
 
 
-test <- split(test, f = test$id)
+
+# sankey algorithm --------------------------------------------------------
+
+initial <- 3
+
+prop <- c(0.4, 0.3, 0.1, 0.2)
+
+prop2 <- c(0.5, 0.3, 0.2, 0.1)
+
+top <- vector()
+
+bottom <- vector()
+
+for (i in 1:length(prop)) {
+  top[i] <- initial
+
+  bottom[i] <- initial - prop[i]
+
+  initial <- initial - prop[i]
+}
+
+
+left <- tibble::tibble(ystart = c(top, bottom),
+                       xstart = 0) |>
+  dplyr::arrange(desc(y)) |>
+  dplyr::mutate(id = dplyr::row_number())
+
+right <- tibble::tibble(yend = c(rev(1:length(prop)), (rev(1:length(prop)) - prop)),
+                        xend = 1) |>
+  dplyr::arrange(desc(y)) |>
+  dplyr::mutate(id = dplyr::row_number())
+
+full <- left |>
+  dplyr::left_join(right,
+                   by = "id")
+
+
+map <- purrr::map_dfr(seq_len(nrow(full)),
+                      ~ sigmoid(as.numeric(full[.x, 2]), as.numeric(full[.x, 5]),
+                                as.numeric(full[.x, 1]), as.numeric(full[.x, 4]),
+                                10) |>
+                        dplyr::mutate(id = .x))
+
+split <- split(map, map$id)
+
+
+for (i in seq(2, 8, by = 2)) {
+  split[[i]] <- split[[i]] |>
+    arrange(desc(x))
+
+  split[[i-1]]$id <- i - 1
+  split[[i]]$id <- i - 1
+}
+
+
+split
+
+data <- do.call("rbind", split)
+
+library(ggplot2)
+
+ggplot(data = data, aes(x = x, y = y, group = id, fill = as.factor(id))) +
+  geom_polygon(alpha = 0.1) +
+  theme_void() +
+  theme(legend.position = "bottom",
+        legend.title = element_blank())
+
+
+
+
+
+
+
+# -------------------------------------------------------------------------
+
+
+
+
 
 
 
@@ -338,6 +444,8 @@ osiris |>
   ggplot2::geom_line()
 
 data <- anim_prep(osiris, id = ID, values = sales, time = year)
+
+
 
 
 point0 <- tibble::tibble(
