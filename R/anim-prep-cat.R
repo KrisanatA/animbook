@@ -97,7 +97,7 @@ anim_prep_cat <- function(data,
 
     order <- data |>
       dplyr::count(!!qvalues) |>
-      dplyr::arrange(n) |>
+      dplyr::arrange(dplyr::desc(n)) |>
       dplyr::pull(!!qvalues)
 
   }
@@ -187,8 +187,8 @@ anim_prep_cat <- function(data,
                  settings = list(
                    gap = gap,
                    xbreaks = x,
-                   label = label,
-                   order = order
+                   label = as.character(label),
+                   order = as.character(order)
                  ))
 
   class(object) <- "animbook"

@@ -361,7 +361,7 @@ anim_prep <- function(data,
                  settings = list(
                    gap = gap,
                    xbreaks = x,
-                   label = label,
+                   label = as.character(label),
                    scaling = breaks
                  ))
 
