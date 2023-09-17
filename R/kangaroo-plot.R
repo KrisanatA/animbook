@@ -136,5 +136,72 @@ kangaroo_plot <- function(object,
 
   return(anim)
 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+#'Kangaroo plot data
+#'
+#'This function performs data manipulation and formatting tasks
+#'from the original object with additional data components for labeling and shading.
+#'
+#'@param object An animbook object
+#'
+#'@return A modified animbook object with addition data components
+#'
+#'@details The function takes the animbook object and create a new label data and
+#'shading data used for the plot then appends them to the original object.
+#'
+#'@keywords internal
+#'
+#'@export
+
+kangaroo_data <- function(object) {
+
+  data <- object[["data"]]
+
+  x <- unique(data$time)
+
+  y <- sort(unique(data$qtile), decreasing = TRUE)
+
+  gap <- object[["settings"]]$gap
+
+  unique_qtiles <- unique(data$qtile)
+
+# Create label data -------------------------------------------------------
+
+  label_data <- tibble::tibble(
+    x = min(x) - (2 * gap),
+    y = y,
+    label = object[["settings"]]$label
+  )
+
+
+# Create shading data -----------------------------------------------------
+
+  shade_data <- tibble::tibble(
+    id = y,
+    xmin = rep(min(x) - gap, length(y)),
+    xmax = rep(max(x) + gap, length(y)),
+    ymin = y - 0.25,
+    ymax = y + 0.25
+  )
+
+
+  kangaroo <- append(object, list(label_data, shade_data))
+
+  names(kangaroo) <- c("data", "settings", "label_data", "shade_data")
+
+  return(kangaroo)
 
 }
+

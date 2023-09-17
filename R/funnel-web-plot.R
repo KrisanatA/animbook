@@ -98,3 +98,63 @@ funnel_web_plot <- function(object,
 
   return(anim)
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#'Funnel web spider plot data
+#'
+#'This function performs data manipulation for facetting.
+#'
+#'@param object An animbook object
+#'
+#'@return A modified animbook object
+#'
+#'@details The function takes the animbook object and manipulate the data into the
+#'format where it can be further facetting.
+#'
+#'@keywords internal
+#'
+#'@export
+
+funnel_web_spider_data <- function(object) {
+
+  data <- object[["data"]]
+
+
+# Change the data format --------------------------------------------------
+
+  start <- data |>
+    dplyr::filter(time > min(time)) |>
+    dplyr::group_by(id) |>
+    dplyr::mutate(facet = dplyr::row_number())
+
+  end <- data |>
+    dplyr::filter(time < max(time)) |>
+    dplyr::group_by(id) |>
+    dplyr::mutate(facet = dplyr::row_number())
+
+  full <- rbind(start, end) |>
+    dplyr::arrange(id, time)
+
+
+  object[["data"]] <- full
+
+  return(object)
+}
+
