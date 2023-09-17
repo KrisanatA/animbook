@@ -372,12 +372,12 @@ for (i in 1:length(prop)) {
 
 left <- tibble::tibble(ystart = c(top, bottom),
                        xstart = 0) |>
-  dplyr::arrange(desc(y)) |>
+  dplyr::arrange(desc(ystart)) |>
   dplyr::mutate(id = dplyr::row_number())
 
 right <- tibble::tibble(yend = c(rev(1:length(prop)), (rev(1:length(prop)) - prop)),
                         xend = 1) |>
-  dplyr::arrange(desc(y)) |>
+  dplyr::arrange(desc(yend)) |>
   dplyr::mutate(id = dplyr::row_number())
 
 full <- left |>
@@ -396,7 +396,7 @@ split <- split(map, map$id)
 
 for (i in seq(2, 8, by = 2)) {
   split[[i]] <- split[[i]] |>
-    arrange(desc(x))
+    dplyr::arrange(desc(x))
 
   split[[i-1]]$id <- i - 1
   split[[i]]$id <- i - 1
@@ -426,16 +426,28 @@ ggplot(data = data, aes(x = x, y = y, group = id, fill = as.factor(id))) +
 
 
 
+object <- anim_prep_cat(aeles, id, party, year)
+
+data <- object[["data"]]
 
 
 
 
+subset <- data |>
+  dplyr::filter(time == min(time),
+                qtile == 6) |>
+  dplyr::pull(id)
+
+subset_data <- data |>
+  dplyr::filter(id %in% subset) |>
+  dplyr::mutate(time = dplyr::case_when(time == min(time) ~ 0,
+                                        time == max(time) ~ 1))
 
 
-subset <- osiris |>
-  dplyr::filter(country == "JP") |>
-  dplyr::slice_head(n = 3) |>
-  dplyr::pull(ID)
+subset_data |>
+  dplyr::count(qtile) |>
+  dplyr::mutate(prop = n/sum(n),
+                prop = ifelse(prop < 0.1, 0.1, prop))
 
 osiris |>
   dplyr::filter(ID %in% subset) |>
