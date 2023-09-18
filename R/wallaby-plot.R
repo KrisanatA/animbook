@@ -354,13 +354,14 @@ wallaby_data <- function(object,
     tidyr::pivot_wider(id_cols = id,
                        names_from = time,
                        values_from = qtile) |>
-    dplyr::mutate(xstart = 0, xend = 1) |>
+    dplyr::mutate(xstart = 0 - gap, xend = 1 + gap) |>
     dplyr::group_by(id) |>
     dplyr::mutate(path = purrr::map(.data, ~sigmoid(xstart, xend,
                                                     `0`, `1`,
                                                     scale = 10, n = 40))) |>
     dplyr::select(id, path) |>
-    tidyr::unnest(cols = path)
+    tidyr::unnest(cols = path) |>
+    dplyr::filter(dplyr::between(x, 0, 1))
 
   if (object[["settings"]]$time_dependent == TRUE) {
     data <- path |>
