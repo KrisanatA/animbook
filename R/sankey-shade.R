@@ -52,7 +52,7 @@ sankey_shade <- function(initial = NULL,
 # left point data ---------------------------------------------------------
 
   left <- tibble::tibble(ystart = ystart,
-                         xstart = 0 - gap) |>
+                         xstart = 0) |>
     dplyr::arrange(dplyr::desc(ystart)) |>
     dplyr::mutate(id = dplyr::row_number())
 
@@ -60,7 +60,7 @@ sankey_shade <- function(initial = NULL,
 # right point data --------------------------------------------------------
 
   right <- tibble::tibble(yend = yend,
-                          xend = 1 + gap) |>
+                          xend = 1) |>
     dplyr::arrange(dplyr::desc(yend)) |>
     dplyr::mutate(id = dplyr::row_number())
 
