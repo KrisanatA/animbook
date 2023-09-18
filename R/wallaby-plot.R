@@ -1,3 +1,5 @@
+#'@export
+
 wallaby_plot <- function(object,
                          palette = RColorBrewer::brewer.pal(9, "Set1"),
                          rendering = "ggplot",
@@ -191,7 +193,6 @@ wallaby_plot <- function(object,
 #'@keywords internal
 #'
 #'@export
-#'
 
 wallaby_data <- function(object,
                          subset = "top",

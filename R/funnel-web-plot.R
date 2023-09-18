@@ -1,3 +1,5 @@
+#'@export
+
 funnel_web_plot <- function(object,
                             palette = RColorBrewer::brewer.pal(9, "Set1"),
                             rendering = "ggplot",
