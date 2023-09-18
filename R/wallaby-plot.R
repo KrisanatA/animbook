@@ -59,8 +59,8 @@ wallaby_plot <- function(object,
 
     if ("color" %in% colnames(object[["data"]])) {
       aes_list <- list(
-        x = quote(time),
-        y = quote(qtile),
+        x = quote(x),
+        y = quote(y),
         group = quote(id),
         color = quote(color)
       )
@@ -68,8 +68,8 @@ wallaby_plot <- function(object,
 
     else {
       aes_list <- list(
-        x = quote(time),
-        y = quote(qtile),
+        x = quote(x),
+        y = quote(y),
         group = quote(id)
       )
     }
@@ -79,8 +79,8 @@ wallaby_plot <- function(object,
 
     if ("color" %in% colnames(object[["data"]])) {
       aes_list <- list(
-        x = quote(time),
-        y = quote(qtile),
+        x = quote(x),
+        y = quote(y),
         color = quote(color),
         ids = quote(id),
         frame = quote(frame)
@@ -89,8 +89,8 @@ wallaby_plot <- function(object,
 
     else {
       aes_list <- list(
-        x = quote(time),
-        y = quote(qtile),
+        x = quote(x),
+        y = quote(y),
         ids = quote(id),
         frame = quote(frame)
       )
@@ -112,7 +112,8 @@ wallaby_plot <- function(object,
     ggplot2::geom_polygon(data = object[["shade_data"]],
                           ggplot2::aes(x = x,
                                        y = y,
-                                       group = id),
+                                       group = id,
+                                       fill = as.factor(id)),
                           alpha = alpha) +
     ggplot2::geom_text(data = object[["label_data"]]$right,
                        ggplot2::aes(x = x,
@@ -138,6 +139,8 @@ wallaby_plot <- function(object,
                    axis.text.x = element_blank(),
                    legend.position = "bottom",
                    legend.title = element_blank()) +
+    ggplot2::guides(fill = "none") +
+    ggplot2::scale_fill_manual(values = col_val) +
     ggplot2::scale_colour_manual(values = col_val)
 
   return(anim)
@@ -232,9 +235,11 @@ wallaby_data <- function(object,
   }
 
   if (subset %in% choice) {
-    subset <- which(object[["settings"]]$label == subset)
+    subset_pos <- which(rev(object[["settings"]]$label) == subset)
 
-    label_pos <- subset
+    subset <- as.numeric(rev(object[["settings"]]$label)[subset_pos])
+
+    label_pos <- rev(object[["settings"]]$label)[subset_pos]
   }
 
 
@@ -282,8 +287,6 @@ wallaby_data <- function(object,
                                           time == max(time) ~ 1)) |>
     na.omit()
 
-  object[["data"]] <- subset_data
-
   object[["settings"]]$xbreaks <- c(0, 1)
 
 
@@ -316,15 +319,73 @@ wallaby_data <- function(object,
                   prop = ifelse(prop < 0.1, 0.1, prop)) |>
     dplyr::pull(prop)
 
-  initial <- subset + rev(prop)[1]/2
+  initial <- subset + sum(prop)/2
 
-  y <- unique(subset_data$qtile) + (rev(prop)/2)
+  y <- sort(unique(subset_data$qtile)) + (prop/2)
 
   shade_data <- sankey_shade(initial = initial,
                              proportion = rev(prop),
                              gap = gap,
                              y = y,
                              position = position)
+
+  starting_point <- shade_data |>
+    dplyr::group_by(id) |>
+    dplyr::filter(x == min(x)) |>
+    dplyr::summarise(point = mean(y)) |>
+    dplyr::arrange(point) |>
+    dplyr::select(point)
+
+  qtile <- subset_data |>
+    dplyr::filter(time == 1) |>
+    dplyr::distinct(qtile) |>
+    dplyr::arrange(qtile)
+
+  lookup_table <- tibble::tibble(cbind(starting_point, qtile))
+
+  subset_data <- subset_data |>
+    dplyr::arrange(id, time) |>
+    dplyr::left_join(lookup_table, by = "qtile") |>
+    dplyr::mutate(point = dplyr::lead(point),
+                  qtile = ifelse(time == 0, point, qtile)) |>
+    dplyr::select(-point)
+
+  path <- subset_data |>
+    tidyr::pivot_wider(id_cols = id,
+                       names_from = time,
+                       values_from = qtile) |>
+    dplyr::mutate(xstart = 0, xend = 1) |>
+    dplyr::group_by(id) |>
+    dplyr::mutate(path = purrr::map(.data, ~sigmoid(xstart, xend,
+                                                    `0`, `1`,
+                                                    scale = 10, n = 40))) |>
+    dplyr::select(id, path) |>
+    tidyr::unnest(cols = path)
+
+  if (object[["settings"]]$time_dependent == TRUE) {
+    data <- path |>
+      dplyr::mutate(
+        frame = dplyr::row_number()
+      )
+  }
+
+  if (object[["settings"]]$time_dependent == FALSE) {
+    data <- path |>
+      dplyr::mutate(
+        frame = dplyr::row_number(),
+        frame = frame + floor(runif(1, runif_min, runif_max))
+      )
+  }
+
+  information <- subset_data |>
+    dplyr::select(id, color) |>
+    dplyr::distinct()
+
+  wallaby_data <- data |>
+    dplyr::left_join(information,
+              by = "id")
+
+  object[["data"]] <- wallaby_data
 
   wallaby <- append(object, list(label_data, shade_data))
 
@@ -335,4 +396,16 @@ wallaby_data <- function(object,
   return(wallaby)
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
