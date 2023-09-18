@@ -102,9 +102,9 @@ wallaby_plot <- function(object,
 
   # the data point
   australia <- ggplot2::ggplot() +
-    ggplot2::geom_jitter(data = object[["data"]],
-                         mapping = ggplot2::aes(!!!aes_list),
-                         height = height, width = width) |>
+    ggplot2::geom_point(data = object[["data"]],
+                         mapping = ggplot2::aes(!!!aes_list)
+                         ) |>
     suppressWarnings()
 
   # the shaded area + label
@@ -313,11 +313,14 @@ wallaby_data <- function(object,
 
 # create shading data -----------------------------------------------------
 
-  prop <- subset_data |>
+  prop_table <- subset_data |>
+    dplyr::filter(time == 1) |>
     dplyr::count(qtile) |>
     dplyr::mutate(prop = n/sum(n),
                   prop = ifelse(prop < 0.1, 0.1, prop)) |>
-    dplyr::pull(prop)
+    dplyr::select(qtile, prop)
+
+  prop <- dplyr::pull(prop_table, prop)
 
   initial <- subset + sum(prop)/2
 
