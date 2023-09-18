@@ -77,7 +77,7 @@ sankey_shade <- function(initial = NULL,
   map <- purrr::map_dfr(seq_len(nrow(full)),
                         ~ sigmoid(as.numeric(full[.x, 2]), as.numeric(full[.x, 5]),
                                   as.numeric(full[.x, 1]), as.numeric(full[.x, 4]),
-                                  10) |>
+                                  scale = 10, n = 100) |>
                           dplyr::mutate(id = .x))
 
   split_map <- split(map, map$id)
