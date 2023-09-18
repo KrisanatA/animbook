@@ -297,13 +297,13 @@ wallaby_data <- function(object,
   object[["settings"]]$gap <- gap
 
   left <- tibble::tibble(
-    x = min(subset_data$time) - (gap * 2),
+    x = min(subset_data$time) - gap,
     y = y_left,
     label = label_left
   )
 
   right <- tibble::tibble(
-    x = max(subset_data$time) + (gap * 2),
+    x = max(subset_data$time) + gap,
     y = y_right,
     label = label_right
   )
@@ -317,8 +317,15 @@ wallaby_data <- function(object,
     dplyr::filter(time == 1) |>
     dplyr::count(qtile) |>
     dplyr::mutate(prop = n/sum(n),
-                  prop = ifelse(prop < 0.1, 0.1, prop)) |>
-    dplyr::select(qtile, prop)
+                  prop = ifelse(prop < 0.1, 0.1, prop))
+
+  subset_data <- prop_table |>
+    dplyr::select(qtile, prop) |>
+    dplyr::right_join(subset_data |> filter(time == 1),
+                      by = "qtile") |>
+    dplyr::select(id, prop) |>
+    dplyr::right_join(subset_data,
+                      by = "id")
 
   prop <- dplyr::pull(prop_table, prop)
 
@@ -357,14 +364,13 @@ wallaby_data <- function(object,
     tidyr::pivot_wider(id_cols = id,
                        names_from = time,
                        values_from = qtile) |>
-    dplyr::mutate(xstart = 0 - gap, xend = 1 + gap) |>
+    dplyr::mutate(xstart = 0, xend = 1) |>
     dplyr::group_by(id) |>
     dplyr::mutate(path = purrr::map(.data, ~sigmoid(xstart, xend,
                                                     `0`, `1`,
                                                     scale = 10, n = 40))) |>
     dplyr::select(id, path) |>
-    tidyr::unnest(cols = path) |>
-    dplyr::filter(dplyr::between(x, 0, 1))
+    tidyr::unnest(cols = path)
 
   if (object[["settings"]]$time_dependent == TRUE) {
     data <- path |>
@@ -377,17 +383,20 @@ wallaby_data <- function(object,
     data <- path |>
       dplyr::mutate(
         frame = dplyr::row_number(),
-        frame = frame + floor(runif(1, runif_min, runif_max))
+        frame = frame + floor(runif(1,
+                                    object[["settings"]]$runif_min,
+                                    object[["settings"]]$runif_max))
       )
   }
 
   information <- subset_data |>
-    dplyr::select(id, color) |>
+    dplyr::select(id, color, prop) |>
     dplyr::distinct()
 
   wallaby_data <- data |>
     dplyr::left_join(information,
-              by = "id")
+              by = "id") |>
+    dplyr::mutate(y = y + runif(1, -prop/3, prop/3))
 
   object[["data"]] <- wallaby_data
 
