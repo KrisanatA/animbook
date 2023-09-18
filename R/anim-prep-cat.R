@@ -188,7 +188,8 @@ anim_prep_cat <- function(data,
                    gap = gap,
                    xbreaks = x,
                    label = as.character(label),
-                   order = as.character(order)
+                   order = as.character(order),
+                   time_dependent = time_dependent
                  ))
 
   class(object) <- "animbook"
