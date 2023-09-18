@@ -337,23 +337,18 @@ table <- map |>
                    by = c("id" = "qtile")) |>
   na.omit()
 
-split <- split(table, f = table$id)
+split <- split(map, f = map$id)
 
 ggplot2::ggplot() +
-  ggplot2::geom_ribbon(data = split[[1]], ggplot2::aes(x = x, y = y, ymin = y - len, ymax = y + len), alpha = 0.1) +
-  ggplot2::geom_ribbon(data = split[[2]], ggplot2::aes(x = x, y = y, ymin = y - len, ymax = y + len), alpha = 0.1) +
-  ggplot2::geom_ribbon(data = split[[3]], ggplot2::aes(x = x, y = y, ymin = y - len, ymax = y + len), alpha = 0.1) +
-  ggplot2::geom_ribbon(data = split[[4]], ggplot2::aes(x = x, y = y, ymin = y - len, ymax = y + len), alpha = 0.1) +
-  ggplot2::geom_ribbon(data = split[[5]], ggplot2::aes(x = x, y = y, ymin = y - len, ymax = y + len), alpha = 0.1)
-
+  ggplot2::geom_ribbon(data = split[[1]], ggplot2::aes(x = x, y = y, ymin = y - 0.05, ymax = y + 0.05), alpha = 0.1)
 
 
 
 # sankey algorithm --------------------------------------------------------
 
-initial <- 3
+initial <- 5
 
-prop <- c(0.4, 0.3, 0.1, 0.2)
+prop <- c(0.9, 0.1)
 
 prop2 <- c(0.5, 0.3, 0.2, 0.1)
 
