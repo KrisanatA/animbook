@@ -131,8 +131,6 @@ funnel_web_plot <- function(object,
 #'format where it can be further facetting.
 #'
 #'@keywords internal
-#'
-#'@export
 
 funnel_web_spider_data <- function(object) {
 

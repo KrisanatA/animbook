@@ -164,8 +164,6 @@ kangaroo_plot <- function(object,
 #'shading data used for the plot then appends them to the original object.
 #'
 #'@keywords internal
-#'
-#'@export
 
 kangaroo_data <- function(object) {
 

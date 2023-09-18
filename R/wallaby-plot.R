@@ -191,28 +191,32 @@ wallaby_plot <- function(object,
 #'of this then replaced the original data and append new data to the object.
 #'
 #'@keywords internal
-#'
-#'@export
 
 wallaby_data <- function(object,
                          subset = "top",
                          relation = "one_many") {
 
+# subset choice -----------------------------------------------------------
+
   choice <- as.character(object[["settings"]]$label)
 
   subset_choice <- c("top", "bottom", choice)
 
-  relation_choice <- c("one_many", "many_one")
-
-  # check subset argument
   if (!(subset %in% subset_choice)) {
     stop(paste0("subset can only be the following: ",
                 paste0(subset_choice, collapse = ", ")))
   }
 
-  # check relation argument
+
+# relation choice ---------------------------------------------------------
+
+  relation_choice <- c("one_many", "many_one")
+
   stopifnot("relation can only be the following: one_many, many_one" =
               relation %in% relation_choice)
+
+
+# data --------------------------------------------------------------------
 
   data <- object[["data"]]
 
@@ -275,7 +279,7 @@ wallaby_data <- function(object,
   }
 
 
-# data manipulation -------------------------------------------------------
+# filter data -------------------------------------------------------------
 
   subset_id <- data |>
     dplyr::filter(time == time_subset,
@@ -312,23 +316,38 @@ wallaby_data <- function(object,
   label_data <- list(left, right)
 
 
-# create shading data -----------------------------------------------------
+# calculate proportion ----------------------------------------------------
+
+  if (relation == "one_many") {
+    prop_time <- max(subset_data$time)
+
+    x_point <- min(subset_data$time)
+  }
+
+  if (relation == "many_one") {
+    prop_time <- min(subset_data$time)
+
+    x_point <- max(subset_data$time)
+  }
 
   prop_table <- subset_data |>
-    dplyr::filter(time == 1) |>
+    dplyr::filter(time == prop_time) |>
     dplyr::count(qtile) |>
     dplyr::mutate(prop = n/sum(n),
                   prop = ifelse(prop < 0.1, 0.1, prop))
 
+  prop <- dplyr::pull(prop_table, prop)
+
+
+# create shading data -----------------------------------------------------
+
   subset_data <- prop_table |>
     dplyr::select(qtile, prop) |>
-    dplyr::right_join(subset_data |> filter(time == 1),
+    dplyr::right_join(subset_data |> filter(time == prop_time),
                       by = "qtile") |>
     dplyr::select(id, prop) |>
     dplyr::right_join(subset_data,
                       by = "id")
-
-  prop <- dplyr::pull(prop_table, prop)
 
   initial <- subset + sum(prop)/2
 
@@ -340,26 +359,32 @@ wallaby_data <- function(object,
                              y = y,
                              position = position)
 
-  starting_point <- shade_data |>
+
+# change the start/end position -------------------------------------------
+
+  new_point <- shade_data |>
     dplyr::group_by(id) |>
-    dplyr::filter(x == min(x)) |>
+    dplyr::filter(x == x_point) |>
     dplyr::summarise(point = mean(y)) |>
     dplyr::arrange(point) |>
     dplyr::select(point)
 
   qtile <- subset_data |>
-    dplyr::filter(time == 1) |>
+    dplyr::filter(time == prop_time) |>
     dplyr::distinct(qtile) |>
     dplyr::arrange(qtile)
 
-  lookup_table <- tibble::tibble(cbind(starting_point, qtile))
+  lookup_table <- tibble::tibble(cbind(new_point, qtile))
 
   subset_data <- subset_data |>
     dplyr::arrange(id, time) |>
     dplyr::left_join(lookup_table, by = "qtile") |>
     dplyr::mutate(point = dplyr::lead(point),
-                  qtile = ifelse(time == 0, point, qtile)) |>
+                  qtile = ifelse(time == x_point, point, qtile)) |>
     dplyr::select(-point)
+
+
+# crate sigmoid path ------------------------------------------------------
 
   path <- subset_data |>
     tidyr::pivot_wider(id_cols = id,
@@ -372,6 +397,9 @@ wallaby_data <- function(object,
                                                     scale = 10, n = 40))) |>
     dplyr::select(id, path) |>
     tidyr::unnest(cols = path)
+
+
+# calculate frame ---------------------------------------------------------
 
   if (object[["settings"]]$time_dependent == TRUE) {
     data <- path |>
@@ -390,14 +418,20 @@ wallaby_data <- function(object,
       )
   }
 
+
+# join the missing information --------------------------------------------
+
   information <- subset_data |>
     dplyr::select(id, color, prop) |>
     dplyr::distinct()
 
   wallaby_data <- data |>
     dplyr::left_join(information,
-              by = "id") |>
+                     by = "id") |>
     dplyr::mutate(y = y + runif(1, -prop/3, prop/3))
+
+
+# output ------------------------------------------------------------------
 
   object[["data"]] <- wallaby_data
 
