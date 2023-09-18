@@ -363,7 +363,9 @@ anim_prep <- function(data,
                    xbreaks = x,
                    label = as.character(label),
                    scaling = breaks,
-                   time_dependent = time_dependent
+                   time_dependent = time_dependent,
+                   runif_min = runif_min,
+                   runif_max = runif_max
                  ))
 
   class(object) <- "animbook"
