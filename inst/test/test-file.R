@@ -346,9 +346,9 @@ ggplot2::ggplot() +
 
 # sankey algorithm --------------------------------------------------------
 
-initial <- 5
+initial <- 4
 
-prop <- c(0.9, 0.1)
+prop <- c(0.5, 0.3, 0.2, 0.1)
 
 prop2 <- c(0.5, 0.3, 0.2, 0.1)
 
@@ -404,7 +404,7 @@ data <- do.call("rbind", split)
 
 library(ggplot2)
 
-ggplot(data = data, aes(x = x, y = y, group = id, fill = as.factor(id))) +
+test <- ggplot(data = data, aes(x = x, y = y, group = id, fill = as.factor(id))) +
   geom_polygon(alpha = 0.1) +
   theme_void() +
   theme(legend.position = "bottom",

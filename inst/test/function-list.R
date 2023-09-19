@@ -24,14 +24,17 @@ osiris4 <- anim_prep(data = osiris, id = ID, values = sales, time = year,
 order <- c("liberal", "not vote", "greens", "other", "national", "labor")
 
 object <- anim_prep_cat(data = aeles, id = id, values = party, time = year,
-                        order = NULL, color = gender, time_dependent = TRUE,
-                        runif_min = 1, runif_max = 50)
+                        order = NULL, color = gender, time_dependent = FALSE,
+                        runif_min = 1, runif_max = 100)
 
 # subset can be either "top", "bottom" or values in the data
 # many_one not working yet
 
 p <- wallaby_plot(object = object, palette = RColorBrewer::brewer.pal(9, "Set1"),
-                  rendering = "ggplot", subset = "top", relation = "one_many")
+                  rendering = "ggplot", subset = "bottom", relation = "many_one")
 
-p2 <- anim_aniate(p)
+
+p <- kangaroo_plot(object)
+
+p2 <- anim_animate(p)
 
