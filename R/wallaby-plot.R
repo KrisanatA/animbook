@@ -1,3 +1,5 @@
+#'@importFrom ggplot2 element_blank
+#'
 #'@export
 
 wallaby_plot <- function(object,
