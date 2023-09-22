@@ -72,7 +72,8 @@ anim_prep <- function(data,
               rlang::as_label(qtime) != "NULL",
             "The id column need to be factor variable" =
               type[[rlang::as_label(qid)]] == "factor",
-            "The values column need to be numeric variable" =
+            "The values column need to be numeric variable, if the values
+            column is category variable, try anim_prep_cat function" =
               type[[rlang::as_label(qvalues)]] == "numeric",
             "The time column need to be integer variable" =
               type[[rlang::as_label(qtime)]] == "integer")
