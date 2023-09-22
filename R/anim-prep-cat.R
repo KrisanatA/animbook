@@ -1,12 +1,12 @@
 #'Prepare Category Data for Visualizations
 #'
 #'This function prepares the category data into the format the [anim_plot()] required
-#'by assigning frames and creating a necessary data and settings for the [anim_plot()] function.
+#'by assigning frames and creating necessary data and settings for the [anim_plot()] function.
 #'
 #'@param data A data frame containing the category values to be prepared for visualization.
 #'@param id The column name that represents the unique identifier variable.
 #'@param values The column name that contains the categorical values to be visualized.
-#'@param time The column name representing the time variable.
+#'@param time The column name represents the time variable.
 #'@param label A vector of labels to be used for the y-axis in the visualization.
 #'@param order A vector of order for sorting the category values.
 #'@param color The column name to be used in [ggplot2::aes()] for the [anim_plot()].
@@ -15,13 +15,13 @@
 #'@param runif_max The maximum value for random addition to frame numbers.
 #'
 #'@return An animbook object:
-#'  \item{data}{A data frame with prepared data for visualisation.}
+#'  \item{data}{A data frame with prepared data for visualization.}
 #'  \item{settings}{A list of settings to be used in [anim_plot()], including gap, xbreaks, label, scaling, time_dependent,
 #'  runif_min, and runif_max}
 #'
 #'@details
 #'The function takes the input data and performs several operations to prepare it for visualizations.
-#'It assigns frames and create necessary data and settings for the [anim_plot()] function.
+#'It assigns frames and creates necessary data and settings for the [anim_plot()] function.
 #'
 #'@examples
 #'anim_prep_cat(data = aeles, id = id, values = party, time = year)
@@ -55,12 +55,12 @@ anim_prep_cat <- function(data,
               rlang::as_label(qid) != "NULL" &
               rlang::as_label(qvalues) != "NULL" &
               rlang::as_label(qtime) != "NULL",
-            "The id column need to be factor variable" =
+            "The id column needs to be a factor variable" =
               type[[rlang::as_label(qid)]] == "factor",
-            "The values column need to be factor variable, if the values
-            column is numerical variable, try anim_prep function" =
+            "The values column needs to be a factor variable. If the values
+            column is a numerical variable, try the anim_prep function" =
               type[[rlang::as_label(qvalues)]] == "factor",
-            "The time column need to be integer variable" =
+            "The time column needs to be an integer variable" =
               type[[rlang::as_label(qtime)]] == "integer")
 
 
@@ -110,7 +110,7 @@ anim_prep_cat <- function(data,
                 is.vector(order),
               "The order vector must have the same number as the unique values element" =
                 length(order) == n_group,
-              "The breaks vector should not contains NA" =
+              "The order vector should not contain NA" =
                 !is.na(order),
               "The order vector must be the elements of the values column" =
                 all(order %in% dplyr::pull(data, !!qvalues))
@@ -179,7 +179,7 @@ anim_prep_cat <- function(data,
   if (length(label) < length(y)) {
     label <- order
 
-    warning("length of the label provided is less than length of y")
+    warning("The length of the label provided is less than the length of y")
   }
 
 

@@ -27,7 +27,7 @@ anim_prep(
 
 \item{values}{The column name that contains the numeric values to be visualized.}
 
-\item{time}{The column name representing the time variable.}
+\item{time}{The column name represents the time variable.}
 
 \item{label}{A vector of labels to be used for the y-axis in the visualization.}
 
@@ -41,7 +41,7 @@ anim_prep(
 
 \item{time_dependent}{Logical. Should the visualization be time-dependent? Default is TRUE.}
 
-\item{scaling}{The scaling method to be used: "rank" or "absolute".}
+\item{scaling}{The scaling method to be used; "rank" or "absolute."}
 
 \item{runif_min}{The minimum value for random addition to frame numbers.}
 
@@ -55,7 +55,7 @@ runif_min, and runif_max.}
 }
 \description{
 This function prepares the numerical data into the format the \code{\link[=anim_plot]{anim_plot()}} required by assigning frames,
-grouping data, scaling values, and creating a necessary data and settings for the \code{\link[=anim_plot]{anim_plot()}} function.
+grouping data, scaling values, and creating necessary data and settings for the \code{\link[=anim_plot]{anim_plot()}} function.
 }
 \details{
 The function takes the input data and performs several operations to prepare it for visualizations.

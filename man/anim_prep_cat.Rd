@@ -24,7 +24,7 @@ anim_prep_cat(
 
 \item{values}{The column name that contains the categorical values to be visualized.}
 
-\item{time}{The column name representing the time variable.}
+\item{time}{The column name represents the time variable.}
 
 \item{label}{A vector of labels to be used for the y-axis in the visualization.}
 
@@ -40,17 +40,17 @@ anim_prep_cat(
 }
 \value{
 An animbook object:
-\item{data}{A data frame with prepared data for visualisation.}
+\item{data}{A data frame with prepared data for visualization.}
 \item{settings}{A list of settings to be used in \code{\link[=anim_plot]{anim_plot()}}, including gap, xbreaks, label, scaling, time_dependent,
 runif_min, and runif_max}
 }
 \description{
 This function prepares the category data into the format the \code{\link[=anim_plot]{anim_plot()}} required
-by assigning frames and creating a necessary data and settings for the \code{\link[=anim_plot]{anim_plot()}} function.
+by assigning frames and creating necessary data and settings for the \code{\link[=anim_plot]{anim_plot()}} function.
 }
 \details{
 The function takes the input data and performs several operations to prepare it for visualizations.
-It assigns frames and create necessary data and settings for the \code{\link[=anim_plot]{anim_plot()}} function.
+It assigns frames and creates necessary data and settings for the \code{\link[=anim_plot]{anim_plot()}} function.
 }
 \examples{
 anim_prep_cat(data = aeles, id = id, values = party, time = year)

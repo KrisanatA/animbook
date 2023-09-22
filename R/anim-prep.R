@@ -1,19 +1,19 @@
 #'Prepare Numerical Data for Visualizations
 #'
 #'This function prepares the numerical data into the format the [anim_plot()] required by assigning frames,
-#'grouping data, scaling values, and creating a necessary data and settings for the [anim_plot()] function.
+#'grouping data, scaling values, and creating necessary data and settings for the [anim_plot()] function.
 #'
 #'@param data A data frame containing the data to be prepared for visualization.
 #'@param id The column name that represents the unique identifier variable.
 #'@param values The column name that contains the numeric values to be visualized.
-#'@param time The column name representing the time variable.
+#'@param time The column name represents the time variable.
 #'@param label A vector of labels to be used for the y-axis in the visualization.
 #'@param ngroup The number of groups or categories to create for scaling values.
 #'@param breaks A vector of breaks for creating bins.
 #'@param group_scaling The column name that represents the grouping variable.
 #'@param color The column name to used in [ggplot2::aes()] for the [anim_plot()].
 #'@param time_dependent Logical. Should the visualization be time-dependent? Default is TRUE.
-#'@param scaling The scaling method to be used: "rank" or "absolute".
+#'@param scaling The scaling method to be used; "rank" or "absolute."
 #'@param runif_min The minimum value for random addition to frame numbers.
 #'@param runif_max The maximum value for random addition to frame numbers.
 #'
@@ -70,12 +70,12 @@ anim_prep <- function(data,
               rlang::as_label(qid) != "NULL" &
               rlang::as_label(qvalues) != "NULL" &
               rlang::as_label(qtime) != "NULL",
-            "The id column need to be factor variable" =
+            "The id column needs to be a factor variable" =
               type[[rlang::as_label(qid)]] == "factor",
-            "The values column need to be numeric variable, if the values
-            column is category variable, try anim_prep_cat function" =
+            "The values column needs to be a numeric variable. If the values
+            the column is a category variable, try the anim_prep_cat function" =
               type[[rlang::as_label(qvalues)]] == "numeric",
-            "The time column need to be integer variable" =
+            "The time column needs to be an integer variable" =
               type[[rlang::as_label(qtime)]] == "integer")
 
 
@@ -120,7 +120,7 @@ anim_prep <- function(data,
 
   if (rlang::as_label(qgroup_scaling) != "NULL") {
 
-    stopifnot("The group_scaling column need to be factor variable" =
+    stopifnot("The group_scaling column needs to be a factor variable" =
                 type[[rlang::as_label(qgroup_scaling)]] == "factor")
 
     if (scaling == "rank") {
@@ -186,9 +186,9 @@ anim_prep <- function(data,
 
       stopifnot("The breaks argument only accepted vector" =
                   is.vector(breaks),
-                "The breaks vector must have the same number of group as ngroup argument" =
+                "The breaks vector must have the same number of groups as ngroup argument" =
                   length(breaks) - 1 == ngroup,
-                "The breaks vector should not contains NA" =
+                "The breaks vector should not contain NA" =
                   !is.na(breaks),
                 "The breaks values must be between 0 and 1" =
                   all(dplyr::between(breaks, 0, 1))
@@ -238,9 +238,9 @@ anim_prep <- function(data,
                   is.vector(breaks),
                 "The breaks vector must have the same number of group as ngroup argument" =
                   length(breaks) - 1 == ngroup,
-                "The breaks vector should not contains NA" =
+                "The breaks vector should not contain NA" =
                   !is.na(breaks),
-                "The breaks values is not in the range of values" =
+                "The breaks values are not in the range of values" =
                   all(dplyr::between(breaks,
                                      min(data[, rlang::as_label(!!qvalues)]),
                                      max(data[, rlang::as_label(!!qvalues)])))
@@ -353,7 +353,7 @@ anim_prep <- function(data,
   if (length(label) < length(y)) {
     label <- as.character(y)
 
-    warning("length of the label provided is less than length of y")
+    warning("The length of the label provided is less than the length of y")
   }
 
 
