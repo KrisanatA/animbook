@@ -1,42 +1,42 @@
-#'Prepare Numerical Data for Visualizations
+#' Prepare Numerical Data for Visualizations
 #'
-#'This function prepares the numerical data into the format the [anim_plot()] required by assigning frames,
-#'grouping data, scaling values, and creating necessary data and settings for the [anim_plot()] function.
+#' This function prepares the numerical data into the format the [anim_plot()] required by assigning frames,
+#' grouping data, scaling values, and creating necessary data and settings for the [anim_plot()] function.
 #'
-#'@param data A data frame containing the data to be prepared for visualization.
-#'@param id The column name that represents the unique identifier variable.
-#'@param values The column name that contains the numeric values to be visualized.
-#'@param time The column name represents the time variable.
-#'@param label A vector of labels to be used for the y-axis in the visualization.
-#'@param ngroup The number of groups or categories to create for scaling values.
-#'@param breaks A vector of breaks for creating bins.
-#'@param group_scaling The column name that represents the grouping variable.
-#'@param color The column name to used in [ggplot2::aes()] for the [anim_plot()].
-#'@param time_dependent Logical. Should the visualization be time-dependent? Default is TRUE.
-#'@param scaling The scaling method to be used; "rank" or "absolute."
-#'@param runif_min The minimum value for random addition to frame numbers.
-#'@param runif_max The maximum value for random addition to frame numbers.
+#' @param data A data frame containing the data to be prepared for visualization.
+#' @param id The column name that represents the unique identifier variable.
+#' @param values The column name that contains the numeric values to be visualized.
+#' @param time The column name represents the time variable.
+#' @param label A vector of labels to be used for the y-axis in the visualization.
+#' @param ngroup The number of groups or categories to create for scaling values.
+#' @param breaks A vector of breaks for creating bins.
+#' @param group_scaling The column name that represents the grouping variable.
+#' @param color The column name to used in [ggplot2::aes()] for the [anim_plot()].
+#' @param time_dependent Logical. Should the visualization be time-dependent? Default is TRUE.
+#' @param scaling The scaling method to be used; "rank" or "absolute."
+#' @param runif_min The minimum value for random addition to frame numbers.
+#' @param runif_max The maximum value for random addition to frame numbers.
 #'
-#'@return An animbook object:
-#'  \item{data}{A data frame with prepared data for visualization.}
-#'  \item{settings}{A list of settings to be used in [anim_plot()], including gap, xbreaks, label, scaling, time_dependent,
-#'  runif_min, and runif_max.}
+#' @return An animbook object:
+#'   \item{data}{A data frame with prepared data for visualization.}
+#'   \item{settings}{A list of settings to be used in [anim_plot()], including gap, xbreaks, label, scaling, time_dependent,
+#'   runif_min, and runif_max.}
 #'
-#'@details
-#'The function takes the input data and performs several operations to prepare it for visualizations.
-#'It assigns frames, groups data, scales values, and creates necessary data and settings for the [anim_plot()]
-#'function.
+#' @details
+#' The function takes the input data and performs several operations to prepare it for visualizations.
+#' It assigns frames, groups data, scales values, and creates necessary data and settings for the [anim_plot()]
+#' function.
 #'
-#'@examples
-#'anim_prep(data = osiris, id = ID, values = sales, time = year)
+#' @examples
+#' anim_prep(data = osiris, id = ID, values = sales, time = year)
 #'
-#'anim_prep(data = osiris, id = ID, values = sales, time = year, group_scaling = country)
+#' anim_prep(data = osiris, id = ID, values = sales, time = year, group_scaling = country)
 #'
-#'anim_prep(data = osiris, id = ID, values = sales, time = year, scaling = "absolute")
+#' anim_prep(data = osiris, id = ID, values = sales, time = year, scaling = "absolute")
 #'
-#'anim_prep(data = osiris, id = ID, values = sales, time = year, group_scaling = country, scaling = "absolute")
+#' anim_prep(data = osiris, id = ID, values = sales, time = year, group_scaling = country, scaling = "absolute")
 #'
-#'@export
+#' @export
 
 anim_prep <- function(data,
                       id = NULL,

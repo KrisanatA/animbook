@@ -1,32 +1,32 @@
-#'Prepare Category Data for Visualizations
+#' Prepare Category Data for Visualizations
 #'
-#'This function prepares the category data into the format the [anim_plot()] required
-#'by assigning frames and creating necessary data and settings for the [anim_plot()] function.
+#' This function prepares the category data into the format the [anim_plot()] required
+#' by assigning frames and creating necessary data and settings for the [anim_plot()] function.
 #'
-#'@param data A data frame containing the category values to be prepared for visualization.
-#'@param id The column name that represents the unique identifier variable.
-#'@param values The column name that contains the categorical values to be visualized.
-#'@param time The column name represents the time variable.
-#'@param label A vector of labels to be used for the y-axis in the visualization.
-#'@param order A vector of order for sorting the category values.
-#'@param color The column name to be used in [ggplot2::aes()] for the [anim_plot()].
-#'@param time_dependent Logical. Should the visualization be time-dependent? Default is TRUE.
-#'@param runif_min The minimum value for random addition to frame numbers.
-#'@param runif_max The maximum value for random addition to frame numbers.
+#' @param data A data frame containing the category values to be prepared for visualization.
+#' @param id The column name that represents the unique identifier variable.
+#' @param values The column name that contains the categorical values to be visualized.
+#' @param time The column name represents the time variable.
+#' @param label A vector of labels to be used for the y-axis in the visualization.
+#' @param order A vector of order for sorting the category values.
+#' @param color The column name to be used in [ggplot2::aes()] for the [anim_plot()].
+#' @param time_dependent Logical. Should the visualization be time-dependent? Default is TRUE.
+#' @param runif_min The minimum value for random addition to frame numbers.
+#' @param runif_max The maximum value for random addition to frame numbers.
 #'
-#'@return An animbook object:
-#'  \item{data}{A data frame with prepared data for visualization.}
-#'  \item{settings}{A list of settings to be used in [anim_plot()], including gap, xbreaks, label, scaling, time_dependent,
-#'  runif_min, and runif_max}
+#' @return An animbook object:
+#'   \item{data}{A data frame with prepared data for visualization.}
+#'   \item{settings}{A list of settings to be used in [anim_plot()], including gap, xbreaks, label, scaling, time_dependent,
+#'   runif_min, and runif_max}
 #'
-#'@details
-#'The function takes the input data and performs several operations to prepare it for visualizations.
-#'It assigns frames and creates necessary data and settings for the [anim_plot()] function.
+#' @details
+#' The function takes the input data and performs several operations to prepare it for visualizations.
+#' It assigns frames and creates necessary data and settings for the [anim_plot()] function.
 #'
-#'@examples
-#'anim_prep_cat(data = aeles, id = id, values = party, time = year)
+#' @examples
+#' anim_prep_cat(data = aeles, id = id, values = party, time = year)
 #'
-#'@export
+#' @export
 
 anim_prep_cat <- function(data,
                           id = NULL,
