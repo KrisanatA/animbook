@@ -1,7 +1,7 @@
 #'Turn the data into a ggplot object for the animate function
 #'
-#'This function takes in the data which has been prepared by the [anim_prep()] and
-#'return the ggplot object. The user can still modify the plot the same as normal.
+#'This function takes in the data which has been prepared by the [anim_prep()] or [anim_prep_cat()]
+#'and return the ggplot object. The user can still modify the plot the same as normal.
 #'
 #'@param object The animbook object returned from the prep function.
 #'@param palette The vector of the palette used by the function to supply the color to each group.
@@ -20,7 +20,7 @@
 #'@examples
 #'animbook <- anim_prep(data = osiris, id = ID, values = sales, time = year, color = japan)
 #'
-#'anim_plot(animbook)
+#'kangaroo_plot(animbook)
 #'
 #'@importFrom ggplot2 element_blank
 #'

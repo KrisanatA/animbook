@@ -25,8 +25,8 @@ plotly.}
 Return a ggplot object
 }
 \description{
-This function takes in the data which has been prepared by the \code{\link[=anim_prep]{anim_prep()}} and
-return the ggplot object. The user can still modify the plot the same as normal.
+This function takes in the data which has been prepared by the \code{\link[=anim_prep]{anim_prep()}} or \code{\link[=anim_prep_cat]{anim_prep_cat()}}
+and return the ggplot object. The user can still modify the plot the same as normal.
 }
 \details{
 This function takes prepared data and generates a ggplot object.
@@ -37,6 +37,6 @@ to control the appearance. For the shading area, the alpha argument can be used.
 \examples{
 animbook <- anim_prep(data = osiris, id = ID, values = sales, time = year, color = japan)
 
-anim_plot(animbook)
+kangaroo_plot(animbook)
 
 }
