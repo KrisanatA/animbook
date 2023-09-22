@@ -1,7 +1,7 @@
 #' Turn the data into a facetted plot
 #'
 #' This function takes in the data which has been prepared by either [anim_prep()] or [anim_prep_cat()] and
-#' reutrn the ggplot object. The user can still modify the plot the same as normal using ggplot2 function.
+#' return the ggplot object. The user can still modify the plot the same as normal using the ggplot2 function.
 #'
 #' @param object The animbook object returned from the prep function.
 #' @param palette The vector of the palette used by the function to supply the color to each group.
@@ -16,7 +16,7 @@
 #' The funnel web plot is the plot that shows the line facetted plot showing the pattern between
 #' time period.
 #' The line jitter can be controlled using additional arguments such as height and width
-#' to control the appearance. For the shading are, the alpha argument can be used.
+#' to control the appearance. For the shading area, the alpha argument can be used.
 #'
 #' @examples
 #' animbook <- anim_prep(data = osiris, id = ID, values = sales, time = year, color = japan)
@@ -35,7 +35,7 @@ funnel_web_plot <- function(object,
 
   rendering_choice <- c("ggplot", "plotly")
 
-  stopifnot("Please use the anim_prep function to converted data into animbook class object" =
+  stopifnot("Use the anim_prep function to convert data into an animbook class object" =
               class(object) == "animbook",
             "The rendering argument can only be either ggplot or plotly" =
               rendering %in% rendering_choice)

@@ -26,14 +26,14 @@ Return a ggplot object
 }
 \description{
 This function takes in the data which has been prepared by either \code{\link[=anim_prep]{anim_prep()}} or \code{\link[=anim_prep_cat]{anim_prep_cat()}} and
-reutrn the ggplot object. The user can still modify the plot the same as normal using ggplot2 function.
+return the ggplot object. The user can still modify the plot the same as normal using the ggplot2 function.
 }
 \details{
 This function takes prepared data and generates a ggplot object.
 The funnel web plot is the plot that shows the line facetted plot showing the pattern between
 time period.
 The line jitter can be controlled using additional arguments such as height and width
-to control the appearance. For the shading are, the alpha argument can be used.
+to control the appearance. For the shading area, the alpha argument can be used.
 }
 \examples{
 animbook <- anim_prep(data = osiris, id = ID, values = sales, time = year, color = japan)
