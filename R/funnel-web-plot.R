@@ -1,3 +1,30 @@
+#'Turn the data into a facetted plot
+#'
+#'This function takes in the data which has been prepared by either [anim_prep()] or [anim_prep_cat()] and
+#'reutrn the ggplot object. The user can still modify the plot the same as normal using ggplot2 function.
+#'
+#'@param object The animbook object returned from the prep function.
+#'@param palette The vector of the palette used by the function to supply the color to each group.
+#'@param rendering The choice of method used to create and display the plot, either gganimate or
+#'plotly.
+#'@param .. Additional arguments for customization, see details for more information.
+#'
+#'@return Return a ggplot object
+#'
+#'@details
+#'This function takes prepared data and generates a ggplot object.
+#'The funnel web plot is the plot that shows the line facetted plot showing the pattern between
+#'time period.
+#'The line jitter can be controlled using additional arguments such as height and width
+#'to control the appearance. For the shading are, the alpha argument can be used.
+#'
+#'@examples
+#'animbook <- anim_prep(data = osiris, id = ID, values = sales, time = year, color = japan)
+#'
+#'funnel_web_plot(animbook)
+#'
+#'@importFrom ggplot2 element_blank
+#'
 #'@export
 
 funnel_web_plot <- function(object,
