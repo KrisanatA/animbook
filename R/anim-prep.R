@@ -1,6 +1,6 @@
-#'Prepare Data for Animated Visualizations
+#'Prepare Numerical Data for Visualizations
 #'
-#'This function prepares the data into the format the [anim_plot()] required by assigning frames,
+#'This function prepares the numerical data into the format the [anim_plot()] required by assigning frames,
 #'grouping data, scaling values, and creating a necessary data and settings for the [anim_plot()] function.
 #'
 #'@param data A data frame containing the data to be prepared for visualization.
@@ -19,7 +19,8 @@
 #'
 #'@return An animbook object:
 #'  \item{data}{A data frame with prepared data for visualization.}
-#'  \item{settings}{A list of settings to be used in [anim_plot()], including gap, xbreaks, label and scaling.}
+#'  \item{settings}{A list of settings to be used in [anim_plot()], including gap, xbreaks, label, scaling, time_dependent,
+#'  runif_min, and runif_max.}
 #'
 #'@details
 #'The function takes the input data and performs several operations to prepare it for visualizations.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/anim-prep.R
 \name{anim_prep}
 \alias{anim_prep}
-\title{Prepare Data for Animated Visualizations}
+\title{Prepare Numerical Data for Visualizations}
 \usage{
 anim_prep(
   data,
@@ -50,10 +50,11 @@ anim_prep(
 \value{
 An animbook object:
 \item{data}{A data frame with prepared data for visualization.}
-\item{settings}{A list of settings to be used in \code{\link[=anim_plot]{anim_plot()}}, including gap, xbreaks, label and scaling.}
+\item{settings}{A list of settings to be used in \code{\link[=anim_plot]{anim_plot()}}, including gap, xbreaks, label, scaling, time_dependent,
+runif_min, and runif_max.}
 }
 \description{
-This function prepares the data into the format the \code{\link[=anim_plot]{anim_plot()}} required by assigning frames,
+This function prepares the numerical data into the format the \code{\link[=anim_plot]{anim_plot()}} required by assigning frames,
 grouping data, scaling values, and creating a necessary data and settings for the \code{\link[=anim_plot]{anim_plot()}} function.
 }
 \details{
