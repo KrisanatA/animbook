@@ -1,30 +1,30 @@
-#'Turn the data into a ggplot object for the animate function
+#' Turn the data into a ggplot object for the animate function
 #'
-#'This function takes in the data which has been prepared by the [anim_prep()] or [anim_prep_cat()]
-#'and return the ggplot object. The user can still modify the plot the same as normal.
+#' This function takes in the data which has been prepared by the [anim_prep()] or [anim_prep_cat()]
+#' and return the ggplot object. The user can still modify the plot the same as normal.
 #'
-#'@param object The animbook object returned from the prep function.
-#'@param palette The vector of the palette used by the function to supply the color to each group.
-#'@param rendering The choice of method used to create and display the plot, either gganimate or
-#'plotly.
-#'@param ... Additional arguments for customization, see details for more information
+#' @param object The animbook object returned from the prep function.
+#' @param palette The vector of the palette used by the function to supply the color to each group.
+#' @param rendering The choice of method used to create and display the plot, either gganimate or
+#' plotly.
+#' @param ... Additional arguments for customization, see details for more information
 #'
-#'@return Return a ggplot object
+#' @return Return a ggplot object
 #'
-#'@details
-#'This function takes prepared data and generates a ggplot object.
-#'The kangaroo plot is the plot that shows the movement between groups over time.
-#'The jitter point can be controlled using additional arguments such as height and width
-#'to control the appearance. For the shading area, the alpha argument can be used.
+#' @details
+#' This function takes prepared data and generates a ggplot object.
+#' The kangaroo plot is the plot that shows the movement between groups over time.
+#' The jitter point can be controlled using additional arguments such as height and width
+#' to control the appearance. For the shading area, the alpha argument can be used.
 #'
-#'@examples
-#'animbook <- anim_prep(data = osiris, id = ID, values = sales, time = year, color = japan)
+#' @examples
+#' animbook <- anim_prep(data = osiris, id = ID, values = sales, time = year, color = japan)
 #'
-#'kangaroo_plot(animbook)
+#' kangaroo_plot(animbook)
 #'
-#'@importFrom ggplot2 element_blank
+#' @importFrom ggplot2 element_blank
 #'
-#'@export
+#' @export
 
 kangaroo_plot <- function(object,
                           palette = RColorBrewer::brewer.pal(9, "Set1"),
@@ -177,19 +177,19 @@ kangaroo_plot <- function(object,
 
 
 
-#'Kangaroo plot data
+#' Kangaroo plot data
 #'
-#'This function performs data manipulation and formatting tasks
-#'from the original object with additional data components for labeling and shading.
+#' This function performs data manipulation and formatting tasks
+#' from the original object with additional data components for labeling and shading.
 #'
-#'@param object An animbook object
+#' @param object An animbook object
 #'
-#'@return A modified animbook object with addition data components
+#' @return A modified animbook object with addition data components
 #'
-#'@details The function takes the animbook object and create a new label data and
-#'shading data used for the plot then appends them to the original object.
+#' @details The function takes the animbook object and create a new label data and
+#' shading data used for the plot then appends them to the original object.
 #'
-#'@keywords internal
+#' @keywords internal
 
 kangaroo_data <- function(object) {
 

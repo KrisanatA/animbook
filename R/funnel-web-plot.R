@@ -1,31 +1,31 @@
-#'Turn the data into a facetted plot
+#' Turn the data into a facetted plot
 #'
-#'This function takes in the data which has been prepared by either [anim_prep()] or [anim_prep_cat()] and
-#'reutrn the ggplot object. The user can still modify the plot the same as normal using ggplot2 function.
+#' This function takes in the data which has been prepared by either [anim_prep()] or [anim_prep_cat()] and
+#' reutrn the ggplot object. The user can still modify the plot the same as normal using ggplot2 function.
 #'
-#'@param object The animbook object returned from the prep function.
-#'@param palette The vector of the palette used by the function to supply the color to each group.
-#'@param rendering The choice of method used to create and display the plot, either gganimate or
-#'plotly.
-#'@param .. Additional arguments for customization, see details for more information.
+#' @param object The animbook object returned from the prep function.
+#' @param palette The vector of the palette used by the function to supply the color to each group.
+#' @param rendering The choice of method used to create and display the plot, either gganimate or
+#' plotly.
+#' @param .. Additional arguments for customization, see details for more information.
 #'
-#'@return Return a ggplot object
+#' @return Return a ggplot object
 #'
-#'@details
-#'This function takes prepared data and generates a ggplot object.
-#'The funnel web plot is the plot that shows the line facetted plot showing the pattern between
-#'time period.
-#'The line jitter can be controlled using additional arguments such as height and width
-#'to control the appearance. For the shading are, the alpha argument can be used.
+#' @details
+#' This function takes prepared data and generates a ggplot object.
+#' The funnel web plot is the plot that shows the line facetted plot showing the pattern between
+#' time period.
+#' The line jitter can be controlled using additional arguments such as height and width
+#' to control the appearance. For the shading are, the alpha argument can be used.
 #'
-#'@examples
-#'animbook <- anim_prep(data = osiris, id = ID, values = sales, time = year, color = japan)
+#' @examples
+#' animbook <- anim_prep(data = osiris, id = ID, values = sales, time = year, color = japan)
 #'
-#'funnel_web_plot(animbook)
+#' funnel_web_plot(animbook)
 #'
-#'@importFrom ggplot2 element_blank
+#' @importFrom ggplot2 element_blank
 #'
-#'@export
+#' @export
 
 funnel_web_plot <- function(object,
                             palette = RColorBrewer::brewer.pal(9, "Set1"),
@@ -146,18 +146,18 @@ funnel_web_plot <- function(object,
 
 
 
-#'Funnel web spider plot data
+#' Funnel web spider plot data
 #'
-#'This function performs data manipulation for facetting.
+#' This function performs data manipulation for facetting.
 #'
-#'@param object An animbook object
+#' @param object An animbook object
 #'
-#'@return A modified animbook object
+#' @return A modified animbook object
 #'
-#'@details The function takes the animbook object and manipulate the data into the
-#'format where it can be further facetting.
+#' @details The function takes the animbook object and manipulate the data into the
+#' format where it can be further facetting.
 #'
-#'@keywords internal
+#' @keywords internal
 
 funnel_web_spider_data <- function(object) {
 
