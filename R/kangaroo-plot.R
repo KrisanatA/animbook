@@ -35,7 +35,7 @@ kangaroo_plot <- function(object,
 
   rendering_choice <- c("ggplot", "plotly")
 
-  stopifnot("Please use the anim_prep function to converted data into animbook class object" =
+  stopifnot("Use the anim_prep function to convert data into an animbook class object" =
               class(object) == "animbook",
             "The rendering argument can only be either ggplot or plotly" =
               rendering %in% rendering_choice)
