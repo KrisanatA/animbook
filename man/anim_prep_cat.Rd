@@ -2,7 +2,7 @@
 % Please edit documentation in R/anim-prep-cat.R
 \name{anim_prep_cat}
 \alias{anim_prep_cat}
-\title{Prepare Category Data for Animated Visualizations}
+\title{Prepare Category Data for Visualizations}
 \usage{
 anim_prep_cat(
   data,
@@ -41,7 +41,8 @@ anim_prep_cat(
 \value{
 An animbook object:
 \item{data}{A data frame with prepared data for visualisation.}
-\item{settings}{A list of settings to be used in \code{\link[=anim_plot]{anim_plot()}}, including gap, xbreaks, label and scaling}
+\item{settings}{A list of settings to be used in \code{\link[=anim_plot]{anim_plot()}}, including gap, xbreaks, label, scaling, time_dependent,
+runif_min, and runif_max}
 }
 \description{
 This function prepares the category data into the format the \code{\link[=anim_plot]{anim_plot()}} required

@@ -1,4 +1,4 @@
-#'Prepare Category Data for Animated Visualizations
+#'Prepare Category Data for Visualizations
 #'
 #'This function prepares the category data into the format the [anim_plot()] required
 #'by assigning frames and creating a necessary data and settings for the [anim_plot()] function.
@@ -16,7 +16,8 @@
 #'
 #'@return An animbook object:
 #'  \item{data}{A data frame with prepared data for visualisation.}
-#'  \item{settings}{A list of settings to be used in [anim_plot()], including gap, xbreaks, label and scaling}
+#'  \item{settings}{A list of settings to be used in [anim_plot()], including gap, xbreaks, label, scaling, time_dependent,
+#'  runif_min, and runif_max}
 #'
 #'@details
 #'The function takes the input data and performs several operations to prepare it for visualizations.
