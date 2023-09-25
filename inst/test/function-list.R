@@ -31,7 +31,7 @@ object <- anim_prep_cat(data = aeles, id = id, values = party, time = year,
 # many_one not working yet
 
 p <- wallaby_plot(object = object, palette = RColorBrewer::brewer.pal(9, "Set1"),
-                  rendering = "ggplot", subset = "bottom", relation = "many_one")
+                  rendering = "ggplot", subset = "top", relation = "many_one")
 
 
 p <- kangaroo_plot(object)

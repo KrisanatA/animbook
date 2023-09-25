@@ -17,6 +17,8 @@
 #'   ggplot2::geom_polygon(alpha = 0.1)
 #'
 #' @keywords internal
+#'
+#' @export
 
 sankey_shade <- function(initial = NULL,
                          proportion = NULL,

@@ -30,7 +30,7 @@ anim_prep_cat(
 
 \item{order}{A vector of order for sorting the category values.}
 
-\item{color}{The column name to be used in \code{\link[ggplot2:aes]{ggplot2::aes()}} for the \code{\link[=anim_plot]{anim_plot()}}.}
+\item{color}{The column name to be used in \code{\link[ggplot2:aes]{ggplot2::aes()}} for the plot function.}
 
 \item{time_dependent}{Logical. Should the visualization be time-dependent? Default is TRUE.}
 
@@ -41,16 +41,16 @@ anim_prep_cat(
 \value{
 An animbook object:
 \item{data}{A data frame with prepared data for visualization.}
-\item{settings}{A list of settings to be used in \code{\link[=anim_plot]{anim_plot()}}, including gap, xbreaks, label, scaling, time_dependent,
+\item{settings}{A list of settings to be used in plot function, including gap, xbreaks, label, scaling, time_dependent,
 runif_min, and runif_max}
 }
 \description{
-This function prepares the category data into the format the \code{\link[=anim_plot]{anim_plot()}} required
-by assigning frames and creating necessary data and settings for the \code{\link[=anim_plot]{anim_plot()}} function.
+This function prepares the category data into the format the plot function required
+by assigning frames and creating necessary data and settings for the plot function.
 }
 \details{
 The function takes the input data and performs several operations to prepare it for visualizations.
-It assigns frames and creates necessary data and settings for the \code{\link[=anim_plot]{anim_plot()}} function.
+It assigns frames and creates necessary data and settings for the plot function.
 }
 \examples{
 anim_prep_cat(data = aeles, id = id, values = party, time = year)

@@ -13,7 +13,7 @@
 #'@examples
 #'animbook <- anim_prep(data = osiris, id = ID, values = sales, time = year, color = japan)
 #'
-#'plot <- anim_plot(animbook, plot = "wallaby", rendering = "plotly")
+#'plot <- wallaby_plot(animbook)
 #'
 #'animate <- anim_animate(plot)
 #'

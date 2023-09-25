@@ -7,7 +7,7 @@
 #' @param palette The vector of the palette used by the function to supply the color to each group.
 #' @param rendering The choice of method used to create and display the plot, either gganimate or
 #' plotly.
-#' @param .. Additional arguments for customization, see details for more information.
+#' @param ... Additional arguments for customization, see details for more information.
 #'
 #' @return Return a ggplot object
 #'

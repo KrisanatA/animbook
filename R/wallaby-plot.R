@@ -225,7 +225,7 @@ wallaby_plot <- function(object,
 #' @return A modified animbook object with additional data components
 #'
 #' @details The function takes the animbook object and then subsets the data based on the users.
-#' Additionally, it creates a label data and shading data for the [anim_plot()] function. All
+#' Additionally, it creates a label data and shading data for the [wallaby_plot()] function. All
 #' of this then replaced the original data and appended new data to the object.
 #'
 #' @keywords internal

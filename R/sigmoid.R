@@ -1,31 +1,32 @@
-#'Animate sigmoid path
+#' Animate sigmoid path
 #'
-#'This function create a path from the starting point (x_start, y_start)
-#'to the ending point (x_end, y_end) with the sigmoid shape.
+#' This function create a path from the starting point (x_start, y_start)
+#' to the ending point (x_end, y_end) with the sigmoid shape.
 #'
-#'@param x_start The x-coordinate of the starting point.
-#'@param x_end The x-coordinate of the ending point.
-#'@param y_start The y-coordinate of the starting point.
-#'@param y_end The y-coordinate of the ending point.
-#'@param scale A numeric value that controls the length of the sigmoid.
-#'@param n A numeric value that controls the number of points between
-#'starting and ending points.
+#' @param x_start The x-coordinate of the starting point.
+#' @param x_end The x-coordinate of the ending point.
+#' @param y_start The y-coordinate of the starting point.
+#' @param y_end The y-coordinate of the ending point.
+#' @param scale A numeric value that controls the length of the sigmoid.
+#' @param n A numeric value that controls the number of points between
+#' starting and ending points.
 #'
-#'@return Return a path in a data frame format
+#' @return Return a path in a data frame format
 #'
-#'@keywords internal
+#' @keywords internal
 #'
-#'@examples
-#'path <- sigmoid()
+#' @examples
+#' path <- sigmoid()
 #'
-#'ggplot2::ggplot(data = path, ggplot2::aes(x = x, y = y)) + ggplot2::geom_point()
+#' ggplot2::ggplot(data = path, ggplot2::aes(x = x, y = y)) + ggplot2::geom_point()
 #'
-#'@references
-#'Recreate - Sankey flow chart. (n.d.). Emil Hvitfeldt.
-#' Retrieved April 13, 2023, from
-#' https://www.emilhvitfeldt.com/post/2018-03-20-recreate-sankey-flow-chart/
+#' @references
+#' Recreate - Sankey flow chart. (n.d.). Emil Hvitfeldt.
+#'  Retrieved April 13, 2023, from
+#'  https://www.emilhvitfeldt.com/post/2018-03-20-recreate-sankey-flow-chart/
 #'
-#'@export
+#' @export
+
 sigmoid <- function(x_start = 0,
                     x_end = 1,
                     y_start = 0,
