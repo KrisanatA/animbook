@@ -4,21 +4,37 @@
 \alias{wallaby_data}
 \title{Wallaby plot data}
 \usage{
-wallaby_data(object, subset = "top", relation = "one_many")
+wallaby_data(
+  object,
+  subset = "top",
+  relation = "one_many",
+  height = 0.6,
+  width = 50
+)
 }
 \arguments{
 \item{object}{An animbook object}
+
+\item{subset}{A character string specifying the variable used for subsetting the data. The "top"
+and "bottom" strings can also be used in this argument.}
+
+\item{relation}{The choice of relationship for the values to display on the plot, either "one_many."
+or "many_one."}
+
+\item{height}{The proportion the point takes in the shaded area.}
+
+\item{width}{The number which controls how far apart each point will be.}
 }
 \value{
-A modified animbook object with addition data components
+A modified animbook object with additional data components
 }
 \description{
 This function performs data manipulation and formatting tasks
 from the original object with additional data components for labeling and shading.
 }
 \details{
-The function takes the animbook object then subset the data based on the users.
-Additionaly, it create a label data and shading data for the \code{\link[=anim_plot]{anim_plot()}} function. All
-of this then replaced the original data and append new data to the object.
+The function takes the animbook object and then subsets the data based on the users.
+Additionally, it creates a label data and shading data for the \code{\link[=anim_plot]{anim_plot()}} function. All
+of this then replaced the original data and appended new data to the object.
 }
 \keyword{internal}

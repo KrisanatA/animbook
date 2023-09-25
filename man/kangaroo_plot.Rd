@@ -19,7 +19,7 @@ kangaroo_plot(
 \item{rendering}{The choice of method used to create and display the plot, either gganimate or
 plotly.}
 
-\item{...}{Additional arguments for customization, see details for more information}
+\item{...}{Additional arguments for customization, see details for more information.}
 }
 \value{
 Return a ggplot object

@@ -1,6 +1,34 @@
-#'@importFrom ggplot2 element_blank
+#' Turn the data into a Sankey flow plot for animate function
 #'
-#'@export
+#' This function takes in the data which has been prepared by the [anim_prep()] or [anim_prep_cat()]
+#' and return the ggplot object. The user can still modify the plot the same as normal ggplot.
+#'
+#' @param object The animbook object returned from the prep function
+#' @param palette The vector of the palette used by the function to supply the color to each group.
+#' @param rendering The choice of method used to create and display the plot, either gganimate or
+#' plotly.
+#' @param subset A character string specifying the variable used for subsetting the data. The "top"
+#' and "bottom" strings can also be used in this argument.
+#' @param relation The choice of relationship for the values to display on the plot, either "one_many."
+#' or "many_one."
+#' @param ... Additional arguments for customization, see details for more information.
+#'
+#' @return Return a ggplot object
+#'
+#' @details
+#' This function takes prepared data and generates a ggplot object.
+#' The wallaby plot is the Sankey flow plot that shows the movement of the subset data.
+#' The point position in the shaded area can be controlled using additional arguments such
+#' height and width. For the shading area, the alpha argument can be used.
+#'
+#' @examples
+#' animbook <- anim_prep(data = osiris, id = ID, values = sales, time = year, color = japan)
+#'
+#' wallaby_plot(animbook)
+#'
+#' @importFrom ggplot2 element_blank
+#'
+#' @export
 
 wallaby_plot <- function(object,
                          palette = RColorBrewer::brewer.pal(9, "Set1"),
@@ -23,15 +51,15 @@ wallaby_plot <- function(object,
 
   args <- list(...)
 
-  # height settings for geom_jitter
-  height <- 0.3
+  # height settings
+  height <- 0.6
 
   if (!is.null(args[["height"]])) {
     height <- args[["height"]]
   }
 
-  # width settings for geom_jitter
-  width <- 0
+  # width settings
+  width <- 50
 
   if (!is.null(args[["width"]])) {
     width <- args[["width"]]
@@ -54,7 +82,8 @@ wallaby_plot <- function(object,
 
 # format data -------------------------------------------------------------
 
-  object <- wallaby_data(object, subset = subset, relation = relation)
+  object <- wallaby_data(object, subset = subset, relation = relation,
+                         height = height, width = width)
 
 
 # variable main aes() -----------------------------------------------------
@@ -179,25 +208,33 @@ wallaby_plot <- function(object,
 
 
 
-#'Wallaby plot data
+#' Wallaby plot data
 #'
-#'This function performs data manipulation and formatting tasks
-#'from the original object with additional data components for labeling and shading.
+#' This function performs data manipulation and formatting tasks
+#' from the original object with additional data components for labeling and shading.
 #'
-#'@param object An animbook object
+#' @param object An animbook object
+#' @param subset A character string specifying the variable used for subsetting the data. The "top"
+#' and "bottom" strings can also be used in this argument.
+#' @param relation The choice of relationship for the values to display on the plot, either "one_many."
+#' or "many_one."
+#' @param height The proportion the point takes in the shaded area.
+#' @param width The number which controls how far apart each point will be.
 #'
-#'@return A modified animbook object with addition data components
 #'
-#'@details The function takes the animbook object then subset the data based on the users.
-#'Additionaly, it create a label data and shading data for the [anim_plot()] function. All
-#'of this then replaced the original data and append new data to the object.
+#' @return A modified animbook object with additional data components
 #'
-#'@keywords internal
+#' @details The function takes the animbook object and then subsets the data based on the users.
+#' Additionally, it creates a label data and shading data for the [anim_plot()] function. All
+#' of this then replaced the original data and appended new data to the object.
+#'
+#' @keywords internal
 
 wallaby_data <- function(object,
                          subset = "top",
                          relation = "one_many",
-                         height = 0.6) {
+                         height = 0.6,
+                         width = 50) {
 
 # subset choice -----------------------------------------------------------
 
@@ -435,7 +472,7 @@ wallaby_data <- function(object,
         frame = dplyr::row_number(),
         frame = frame + floor(runif(1,
                                     object[["settings"]]$runif_min,
-                                    object[["settings"]]$runif_max))
+                                    width))
       )
   }
 
