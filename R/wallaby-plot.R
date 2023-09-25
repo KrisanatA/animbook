@@ -24,7 +24,7 @@ wallaby_plot <- function(object,
   args <- list(...)
 
   # height settings for geom_jitter
-  height <- 0.2
+  height <- 0.3
 
   if (!is.null(args[["height"]])) {
     height <- args[["height"]]
@@ -196,7 +196,8 @@ wallaby_plot <- function(object,
 
 wallaby_data <- function(object,
                          subset = "top",
-                         relation = "one_many") {
+                         relation = "one_many",
+                         height = 0.6) {
 
 # subset choice -----------------------------------------------------------
 
@@ -222,31 +223,34 @@ wallaby_data <- function(object,
 
   data <- object[["data"]]
 
-  unique_qtiles <- unique(data$qtile)
+  unique_qtiles <- as.numeric(sort(unique(data$qtile), decreasing = TRUE))
 
-  y <- sort(unique(data$qtile), decreasing = TRUE)
+  y_label <- object[["settings"]]$label
+
+  match_table <- tibble::tibble(unique_qtiles = unique_qtiles,
+                                y_label = y_label)
 
 
 # subset argument ---------------------------------------------------------
 
   if (subset == "top") {
-    subset <- max(data$qtile)
+    subset_qtile <- max(unique_qtiles)
 
-    label_pos <- object[["settings"]]$label[1]
+    label_subset <- y_label[1]
   }
 
   if (subset == "bottom") {
-    subset <- min(data$qtile)
+    subset_qtile <- min(unique_qtiles)
 
-    label_pos <- object[["settings"]]$label[length(unique_qtiles)]
+    label_subset <- y_label[length(y_label)]
   }
 
   if (subset %in% choice) {
-    subset_pos <- which(rev(object[["settings"]]$label) == subset)
+    subset_qtile <- match_table |>
+      dplyr::filter(y_label == subset) |>
+      dplyr::pull(unique_qtiles)
 
-    subset <- as.numeric(rev(object[["settings"]]$label)[subset_pos])
-
-    label_pos <- rev(object[["settings"]]$label)[subset_pos]
+    label_subset <- subset
   }
 
 
@@ -255,13 +259,13 @@ wallaby_data <- function(object,
   if (relation == "one_many") {
     time_subset <- min(data$time)
 
-    y_left <- subset
+    y_left <- subset_qtile
 
-    y_right <- y
+    y_right <- unique_qtiles
 
-    label_left <- label_pos
+    label_left <- label_subset
 
-    label_right <- object[["settings"]]$label
+    label_right <- y_label
 
     position <- "left"
   }
@@ -269,13 +273,13 @@ wallaby_data <- function(object,
   if (relation == "many_one") {
     time_subset <- max(data$time)
 
-    y_left <- y
+    y_left <- unique_qtiles
 
-    y_right <- subset
+    y_right <- subset_qtile
 
-    label_left <- object[["settings"]]$label
+    label_left <- y_label
 
-    label_right <- label_pos
+    label_right <- label_subset
 
     position <- "right"
   }
@@ -285,32 +289,32 @@ wallaby_data <- function(object,
 
   subset_id <- data |>
     dplyr::filter(time == time_subset,
-                  qtile == subset) |>
+                  qtile == subset_qtile) |>
     dplyr::pull(id)
 
-  subset_data <- data |>
+  filter_data <- data |>
     dplyr::filter(id %in% subset_id) |>
     dplyr::mutate(time = dplyr::case_when(time == min(time) ~ 0,
                                           time == max(time) ~ 1)) |>
-    na.omit()
+    stats::na.omit()
 
   object[["settings"]]$xbreaks <- c(0, 1)
 
 
 # create label data -------------------------------------------------------
 
-  gap <- 0.1 * length(unique(subset_data$time) - 1)
+  gap <- 0.1 * length(unique(filter_data$time) - 1)
 
   object[["settings"]]$gap <- gap
 
   left <- tibble::tibble(
-    x = min(subset_data$time) - gap,
+    x = min(filter_data$time) - gap,
     y = y_left,
     label = label_left
   )
 
   right <- tibble::tibble(
-    x = max(subset_data$time) + gap,
+    x = max(filter_data$time) + gap,
     y = y_right,
     label = label_right
   )
@@ -321,48 +325,40 @@ wallaby_data <- function(object,
 # calculate proportion ----------------------------------------------------
 
   if (relation == "one_many") {
-    prop_time <- max(subset_data$time)
+    prop_time <- max(filter_data$time)
 
-    x_point <- min(subset_data$time)
+    x_point <- min(filter_data$time)
   }
 
   if (relation == "many_one") {
-    prop_time <- min(subset_data$time)
+    prop_time <- min(filter_data$time)
 
-    x_point <- max(subset_data$time)
+    x_point <- max(filter_data$time)
   }
 
-  prop_table <- subset_data |>
+  prop_table <- filter_data |>
     dplyr::filter(time == prop_time) |>
     dplyr::count(qtile) |>
     dplyr::mutate(prop = n/sum(n),
-                  prop = ifelse(prop < 0.1, 0.1, prop))
+                  prop = ifelse(prop < 0.1, 0.1, prop)) |>
+    dplyr::arrange(dplyr::desc(qtile))
 
   prop <- dplyr::pull(prop_table, prop)
 
 
 # create shading data -----------------------------------------------------
 
-  subset_data <- prop_table |>
-    dplyr::select(qtile, prop) |>
-    dplyr::right_join(subset_data |> filter(time == prop_time),
-                      by = "qtile") |>
-    dplyr::select(id, prop) |>
-    dplyr::right_join(subset_data,
-                      by = "id")
+  initial <- subset_qtile + sum(prop)/2
 
-  initial <- subset + sum(prop)/2
-
-  y <- sort(unique(subset_data$qtile)) + (prop/2)
+  shading_y <- dplyr::pull(prop_table, qtile) + (prop/2)
 
   shade_data <- sankey_shade(initial = initial,
-                             proportion = rev(prop),
-                             gap = gap,
-                             y = y,
+                             proportion = prop,
+                             y = shading_y,
                              position = position)
 
 
-# change the start/end position -------------------------------------------
+# change the start or end point of the subset data ------------------------
 
   new_point <- shade_data |>
     dplyr::group_by(id) |>
@@ -371,24 +367,47 @@ wallaby_data <- function(object,
     dplyr::arrange(point) |>
     dplyr::select(point)
 
-  qtile <- subset_data |>
+  qtile <- filter_data |>
     dplyr::filter(time == prop_time) |>
     dplyr::distinct(qtile) |>
     dplyr::arrange(qtile)
 
-  lookup_table <- tibble::tibble(cbind(new_point, qtile))
+  lookup_newpoint <- tibble::tibble(cbind(qtile, new_point))
 
-  subset_data <- subset_data |>
-    dplyr::arrange(id, time) |>
-    dplyr::left_join(lookup_table, by = "qtile") |>
-    dplyr::mutate(point = dplyr::lead(point),
-                  qtile = ifelse(time == x_point, point, qtile)) |>
-    dplyr::select(-point)
+  if (relation == "one_many") {
+    new_data <- filter_data |>
+      dplyr::select(-frame) |>
+      tidyr::pivot_wider(names_from = time,
+                         values_from = qtile) |>
+      dplyr::left_join(lookup_newpoint,
+                       by = c(`1` = "qtile")) |>
+      dplyr::select(-`0`) |>
+      dplyr::rename(`0` = point) |>
+      tidyr::pivot_longer(-c(id, color),
+                          names_to = "time",
+                          values_to = "qtile") |>
+      dplyr::mutate(time = as.numeric(time))
+  }
+
+  if (relation == "many_one") {
+    new_data <- filter_data |>
+      dplyr::select(-frame) |>
+      tidyr::pivot_wider(names_from = time,
+                         values_from = qtile) |>
+      dplyr::left_join(lookup_newpoint,
+                       by = c(`0` = "qtile")) |>
+      dplyr::select(-`1`) |>
+      dplyr::rename(`1` = point) |>
+      tidyr::pivot_longer(-c(id, color),
+                          names_to = "time",
+                          values_to = "qtile") |>
+      dplyr::mutate(time = as.numeric(time))
+  }
 
 
-# crate sigmoid path ------------------------------------------------------
+# create sigmoid path -----------------------------------------------------
 
-  path <- subset_data |>
+  path <- new_data |>
     tidyr::pivot_wider(id_cols = id,
                        names_from = time,
                        values_from = qtile) |>
@@ -423,14 +442,16 @@ wallaby_data <- function(object,
 
 # join the missing information --------------------------------------------
 
-  information <- subset_data |>
+  information <- new_data |>
+    dplyr::select(id, color, qtile) |>
+    dplyr::left_join(prop_table, by = "qtile") |>
     dplyr::select(id, color, prop) |>
     dplyr::distinct()
 
   wallaby_data <- data |>
     dplyr::left_join(information,
                      by = "id") |>
-    dplyr::mutate(y = y + runif(1, -prop/3, prop/3))
+    dplyr::mutate(y = y + runif(1, -prop * (height/2), prop * (height/2)))
 
 
 # output ------------------------------------------------------------------
