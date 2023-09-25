@@ -41,7 +41,7 @@ wallaby_plot <- function(object,
 
   rendering_choice <- c("ggplot", "plotly")
 
-  stopifnot("Please use the anim_prep function to converted data into animbook class object" =
+  stopifnot("Please use the anim_prep function to convert data into an animbook class object" =
               class(object) == "animbook",
             "The rendering argument can only be either ggplot or plotly" =
               rendering %in% rendering_choice)
@@ -235,6 +235,12 @@ wallaby_data <- function(object,
                          relation = "one_many",
                          height = 0.6,
                          width = 50) {
+
+
+# stop --------------------------------------------------------------------
+
+  stopifnot("height argument only accepted proportion between 0 and 1" =
+              dplyr::between(height, 0, 1))
 
 # subset choice -----------------------------------------------------------
 
