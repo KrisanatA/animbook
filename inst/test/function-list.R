@@ -30,7 +30,7 @@ object <- anim_prep_cat(data = aeles, id = id, values = party, time = year,
 # many_one not working yet
 
 p <- wallaby_plot(object = object, palette = RColorBrewer::brewer.pal(9, "Set1"),
-                  rendering = "ggplot", subset = "labor", relation = "one_many")
+                  rendering = "ggplot", subset = "greens", relation = "many_one")
 
 p2 <- anim_animate(p)
 

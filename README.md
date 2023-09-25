@@ -38,12 +38,12 @@ create the necessary data and settings for the next stage.
 The data needs to contain the following variable for the function to
 work:
 
-- id: `firmID`, it needs to be a factor variable.
+- id: `ID`, it needs to be a factor variable.
 - values: `sales`, it need to be a numeric variable.
 - time: `year`, it needs to be an integer variable.
 
 ``` r
-animbook <- anim_prep(osiris, firmID, sales, year)
+animbook <- anim_prep(osiris, ID, sales, year)
 ```
 
 There are also additional options that allow the user to customize.
@@ -63,35 +63,35 @@ The function can calculate four different scales using these options.
 
 ``` r
 # rank scaling
-rank_scaling <- anim_prep(data = osiris, id = firmID, values = sales, time = year)
+rank_scaling <- anim_prep(data = osiris, id = ID, values = sales, time = year)
 
 # absolute scaling
-absolute_scaling <- anim_prep(data = osiris, id = firmID, values = sales, time = year,
+absolute_scaling <- anim_prep(data = osiris, id = ID, values = sales, time = year,
                               scaling = "absolute")
 
 # rank scaling by group
-rank_group_scaling <- anim_prep(data = osiris, id = firmID, values = sales, time = year, 
+rank_group_scaling <- anim_prep(data = osiris, id = ID, values = sales, time = year, 
                                 group = country)
 
 # absolute scaling by group
-absolute_group_scaling <- anim_prep(data = osiris, id = firmID, values = sales, time = year,
+absolute_group_scaling <- anim_prep(data = osiris, id = ID, values = sales, time = year,
                                     group = country, scaling = "absolute")
 
 rank_scaling
 #> $data
 #> # A tibble: 10,270 × 4
-#>    id                              time qtile frame
-#>    <fct>                          <int> <dbl> <int>
-#>  1 1&1 VERSATEL GMBH DE2011730431  2006     2     1
-#>  2 1&1 VERSATEL GMBH DE2011730431  2007     2     2
-#>  3 1&1 VERSATEL GMBH DE2011730431  2008     2     3
-#>  4 1&1 VERSATEL GMBH DE2011730431  2009     2     4
-#>  5 1&1 VERSATEL GMBH DE2011730431  2010     2     5
-#>  6 1&1 VERSATEL GMBH DE2011730431  2011     2     6
-#>  7 1&1 VERSATEL GMBH DE2011730431  2012     0     7
-#>  8 1&1 VERSATEL GMBH DE2011730431  2013     0     8
-#>  9 1&1 VERSATEL GMBH DE2011730431  2014     0     9
-#> 10 1&1 VERSATEL GMBH DE2011730431  2015     0    10
+#>    id         time qtile frame
+#>    <fct>     <int> <dbl> <int>
+#>  1 AE30008GU  2006     2     1
+#>  2 AE30008GU  2007     2     2
+#>  3 AE30008GU  2008     2     3
+#>  4 AE30008GU  2009     2     4
+#>  5 AE30008GU  2010     2     5
+#>  6 AE30008GU  2011     2     6
+#>  7 AE30008GU  2012     1     7
+#>  8 AE30008GU  2013     1     8
+#>  9 AE30008GU  2014     1     9
+#> 10 AE30008GU  2015     1    10
 #> # ℹ 10,260 more rows
 #> 
 #> $settings
@@ -107,6 +107,15 @@ rank_scaling
 #> $settings$scaling
 #>   0%  20%  40%  60%  80% 100% 
 #>    1   93  185  277  369  567 
+#> 
+#> $settings$time_dependent
+#> [1] TRUE
+#> 
+#> $settings$runif_min
+#> [1] 1
+#> 
+#> $settings$runif_max
+#> [1] 50
 #> 
 #> 
 #> attr(,"class")
@@ -127,10 +136,12 @@ available in this package:
 - `funnel_web_spider`, which is a faceted plot by time variable.
 
 ``` r
-animbook <- anim_prep(data = osiris, id = firmID, values = sales, time = year, color = japan)
+label <- c("Top 20%", "20-40", "40-60", "60-80", "80-100", "not listed")
+
+animbook <- anim_prep(data = osiris, id = ID, values = sales, time = year, color = japan, label = label)
 
 # kangaroo plot
-anim_plot(animbook, plot = "kangaroo")
+kangaroo_plot(animbook)
 ```
 
 <img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
@@ -138,15 +149,15 @@ anim_plot(animbook, plot = "kangaroo")
 ``` r
 
 # wallaby plot
-anim_plot(animbook, plot = "wallaby")
+wallaby_plot(animbook)
 ```
 
 <img src="man/figures/README-unnamed-chunk-5-2.png" width="100%" />
 
 ``` r
-
+            
 # funnel web spider plot
-anim_plot(animbook, plot = "funnel_web_spider")
+funnel_web_plot(animbook)
 ```
 
 <img src="man/figures/README-unnamed-chunk-5-3.png" width="100%" />
@@ -162,9 +173,9 @@ To animate the plot, we need to save the plot into an object, which then
 can be passed on to the function.
 
 ``` r
-animbook <- anim_prep(data = osiris, id = firmID, values = sales, time = year, color = japan)
+animbook <- anim_prep_cat(data = aeles, id = id, values = party, time = year, color = gender, time_dependent = FALSE)
 
-p <- anim_plot(animbook, plot = "wallaby", width = 0.01)
+p <- wallaby_plot(animbook)
 
 p2 <- anim_animate(p)
 #> You can now pass it to gganimate::animate()

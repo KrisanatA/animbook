@@ -99,16 +99,18 @@ After preparing the data, we can not plot it. There are three plots available in
 - `funnel_web_spider`, which is a faceted plot by time variable.
 
 ```{r}
-animbook <- anim_prep(data = osiris, id = ID, values = sales, time = year, color = japan)
+label <- c("Top 20%", "20-40", "40-60", "60-80", "80-100", "not listed")
+
+animbook <- anim_prep(data = osiris, id = ID, values = sales, time = year, color = japan, label = label)
 
 # kangaroo plot
-anim_plot(animbook, plot = "kangaroo")
+kangaroo_plot(animbook)
 
 # wallaby plot
-anim_plot(animbook, plot = "wallaby")
-
+wallaby_plot(animbook)
+            
 # funnel web spider plot
-anim_plot(animbook, plot = "funnel_web_spider")
+funnel_web_plot(animbook)
 ```
 
 The `kangaroo` and `wallaby` plots can be animated using the function of the next stage. `funnel_web_spider` only supported static plot. We can also choose whether we want to animate the plot using gganimate or plotly.
@@ -119,9 +121,9 @@ The `kangaroo` and `wallaby` plots can be animated using the function of the nex
 To animate the plot, we need to save the plot into an object, which then can be passed on to the function.
 
 ```{r}
-animbook <- anim_prep(data = osiris, id = ID, values = sales, time = year, color = japan)
+animbook <- anim_prep_cat(data = aeles, id = id, values = party, time = year, color = gender, time_dependent = FALSE)
 
-p <- anim_plot(animbook, plot = "wallaby", width = 0.01)
+p <- wallaby_plot(animbook)
 
 p2 <- anim_animate(p)
 

@@ -37,6 +37,12 @@
     <loc>/reference/anim_prep.html</loc>
   </url>
   <url>
+    <loc>/reference/anim_prep_cat.html</loc>
+  </url>
+  <url>
+    <loc>/reference/funnel_web_plot.html</loc>
+  </url>
+  <url>
     <loc>/reference/funnel_web_spider_data.html</loc>
   </url>
   <url>
@@ -46,12 +52,21 @@
     <loc>/reference/kangaroo_data.html</loc>
   </url>
   <url>
+    <loc>/reference/kangaroo_plot.html</loc>
+  </url>
+  <url>
     <loc>/reference/osiris.html</loc>
+  </url>
+  <url>
+    <loc>/reference/sankey_shade.html</loc>
   </url>
   <url>
     <loc>/reference/sigmoid.html</loc>
   </url>
   <url>
     <loc>/reference/wallaby_data.html</loc>
+  </url>
+  <url>
+    <loc>/reference/wallaby_plot.html</loc>
   </url>
 </urlset>
