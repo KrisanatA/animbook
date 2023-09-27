@@ -90,6 +90,8 @@ osiris5 <- anim_prep(data = osiris_us_china,
                      group_scaling = country,
                      time_dependent = FALSE)
 
+osiris5$data %>% count(qtile)
+
 osiris_p <- wallaby_plot(object = osiris5,
                          group_palette = RColorBrewer::brewer.pal(8, "Dark2"),
                          shade_palette = c("#737373", "#969696", "#BDBDBD","#D9D9D9","#D9D9D9","#D9D9D9"),
