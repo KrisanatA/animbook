@@ -1,4 +1,5 @@
 library(animbook)
+library(tidyverse)
 
 # osiris ------------------------------------------------------------------
 
@@ -65,8 +66,33 @@ osiris5 <- anim_prep(data = osiris_us,
                      time_dependent = FALSE)
 
 osiris_p <- wallaby_plot(object = osiris5,
-                         group_palette = RColorBrewer::brewer.pal(8, "Paired"),
+                         group_palette = RColorBrewer::brewer.pal(8, "Dark2"),
                          shade_palette = RColorBrewer::brewer.pal(9, "Set1"),
+                         subset = "top")
+
+osiris_anim <- anim_animate(osiris_p)
+
+gganimate::animate(osiris_anim)
+
+# US v China (bc US has few observations in previous view)
+osiris_us_china <- osiris %>%
+  filter(country %in% c("US", "CN")) %>%
+  mutate(usa = ifelse(country == "US", "usa", "china")) %>%
+  mutate(lsales = log(sales))
+
+osiris5 <- anim_prep(data = osiris_us_china,
+                     id = ID,
+                     values = lsales,
+                     time = year,
+                     ngroup = 5L,
+                     color = usa,
+                     #scaling = "absolute",
+                     group_scaling = country,
+                     time_dependent = FALSE)
+
+osiris_p <- wallaby_plot(object = osiris5,
+                         group_palette = RColorBrewer::brewer.pal(8, "Dark2"),
+                         shade_palette = c("#737373", "#969696", "#BDBDBD","#D9D9D9","#D9D9D9","#D9D9D9"),
                          subset = "top")
 
 osiris_anim <- anim_animate(osiris_p)
