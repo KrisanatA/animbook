@@ -16,6 +16,8 @@ osiris3 <- anim_prep(data = osiris, id = ID, values = sales, time = year,
 osiris4 <- anim_prep(data = osiris, id = ID, values = sales, time = year,
                      ngroup = 5L, group_scaling = country, color = japan, scaling = "absolute")
 
+osiris_p <- wallaby_plot(object = osiris3, subset = "top")
+
 
 
 
@@ -30,9 +32,11 @@ object <- anim_prep_cat(data = aeles, id = id, values = party, time = year,
 # many_one not working yet
 
 p <- wallaby_plot(object = object, palette = RColorBrewer::brewer.pal(9, "Set1"),
-                  rendering = "ggplot", subset = "greens", relation = "many_one")
+                  rendering = "ggplot", subset = "greens", relation = "one_many",
+                  height = 1)
 
 p2 <- anim_animate(p)
 
 gganimate::animate(p2)
 
+plotly::ggplotly(p2)

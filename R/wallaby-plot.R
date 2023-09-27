@@ -426,7 +426,7 @@ wallaby_data <- function(object,
                        by = c(`1` = "qtile")) |>
       dplyr::select(-`0`) |>
       dplyr::rename(`0` = point) |>
-      tidyr::pivot_longer(-c(id, color),
+      tidyr::pivot_longer(c(`0`, `1`),
                           names_to = "time",
                           values_to = "qtile") |>
       dplyr::mutate(time = as.numeric(time))
@@ -441,7 +441,7 @@ wallaby_data <- function(object,
                        by = c(`0` = "qtile")) |>
       dplyr::select(-`1`) |>
       dplyr::rename(`1` = point) |>
-      tidyr::pivot_longer(-c(id, color),
+      tidyr::pivot_longer(c(`0`, `1`),
                           names_to = "time",
                           values_to = "qtile") |>
       dplyr::mutate(time = as.numeric(time))
@@ -486,10 +486,11 @@ wallaby_data <- function(object,
 # join the missing information --------------------------------------------
 
   information <- new_data |>
-    dplyr::select(id, color, qtile) |>
+    dplyr::select(-time) |>
     dplyr::left_join(prop_table, by = "qtile") |>
     dplyr::select(id, color, prop) |>
-    dplyr::distinct()
+    dplyr::distinct() |>
+    stats::na.omit()
 
   wallaby_data <- data |>
     dplyr::left_join(information,
