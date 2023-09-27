@@ -47,7 +47,7 @@ osiris5 <- anim_prep(data = osiris_us,
                      time = year,
                      ngroup = 5L,
                      color = usa,
-                     scaling = "absolute",
+                     #scaling = "absolute",
                      group_scaling = country,
                      time_dependent = FALSE)
 
