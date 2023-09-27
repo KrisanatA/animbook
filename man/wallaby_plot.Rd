@@ -6,7 +6,8 @@
 \usage{
 wallaby_plot(
   object,
-  palette = RColorBrewer::brewer.pal(9, "Set1"),
+  group_palette = RColorBrewer::brewer.pal(9, "Set1"),
+  shade_palette = RColorBrewer::brewer.pal(9, "Set1"),
   rendering = "ggplot",
   subset = "top",
   relation = "one_many",
@@ -16,7 +17,9 @@ wallaby_plot(
 \arguments{
 \item{object}{The animbook object returned from the prep function}
 
-\item{palette}{The vector of the palette used by the function to supply the color to each group.}
+\item{group_palette}{The vector of the palette used by the function to supply the color to each group.}
+
+\item{shade_palette}{The vector of the palette used by the function to supply the color to the shaded area.}
 
 \item{rendering}{The choice of method used to create and display the plot, either gganimate or
 plotly.}

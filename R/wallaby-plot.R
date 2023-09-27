@@ -4,7 +4,8 @@
 #' and return the ggplot object. The user can still modify the plot the same as normal ggplot.
 #'
 #' @param object The animbook object returned from the prep function
-#' @param palette The vector of the palette used by the function to supply the color to each group.
+#' @param group_palette The vector of the palette used by the function to supply the color to each group.
+#' @param shade_palette The vector of the palette used by the function to supply the color to the shaded area.
 #' @param rendering The choice of method used to create and display the plot, either gganimate or
 #' plotly.
 #' @param subset A character string specifying the variable used for subsetting the data. The "top"
@@ -31,13 +32,15 @@
 #' @export
 
 wallaby_plot <- function(object,
-                         palette = RColorBrewer::brewer.pal(9, "Set1"),
+                         group_palette = RColorBrewer::brewer.pal(9, "Set1"),
+                         shade_palette = RColorBrewer::brewer.pal(9, "Set1"),
                          rendering = "ggplot",
                          subset = "top",
                          relation = "one_many",
                          ...) {
 
-  col_val <- palette
+  col_group <- group_palette
+  col_shade <- shade_palette
 
   rendering_choice <- c("ggplot", "plotly")
 
@@ -173,8 +176,8 @@ wallaby_plot <- function(object,
                    legend.position = "bottom",
                    legend.title = element_blank()) +
     ggplot2::guides(fill = "none") +
-    ggplot2::scale_fill_manual(values = col_val) +
-    ggplot2::scale_colour_manual(values = col_val)
+    ggplot2::scale_fill_manual(values = col_shade) +
+    ggplot2::scale_colour_manual(values = col_group)
 
   return(anim)
 
