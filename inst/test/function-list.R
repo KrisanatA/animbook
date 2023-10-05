@@ -68,7 +68,8 @@ osiris5 <- anim_prep(data = osiris_us,
 osiris_p <- wallaby_plot(object = osiris5,
                          group_palette = RColorBrewer::brewer.pal(8, "Dark2"),
                          shade_palette = RColorBrewer::brewer.pal(9, "Set1"),
-                         subset = "top")
+                         subset = "top",
+                         size = 5)
 
 osiris_anim <- anim_animate(osiris_p)
 
@@ -95,7 +96,8 @@ osiris5$data %>% count(qtile)
 osiris_p <- wallaby_plot(object = osiris5,
                          group_palette = RColorBrewer::brewer.pal(8, "Dark2"),
                          shade_palette = c("#737373", "#969696", "#BDBDBD","#D9D9D9","#D9D9D9","#D9D9D9"),
-                         subset = "top")
+                         subset = "top",
+                         size = 2)
 
 osiris_anim <- anim_animate(osiris_p)
 

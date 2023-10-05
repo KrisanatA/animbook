@@ -31,7 +31,7 @@ and return the ggplot object. The user can still modify the plot the same as nor
 \details{
 This function takes prepared data and generates a ggplot object.
 The kangaroo plot is the plot that shows the movement between groups over time.
-The jitter point can be controlled using additional arguments such as height and width
+The jitter point can be controlled using additional arguments such as height, width, and size
 to control the appearance. For the shading area, the alpha argument can be used.
 }
 \examples{

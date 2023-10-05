@@ -14,7 +14,7 @@
 #' @details
 #' This function takes prepared data and generates a ggplot object.
 #' The kangaroo plot is the plot that shows the movement between groups over time.
-#' The jitter point can be controlled using additional arguments such as height and width
+#' The jitter point can be controlled using additional arguments such as height, width, and size
 #' to control the appearance. For the shading area, the alpha argument can be used.
 #'
 #' @examples
@@ -66,7 +66,14 @@ kangaroo_plot <- function(object,
     alpha <- args[["alpha"]]
   }
 
-  args_accepted <- c("height", "width", "alpha")
+  # size settings for geom_jitter
+  size <- 2
+
+  if (!is.null(args[["size"]])) {
+    size <- args[["size"]]
+  }
+
+  args_accepted <- c("height", "width", "alpha", "size")
 
   if (any(!(names(args) %in% args_accepted))) {
     warning(paste0("The following arguments are not supported: ",
@@ -130,7 +137,7 @@ kangaroo_plot <- function(object,
   australia <- ggplot2::ggplot() +
     ggplot2::geom_jitter(data = object[["data"]],
                          mapping = ggplot2::aes(!!!aes_list),
-                         height = height, width = width) |>
+                         height = height, width = width, size = size) |>
     suppressWarnings()
 
   # the shaded area + label

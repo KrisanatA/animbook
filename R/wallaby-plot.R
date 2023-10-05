@@ -19,8 +19,8 @@
 #' @details
 #' This function takes prepared data and generates a ggplot object.
 #' The wallaby plot is the Sankey flow plot that shows the movement of the subset data.
-#' The point position in the shaded area can be controlled using additional arguments such
-#' height and width. For the shading area, the alpha argument can be used.
+#' The point position and point size in the shaded area can be controlled using additional arguments such
+#' height, width, and size. For the shading area, the alpha argument can be used.
 #'
 #' @examples
 #' animbook <- anim_prep(data = osiris, id = ID, values = sales, time = year, color = japan)
@@ -75,7 +75,14 @@ wallaby_plot <- function(object,
     alpha <- args[["alpha"]]
   }
 
-  args_accepted <- c("height", "width", "alpha")
+  # size settings for geom_point
+  size <- 2
+
+  if (!is.null(args[["size"]])) {
+    size <- args[["size"]]
+  }
+
+  args_accepted <- c("height", "width", "alpha", "size")
 
   if (any(!(names(args) %in% args_accepted))) {
     warning(paste0("The following arguments are not supported: ",
@@ -139,7 +146,8 @@ wallaby_plot <- function(object,
   # the data point
   australia <- ggplot2::ggplot() +
     ggplot2::geom_point(data = object[["data"]],
-                         mapping = ggplot2::aes(!!!aes_list)
+                        mapping = ggplot2::aes(!!!aes_list),
+                        size = size
                          ) |>
     suppressWarnings()
 
