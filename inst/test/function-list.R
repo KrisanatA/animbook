@@ -112,7 +112,6 @@ object <- anim_prep_cat(data = aeles,
                         values = party,
                         time = year,
                         order = NULL,
-                        color = gender,
                         time_dependent = FALSE)
 
 # subset can be either "top", "bottom" or values in the data

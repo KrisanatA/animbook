@@ -499,7 +499,7 @@ wallaby_data <- function(object,
   information <- new_data |>
     dplyr::select(-time) |>
     dplyr::left_join(prop_table, by = "qtile") |>
-    dplyr::select(id, color, prop) |>
+    dplyr::select(-c(qtile, n)) |>
     dplyr::distinct() |>
     stats::na.omit()
 
