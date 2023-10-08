@@ -9,7 +9,8 @@ wallaby_data(
   subset = "top",
   relation = "one_many",
   height = 0.6,
-  width = 50
+  width = 50,
+  total_point = NULL
 )
 }
 \arguments{
@@ -23,7 +24,10 @@ or "many_one."}
 
 \item{height}{The proportion the point takes in the shaded area.}
 
-\item{width}{The number which controls how far apart each point will be.}
+\item{width}{The number that controls the runif_max to specify how far apart each point is.}
+
+\item{total_point}{The number of points the users want for the wallaby plot. Default is NULL, the number
+of the point is equal to the original number of points.}
 }
 \value{
 A modified animbook object with additional data components

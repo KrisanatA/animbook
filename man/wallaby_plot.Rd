@@ -11,6 +11,7 @@ wallaby_plot(
   rendering = "ggplot",
   subset = "top",
   relation = "one_many",
+  total_point = NULL,
   ...
 )
 }
@@ -29,6 +30,9 @@ and "bottom" strings can also be used in this argument.}
 
 \item{relation}{The choice of relationship for the values to display on the plot, either "one_many."
 or "many_one."}
+
+\item{total_point}{The number of points the users want for the wallaby plot. Default is NULL, the number
+of the point is equal to the original number of points.}
 
 \item{...}{Additional arguments for customization, see details for more information.}
 }

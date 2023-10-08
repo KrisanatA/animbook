@@ -97,7 +97,8 @@ osiris_p <- wallaby_plot(object = osiris5,
                          group_palette = RColorBrewer::brewer.pal(8, "Dark2"),
                          shade_palette = c("#737373", "#969696", "#BDBDBD","#D9D9D9","#D9D9D9","#D9D9D9"),
                          subset = "top",
-                         size = 2)
+                         size = 2,
+                         total_point = 1000)
 
 osiris_anim <- anim_animate(osiris_p)
 
@@ -111,6 +112,7 @@ object <- anim_prep_cat(data = aeles,
                         id = id,
                         values = party,
                         time = year,
+                        color = gender,
                         order = NULL,
                         time_dependent = FALSE)
 
@@ -123,7 +125,10 @@ p <- wallaby_plot(object = object,
                   rendering = "ggplot",
                   subset = "greens",
                   relation = "one_many",
-                  height = 1)
+                  height = 1,
+                  size = 3,
+                  width = 100,
+                  total_point = 1000)
 
 p2 <- anim_animate(p)
 

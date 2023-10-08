@@ -12,6 +12,8 @@
 #' and "bottom" strings can also be used in this argument.
 #' @param relation The choice of relationship for the values to display on the plot, either "one_many."
 #' or "many_one."
+#' @param total_point The number of points the users want for the wallaby plot. Default is NULL, the number
+#' of the point is equal to the original number of points.
 #' @param ... Additional arguments for customization, see details for more information.
 #'
 #' @return Return a ggplot object
@@ -37,6 +39,7 @@ wallaby_plot <- function(object,
                          rendering = "ggplot",
                          subset = "top",
                          relation = "one_many",
+                         total_point = NULL,
                          ...) {
 
   col_group <- group_palette
@@ -62,7 +65,7 @@ wallaby_plot <- function(object,
   }
 
   # width settings
-  width <- 50
+  width <- 50L
 
   if (!is.null(args[["width"]])) {
     width <- args[["width"]]
@@ -93,7 +96,8 @@ wallaby_plot <- function(object,
 # format data -------------------------------------------------------------
 
   object <- wallaby_data(object, subset = subset, relation = relation,
-                         height = height, width = width)
+                         height = height, width = width,
+                         total_point = total_point)
 
 
 # variable main aes() -----------------------------------------------------
@@ -230,8 +234,9 @@ wallaby_plot <- function(object,
 #' @param relation The choice of relationship for the values to display on the plot, either "one_many."
 #' or "many_one."
 #' @param height The proportion the point takes in the shaded area.
-#' @param width The number which controls how far apart each point will be.
-#'
+#' @param width The number that controls the runif_max to specify how far apart each point is.
+#' @param total_point The number of points the users want for the wallaby plot. Default is NULL, the number
+#' of the point is equal to the original number of points.
 #'
 #' @return A modified animbook object with additional data components
 #'
@@ -245,7 +250,8 @@ wallaby_data <- function(object,
                          subset = "top",
                          relation = "one_many",
                          height = 0.6,
-                         width = 50) {
+                         width = 50,
+                         total_point = NULL) {
 
 
 # stop --------------------------------------------------------------------
@@ -412,6 +418,49 @@ wallaby_data <- function(object,
                              position = position)
 
 
+# interpolate data --------------------------------------------------------
+
+  if ("color" %in% colnames(object[["data"]])) {
+    count_list <- list(
+      quote(qtile),
+      quote(color)
+    )
+  }
+
+  else {
+    count_list <- list(
+      quote(qtile)
+    )
+  }
+
+  if (is.null(total_point)) {
+    total_point <- nrow(filter_data)
+  }
+
+  if (!is.null(total_point) & total_point <= nrow(filter_data)) {
+    total_point <- nrow(filter_data)
+  }
+
+  if (!is.null(total_point) & total_point > nrow(filter_data)) {
+    total_point <- total_point
+  }
+
+  count_data <- filter_data |>
+    dplyr::filter(time == prop_time) |>
+    dplyr::count(!!!count_list) |>
+    dplyr::arrange(dplyr::desc(n))
+
+  n_point <- count_data |>
+    dplyr::mutate(prop = n/sum(n),
+                  n_point = ceiling(total_point * prop)) |>
+    dplyr::pull(n_point)
+
+  interpolate_data <- count_data |>
+    dplyr::select(-n) |>
+    dplyr::slice(rep(1:dplyr::n(), times = n_point)) |>
+    dplyr::mutate(id = dplyr::row_number())
+
+
 # change the start or end point of the subset data ------------------------
 
   new_point <- shade_data |>
@@ -429,14 +478,11 @@ wallaby_data <- function(object,
   lookup_newpoint <- tibble::tibble(cbind(qtile, new_point))
 
   if (relation == "one_many") {
-    new_data <- filter_data |>
-      dplyr::select(-frame) |>
-      tidyr::pivot_wider(names_from = time,
-                         values_from = qtile) |>
+    new_data <- interpolate_data |>
       dplyr::left_join(lookup_newpoint,
-                       by = c(`1` = "qtile")) |>
-      dplyr::select(-`0`) |>
-      dplyr::rename(`0` = point) |>
+                       by = "qtile") |>
+      dplyr::rename(`0` = point,
+                    `1` = qtile) |>
       tidyr::pivot_longer(c(`0`, `1`),
                           names_to = "time",
                           values_to = "qtile") |>
@@ -444,14 +490,11 @@ wallaby_data <- function(object,
   }
 
   if (relation == "many_one") {
-    new_data <- filter_data |>
-      dplyr::select(-frame) |>
-      tidyr::pivot_wider(names_from = time,
-                         values_from = qtile) |>
+    new_data <- interpolate_data |>
       dplyr::left_join(lookup_newpoint,
-                       by = c(`0` = "qtile")) |>
-      dplyr::select(-`1`) |>
-      dplyr::rename(`1` = point) |>
+                       by = "qtile") |>
+      dplyr::rename(`1` = point,
+                    `0` = qtile) |>
       tidyr::pivot_longer(c(`0`, `1`),
                           names_to = "time",
                           values_to = "qtile") |>
