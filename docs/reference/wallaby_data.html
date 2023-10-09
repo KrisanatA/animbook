@@ -59,7 +59,8 @@ from the original object with additional data components for labeling and shadin
 <span>  subset <span class="op">=</span> <span class="st">"top"</span>,</span>
 <span>  relation <span class="op">=</span> <span class="st">"one_many"</span>,</span>
 <span>  height <span class="op">=</span> <span class="fl">0.6</span>,</span>
-<span>  width <span class="op">=</span> <span class="fl">50</span></span>
+<span>  width <span class="op">=</span> <span class="fl">50</span>,</span>
+<span>  total_point <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -84,7 +85,12 @@ or "many_one."</p></dd>
 
 
 <dt>width</dt>
-<dd><p>The number which controls how far apart each point will be.</p></dd>
+<dd><p>The number that controls the runif_max to specify how far apart each point is.</p></dd>
+
+
+<dt>total_point</dt>
+<dd><p>The number of points the users want for the wallaby plot. Default is NULL, the number
+of the point is equal to the original number of points.</p></dd>
 
 </dl></div>
     <div class="section level2">
