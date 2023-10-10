@@ -1,5 +1,5 @@
 Package: animbook
-Title: What the Package Does (One Line, Title Case)
+Title: Create an interactive visualization to explore changes in ranks over time
 Version: 0.0.0.9000
 Authors@R: 
     person("Krisanat", "Anukarnsakulchularp", , "kanu0003@student.monash.edu", role = c("aut", "cre"),

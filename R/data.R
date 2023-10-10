@@ -38,3 +38,26 @@
 #'@source This dataset is from the following; Australian Election Study
 #'\url{https://dataverse.ada.edu.au/file.xhtml?fileId=18013&version=3.0}
 "aeles"
+
+#' Simulated data with some change
+#'
+#' This data has changes from category A to E
+#' between two time points.
+#'
+#'@format A data frame with 400 rows and 4 variables
+#'\describe{
+#'  \item{id}{The id of the organisation}
+#'  \item{year}{year}
+#'  \item{gp}{Either X or Y}
+#'  \item{qnt}{Quantile group for the two times}
+#'}
+#'
+#'@examples
+#' d <- anim_prep_cat(d_w_change, id=id,
+#' values=qnt, time=time,
+#' color=gp, time_dependent = FALSE)
+#' d_p <- wallaby_plot(d, height=1)
+#' d_p_anim <- anim_animate(d_p)
+#' gganimate::animate(d_p_anim)
+#'
+"d_w_change"
