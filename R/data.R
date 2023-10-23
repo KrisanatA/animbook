@@ -47,7 +47,7 @@
 #'@format A data frame with 400 rows and 4 variables
 #'\describe{
 #'  \item{id}{The id of the organisation}
-#'  \item{year}{year}
+#'  \item{time}{time}
 #'  \item{gp}{Either X or Y}
 #'  \item{qnt}{Quantile group for the two times}
 #'}
