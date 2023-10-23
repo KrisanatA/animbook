@@ -96,7 +96,7 @@ anim_prep <- function(data,
       dplyr::group_by(!!qid) |>
       dplyr::mutate(
         frame = dplyr::row_number(),
-        frame = frame + floor(runif(1, runif_min, runif_max))
+        frame = frame + floor(stats::runif(1, runif_min, runif_max))
       ) |>
       ungroup()
 
