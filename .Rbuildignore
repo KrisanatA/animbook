@@ -6,6 +6,6 @@
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
-^inst\new_visualisation$
-^inst\test$
-^inst\test.gif$
+^inst/test$
+^inst/test.gif$
+^inst/new_visualisation$

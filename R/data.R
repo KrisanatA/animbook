@@ -53,11 +53,11 @@
 #'}
 #'
 #'@examples
-#' d <- anim_prep_cat(d_w_change, id=id,
-#' values=qnt, time=time,
-#' color=gp, time_dependent = FALSE)
-#' d_p <- wallaby_plot(d, height=1)
-#' d_p_anim <- anim_animate(d_p)
-#' gganimate::animate(d_p_anim)
+#' d <- anim_prep_cat(d_w_change, id = id,
+#' values = qnt, time = time,
+#' color = gp, time_dependent = FALSE)
 #'
+#' d_p <- wallaby_plot(d, height = 1)
+#'
+#' d_p_anim <- anim_animate(d_p)
 "d_w_change"

@@ -1,0 +1,20 @@
+utils::globalVariables(
+  c(
+    "frame",
+    "qtile",
+    "group",
+    "n",
+    "time",
+    "id",
+    "xmin",
+    "xmax",
+    "ymin",
+    "ymax",
+    "x",
+    "y",
+    "label",
+    "point",
+    "0",
+    "1"
+  )
+  )

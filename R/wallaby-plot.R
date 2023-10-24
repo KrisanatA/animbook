@@ -244,6 +244,8 @@ wallaby_plot <- function(object,
 #' Additionally, it creates a label data and shading data for the [wallaby_plot()] function. All
 #' of this then replaced the original data and appended new data to the object.
 #'
+#' @importFrom rlang .data
+#'
 #' @keywords internal
 
 wallaby_data <- function(object,
@@ -530,7 +532,7 @@ wallaby_data <- function(object,
     data <- path |>
       dplyr::mutate(
         frame = dplyr::row_number(),
-        frame = frame + floor(runif(1,
+        frame = frame + floor(stats::runif(1,
                                     object[["settings"]]$runif_min,
                                     width))
       )
@@ -549,7 +551,7 @@ wallaby_data <- function(object,
   wallaby_data <- data |>
     dplyr::left_join(information,
                      by = "id") |>
-    dplyr::mutate(y = y + runif(1, -prop * (height/2), prop * (height/2)))
+    dplyr::mutate(y = y + stats::runif(1, -prop * (height/2), prop * (height/2)))
 
 
 # output ------------------------------------------------------------------

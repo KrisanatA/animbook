@@ -65,10 +65,13 @@ function.
 \examples{
 anim_prep(data = osiris, id = ID, values = sales, time = year)
 
-anim_prep(data = osiris, id = ID, values = sales, time = year, group_scaling = country)
+anim_prep(data = osiris, id = ID, values = sales, time = year,
+group_scaling = country)
 
-anim_prep(data = osiris, id = ID, values = sales, time = year, scaling = "absolute")
+anim_prep(data = osiris, id = ID, values = sales, time = year,
+scaling = "absolute")
 
-anim_prep(data = osiris, id = ID, values = sales, time = year, group_scaling = country, scaling = "absolute")
+anim_prep(data = osiris, id = ID, values = sales, time = year,
+group_scaling = country, scaling = "absolute")
 
 }
