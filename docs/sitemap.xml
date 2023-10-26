@@ -40,6 +40,12 @@
     <loc>/reference/anim_prep_cat.html</loc>
   </url>
   <url>
+    <loc>/reference/cat_change.html</loc>
+  </url>
+  <url>
+    <loc>/reference/dbl_change.html</loc>
+  </url>
+  <url>
     <loc>/reference/funnel_web_plot.html</loc>
   </url>
   <url>
@@ -62,6 +68,9 @@
   </url>
   <url>
     <loc>/reference/sigmoid.html</loc>
+  </url>
+  <url>
+    <loc>/reference/sine.html</loc>
   </url>
   <url>
     <loc>/reference/wallaby_data.html</loc>
