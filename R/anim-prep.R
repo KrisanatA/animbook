@@ -225,10 +225,8 @@ anim_prep <- function(data,
     # default setting for breaks
     if (is.null(breaks)) {
 
-      vector <- dplyr::pull(data, !!qvalues)
-
-      min <- min(vector, na.rm = TRUE)
-      max <- max(vector, na.rm = TRUE)
+      min <- 0
+      max <- 1
 
       breaks <- seq(min, max, by = (max - min)/ngroup)
 
@@ -239,14 +237,12 @@ anim_prep <- function(data,
 
       stopifnot("The breaks argument only accepted vector" =
                   is.vector(breaks),
-                "The breaks vector must have the same number of group as ngroup argument" =
+                "The breaks vector must have the same number of groups as ngroup argument" =
                   length(breaks) - 1 == ngroup,
                 "The breaks vector should not contain NA" =
                   !is.na(breaks),
-                "The breaks values are not in the range of values" =
-                  all(dplyr::between(breaks,
-                                     min(data[, rlang::as_label(!!qvalues)]),
-                                     max(data[, rlang::as_label(!!qvalues)])))
+                "The breaks values must be between 0 and 1" =
+                  all(dplyr::between(breaks, 0, 1))
                 )
 
       breaks <- sort(breaks)
@@ -255,7 +251,12 @@ anim_prep <- function(data,
 
     book <- gdata_frame |>
       dplyr::mutate(
-        qtile = cut(!!qvalues,
+        min = min(!!qvalues, na.rm = TRUE),
+        max = max(!!qvalues, na.rm = TRUE),
+        normalize = (!!qvalues - min) / (max - min)
+      ) |>
+      dplyr::mutate(
+        qtile = cut(normalize,
                     breaks,
                     include.lowest = TRUE,
                     labels = rev(seq(1, ngroup, 1))),
