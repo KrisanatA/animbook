@@ -504,7 +504,7 @@ wallaby_data <- function(object,
   }
 
 
-# create sigmoid path -----------------------------------------------------
+# create sine path -----------------------------------------------------
 
   path <- new_data |>
     tidyr::pivot_wider(id_cols = id,
@@ -512,9 +512,9 @@ wallaby_data <- function(object,
                        values_from = qtile) |>
     dplyr::mutate(xstart = 0, xend = 1) |>
     dplyr::group_by(id) |>
-    dplyr::mutate(path = purrr::map(.data, ~sigmoid(xstart, xend,
+    dplyr::mutate(path = purrr::map(.data, ~sine(xstart, xend,
                                                     `0`, `1`,
-                                                    scale = 10, n = 40))) |>
+                                                    n = 40))) |>
     dplyr::select(id, path) |>
     tidyr::unnest(cols = path)
 

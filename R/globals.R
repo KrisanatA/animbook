@@ -15,6 +15,7 @@ utils::globalVariables(
     "label",
     "point",
     "0",
-    "1"
+    "1",
+    "normalize"
   )
   )
