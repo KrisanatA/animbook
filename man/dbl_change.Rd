@@ -20,7 +20,7 @@ dbl_change
 This data contained the numerical values for each observation.
 }
 \examples{
-d <- anim_prep_cat(dbl_change, id = id, values = qnt,
+d <- anim_prep(dbl_change, id = id, values = values,
 time = time, color = gp, time_dependent = FALSE)
 
 d_p <- wallaby_plot(d, height = 1)
