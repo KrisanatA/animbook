@@ -6,9 +6,9 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-“animbook” is a package to help the user visualize the movement of the
-observations over time. It is a package to help prep the data, plot, and
-animate.
+“animbook” is a package to help the user visualize the changes in
+performance measures and demographic affiliations using animation. It is
+a package to help prepared, plotting, and animating the data.
 
 ## Installation
 

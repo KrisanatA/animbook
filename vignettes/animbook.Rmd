@@ -102,7 +102,7 @@ The `kangaroo` and `wallaby` plots can be animated using the function of the nex
 
 To animate the plot, we need to save the plot into an object, which then can be passed on to the function.
 
-```{r}
+```{r, eval = FALSE}
 animbook <- anim_prep_cat(data = aeles, id = id, values = party, time = year, color = gender, time_dependent = FALSE)
 
 p <- wallaby_plot(animbook)
@@ -110,5 +110,8 @@ p <- wallaby_plot(animbook)
 p2 <- anim_animate(p)
 
 gganimate::animate(p2)
+```
+```{r, echo = FALSE}
+knitr::include_graphics("figures/example.gif")
 ```
 
