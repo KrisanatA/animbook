@@ -1,10 +1,10 @@
 Package: animbook
-Title: Create an interactive visualization to explore changes in benchmark over time
+Title: Visualizing changes in performance measures and demographic affiliations using animation
 Version: 0.0.0.9000
 Authors@R: 
     person("Krisanat", "Anukarnsakulchularp", , "kanu0003@student.monash.edu", role = c("aut", "cre"),
            comment = c(ORCID = "0009-0008-5638-7124"))
-Description: What the package does (one paragraph).
+Description: Create an interactive visualization to be used for communication purposes. Providing the function for preparing, plotting, and animating the data.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
