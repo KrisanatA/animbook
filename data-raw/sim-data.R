@@ -32,7 +32,7 @@ dbl_change <- tibble::tibble(
   id = factor(c(1:n_org, 1:n_org)),
   time = as.integer(rep(c(2020, 2023), rep(n_org, times = 2))),
   gp = factor(rep(rep(c("X", "Y"), n_q, each = n_t1), 2)),
-  values = as.double(runif(400, 1, 10000))
+  values = c(as.double(runif(200, 1, 10000)), as.double(runif(200, 1, 5000)))
 )
 
 usethis::use_data(dbl_change, overwrite = TRUE)
