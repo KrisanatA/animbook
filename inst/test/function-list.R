@@ -40,7 +40,7 @@ osiris4 <- anim_prep(data = osiris,
                      color = japan,
                      scaling = "absolute")
 
-osiris_p <- wallaby_plot(object = osiris3,
+osiris_p <- wallaby_plot(object = osiris1,
                          group_palette = RColorBrewer::brewer.pal(8, "Paired"),
                          shade_palette = RColorBrewer::brewer.pal(9, "Set1"),
                          subset = "top")
@@ -97,7 +97,6 @@ osiris_p <- wallaby_plot(object = osiris5,
                          group_palette = RColorBrewer::brewer.pal(8, "Dark2"),
                          shade_palette = c("#737373", "#969696", "#BDBDBD","#D9D9D9","#D9D9D9","#D9D9D9"),
                          subset = "top",
-                         size = 2,
                          total_point = 1000)
 
 osiris_anim <- anim_animate(osiris_p)

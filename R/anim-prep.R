@@ -172,15 +172,15 @@ anim_prep <- function(data,
         rank = as.integer(rank(!!qvalues)),
         rank = ifelse(is.na(!!qvalues), NA, rank),
         .keep = "unused"
-      ) |>
-      dplyr::ungroup()
+      )
 
     # default setting for breaks
     if (is.null(breaks)) {
 
-      breaks <- stats::quantile(book$rank,
-                                probs = seq(0, 1, 1/ngroup),
-                                na.rm = TRUE)
+      min <- 0
+      max <- 1
+
+      breaks <- seq(min, max, by = (max - min)/ngroup)
 
     }
 
@@ -197,25 +197,27 @@ anim_prep <- function(data,
                   all(dplyr::between(breaks, 0, 1))
       )
 
-    breaks <- stats::quantile(book$rank,
-                              probs = sort(breaks),
-                              na.rm = TRUE)
+      breaks <- sort(breaks)
 
     }
 
-
-
-
     book <- book |>
+      dplyr::mutate(
+        min = ifelse(is.na(rank), NA, min(rank, na.rm = TRUE)),
+        max = ifelse(is.na(rank), NA, max(rank, na.rm = TRUE)),
+        normalize = (rank - min) / (max - min)
+      ) |>
+      dplyr::ungroup(!!qtime) |>
       # split the rank into equal size bins
       dplyr::mutate(
-        qtile = cut(rank,
+        qtile = cut(normalize,
                     breaks,
                     include.lowest = TRUE,
                     labels = rev(seq(1, ngroup, 1))),
         qtile = ifelse(is.na(qtile), 0, as.integer(levels(qtile)[qtile])),
         .keep = "unused"
-      )
+      ) |>
+      dplyr::ungroup()
 
   }
 
