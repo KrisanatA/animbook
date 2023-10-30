@@ -29,7 +29,7 @@ In this stage, we first need to prepare the data structure to a specific format.
 The data needs to contain the following variable for the function to work:
 
 - id: `ID`, it needs to be a factor variable.
-- values: `sales`, it need to be a numeric variable.
+- values: `sales`, needs to be a numeric variable.
 - time: `year`, it needs to be an integer variable.
 
 ```{r}
@@ -69,7 +69,7 @@ absolute_group_scaling <- anim_prep(data = osiris, id = ID, values = sales, time
 rank_scaling
 ```
 
-This function will return `animbook` object containing a list of the formatted data and settings.
+This function will return an `animbook` object containing a list of the formatted data and settings.
 
 
 ### Second stage: Plotting the data

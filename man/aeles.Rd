@@ -9,7 +9,7 @@ A data frame with 1,468 rows and 4 variables
 \describe{
 \item{id}{The id of the respondent}
 \item{year}{Year}
-\item{party}{Party that the respondent vote for in the House of Representatives}
+\item{party}{Party that the respondent votes for in the House of Representatives}
 \item{gender}{Gender of the respondent}
 }
 }
@@ -21,9 +21,9 @@ This dataset is from the following; Australian Election Study
 aeles
 }
 \description{
-The aes dataset contains the answer of the surveys which is done in 2019 for the election.
-This dataset only includes the id, year, party, gender from the the full survey data. The year
-column come from the transformations of two different question to see whether the voter voted the
-same party in 2016 and 2019 or not and if not who did they voted for before.
+The aes dataset contains the answers to the surveys that were done in 2019 for the election.
+This dataset only includes the id, year, party, and gender from the full survey data. The year
+column comes from the transformations of two different questions to see whether the voter voted for the
+same party in 2016 and 2019 or not, and if not, who did they vote for before?
 }
 \keyword{datasets}

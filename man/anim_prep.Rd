@@ -39,7 +39,7 @@ anim_prep(
 
 \item{color}{The column name to used in \code{\link[ggplot2:aes]{ggplot2::aes()}} for the plot function.}
 
-\item{time_dependent}{Logical. Should the visualization be time-dependent? Default is TRUE.}
+\item{time_dependent}{Logical. Should the visualization be time-dependent? The default is TRUE.}
 
 \item{scaling}{The scaling method to be used; "rank" or "absolute."}
 
@@ -50,7 +50,7 @@ anim_prep(
 \value{
 An animbook object:
 \item{data}{A data frame with prepared data for visualization.}
-\item{settings}{A list of settings to be used in plot function, including gap, xbreaks, label, scaling, time_dependent,
+\item{settings}{A list of settings to be used in the plot function, including gap, xbreaks, label, scaling, time_dependent,
 runif_min, and runif_max.}
 }
 \description{

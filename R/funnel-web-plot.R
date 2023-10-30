@@ -154,7 +154,7 @@ funnel_web_plot <- function(object,
 #'
 #' @return A modified animbook object
 #'
-#' @details The function takes the animbook object and manipulate the data into the
+#' @details The function takes the animbook object and manipulates the data into the
 #' format where it can be further facetting.
 #'
 #' @keywords internal

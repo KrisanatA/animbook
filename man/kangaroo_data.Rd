@@ -10,14 +10,14 @@ kangaroo_data(object)
 \item{object}{An animbook object}
 }
 \value{
-A modified animbook object with addition data components
+A modified animbook object with additional data components
 }
 \description{
 This function performs data manipulation and formatting tasks
 from the original object with additional data components for labeling and shading.
 }
 \details{
-The function takes the animbook object and create a new label data and
+The function takes the animbook object and creates a new label data and
 shading data used for the plot then appends them to the original object.
 }
 \keyword{internal}

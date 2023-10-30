@@ -191,9 +191,9 @@ kangaroo_plot <- function(object,
 #'
 #' @param object An animbook object
 #'
-#' @return A modified animbook object with addition data components
+#' @return A modified animbook object with additional data components
 #'
-#' @details The function takes the animbook object and create a new label data and
+#' @details The function takes the animbook object and creates a new label data and
 #' shading data used for the plot then appends them to the original object.
 #'
 #' @keywords internal

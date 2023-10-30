@@ -26,7 +26,7 @@ or "many_one."}
 
 \item{width}{The number that controls the runif_max to specify how far apart each point is.}
 
-\item{total_point}{The number of points the users want for the wallaby plot. Default is NULL, the number
+\item{total_point}{The number of points the users want for the wallaby plot. The default is NULL, the number
 of the point is equal to the original number of points.}
 }
 \value{

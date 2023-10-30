@@ -9,7 +9,7 @@ anim_animate(plot, modify = FALSE)
 \arguments{
 \item{plot}{ggplot object}
 
-\item{modify}{Default is FALSE which supplied the function needed for the rendering
+\item{modify}{Default is FALSE, which supplied the function needed for the rendering
 package.}
 }
 \value{
@@ -17,7 +17,7 @@ A gganimate object if the rendering is gganimate or a ggplot object if
 the rendering is plotly.
 }
 \description{
-This function by default will modified the ggplot object before the user can
+This function, by default will modify the ggplot object before the user can
 pass it to the rendering of choice.
 }
 \examples{

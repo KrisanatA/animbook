@@ -11,10 +11,10 @@ sankey_shade(initial = NULL, proportion = NULL, y = NULL, position = "left")
 
 \item{proportion}{A vector of proportions corresponding to each group.}
 
-\item{y}{A numeric vector specifying the vertical position of the sankey diagram.}
+\item{y}{A numeric vector specifying the vertical position of the Sankey diagram.}
 
-\item{position}{A character string specifying the side the of the Sankey diagram.
-This need to be either "left" (default) or "right"}
+\item{position}{A character string specifying the side of the Sankey diagram.
+This needs to be either "left" (default) or "right".}
 }
 \value{
 A data frame of the shaded Sankey diagram.

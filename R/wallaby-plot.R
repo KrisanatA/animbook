@@ -12,7 +12,7 @@
 #' and "bottom" strings can also be used in this argument.
 #' @param relation The choice of relationship for the values to display on the plot, either "one_many."
 #' or "many_one."
-#' @param total_point The number of points the users want for the wallaby plot. Default is NULL, the number
+#' @param total_point The number of points the users want for the wallaby plot. The default is NULL, the number
 #' of the point is equal to the original number of points.
 #' @param ... Additional arguments for customization, see details for more information.
 #'
@@ -235,7 +235,7 @@ wallaby_plot <- function(object,
 #' or "many_one."
 #' @param height The proportion the point takes in the shaded area.
 #' @param width The number that controls the runif_max to specify how far apart each point is.
-#' @param total_point The number of points the users want for the wallaby plot. Default is NULL, the number
+#' @param total_point The number of points the users want for the wallaby plot. The default is NULL, the number
 #' of the point is equal to the original number of points.
 #'
 #' @return A modified animbook object with additional data components

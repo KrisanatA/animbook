@@ -17,7 +17,7 @@ A data frame with 400 rows and 4 variables
 cat_change
 }
 \description{
-This data has changes from category A to E between two time points.
+This data has changed from category A to E between two-time points.
 }
 \examples{
 d <- anim_prep_cat(cat_change, id = id, values = qnt,

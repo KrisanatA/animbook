@@ -10,13 +10,13 @@
 #' @param label A vector of labels to be used for the y-axis in the visualization.
 #' @param order A vector of order for sorting the category values.
 #' @param color The column name to be used in [ggplot2::aes()] for the plot function.
-#' @param time_dependent Logical. Should the visualization be time-dependent? Default is TRUE.
+#' @param time_dependent Logical. Should the visualization be time-dependent? The default is TRUE.
 #' @param runif_min The minimum value for random addition to frame numbers.
 #' @param runif_max The maximum value for random addition to frame numbers.
 #'
 #' @return An animbook object:
 #'   \item{data}{A data frame with prepared data for visualization.}
-#'   \item{settings}{A list of settings to be used in plot function, including gap, xbreaks, label, scaling, time_dependent,
+#'   \item{settings}{A list of settings to be used in the plot function, including gap, xbreaks, label, scaling, time_dependent,
 #'   runif_min, and runif_max}
 #'
 #' @details

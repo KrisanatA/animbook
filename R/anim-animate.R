@@ -1,26 +1,26 @@
-#'Modified the ggplot object
+#' Modified the ggplot object
 #'
-#'This function by default will modified the ggplot object before the user can
-#'pass it to the rendering of choice.
+#' This function, by default will modify the ggplot object before the user can
+#' pass it to the rendering of choice.
 #'
-#'@param plot ggplot object
-#'@param modify Default is FALSE which supplied the function needed for the rendering
-#'package.
+#' @param plot ggplot object
+#' @param modify Default is FALSE, which supplied the function needed for the rendering
+#' package.
 #'
-#'@return A gganimate object if the rendering is gganimate or a ggplot object if
-#'the rendering is plotly.
+#' @return A gganimate object if the rendering is gganimate or a ggplot object if
+#' the rendering is plotly.
 #'
-#'@examples
-#'animbook <- anim_prep(data = osiris, id = ID, values = sales, time = year, color = japan)
+#' @examples
+#' animbook <- anim_prep(data = osiris, id = ID, values = sales, time = year, color = japan)
 #'
-#'plot <- wallaby_plot(animbook)
+#' plot <- wallaby_plot(animbook)
 #'
-#'animate <- anim_animate(plot)
+#' animate <- anim_animate(plot)
 #'
-#'plotly::ggplotly(animate)
+#' plotly::ggplotly(animate)
 #'
-#'@import gganimate plotly
-#'@export
+#' @import gganimate plotly
+#' @export
 
 anim_animate <- function(plot, modify = FALSE) {
 

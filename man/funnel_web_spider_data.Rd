@@ -16,7 +16,7 @@ A modified animbook object
 This function performs data manipulation for facetting.
 }
 \details{
-The function takes the animbook object and manipulate the data into the
+The function takes the animbook object and manipulates the data into the
 format where it can be further facetting.
 }
 \keyword{internal}

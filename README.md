@@ -8,7 +8,7 @@
 
 “animbook” is a package to help the user visualize the changes in
 performance measures and demographic affiliations using animation. It is
-a package to help prepared, plotting, and animating the data.
+a package to help prepare, plot, and animate the data.
 
 ## Installation
 
@@ -39,7 +39,7 @@ The data needs to contain the following variable for the function to
 work:
 
 - id: `ID`, it needs to be a factor variable.
-- values: `sales`, it need to be a numeric variable.
+- values: `sales`, needs to be a numeric variable.
 - time: `year`, it needs to be an integer variable.
 
 ``` r
@@ -121,7 +121,7 @@ rank_scaling
 #> [1] "animbook"
 ```
 
-This function will return `animbook` object containing a list of the
+This function will return an `animbook` object containing a list of the
 formatted data and settings.
 
 ### Second stage: Plotting the data

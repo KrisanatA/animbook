@@ -24,7 +24,7 @@ starting and ending points.}
 Return a path in a data frame format
 }
 \description{
-This function create a path from the starting point (x_start, y_start)
+This function creates a path from the starting point (x_start, y_start)
 to the ending point (x_end, y_end) with the sigmoid shape.
 }
 \examples{

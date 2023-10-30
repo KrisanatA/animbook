@@ -1,6 +1,6 @@
 #' Osiris firm sales data
 #'
-#' The Osiris dataset contains information on listed, and major unlisted/delisted
+#' The Osiris dataset contains information on listed and major unlisted/delisted
 #' companies across the world from 2006 to 2018. This dataset only includes the year, ID,
 #' country, sales, and japan variables from the full Osiris dataset to give the user
 #' an example of the dataset format.
@@ -11,7 +11,7 @@
 #'   \item{ID}{BvD(Bureau van Dijk) ID}
 #'   \item{country}{Address of incorp. - Country}
 #'   \item{sales}{Sales}
-#'   \item{japan}{Whether the firm is froom Japan or not}
+#'   \item{japan}{Whether the firm is from Japan or not}
 #' }
 #'
 #' @source This dataset is from the following; Bureau van Dijk
@@ -22,16 +22,16 @@
 
 #' Australian election study data
 #'
-#' The aes dataset contains the answer of the surveys which is done in 2019 for the election.
-#' This dataset only includes the id, year, party, gender from the the full survey data. The year
-#' column come from the transformations of two different question to see whether the voter voted the
-#' same party in 2016 and 2019 or not and if not who did they voted for before.
+#' The aes dataset contains the answers to the surveys that were done in 2019 for the election.
+#' This dataset only includes the id, year, party, and gender from the full survey data. The year
+#' column comes from the transformations of two different questions to see whether the voter voted for the
+#' same party in 2016 and 2019 or not, and if not, who did they vote for before?
 #'
 #' @format A data frame with 1,468 rows and 4 variables
 #' \describe{
 #'   \item{id}{The id of the respondent}
 #'   \item{year}{Year}
-#'   \item{party}{Party that the respondent vote for in the House of Representatives}
+#'   \item{party}{Party that the respondent votes for in the House of Representatives}
 #'   \item{gender}{Gender of the respondent}
 #' }
 #'
@@ -43,7 +43,7 @@
 
 #' Simulated data with some change (category)
 #'
-#' This data has changes from category A to E between two time points.
+#' This data has changed from category A to E between two-time points.
 #'
 #' @format A data frame with 400 rows and 4 variables
 #' \describe{

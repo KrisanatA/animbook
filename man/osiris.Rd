@@ -11,7 +11,7 @@ A data frame with 10,270 rows and 5 variables
 \item{ID}{BvD(Bureau van Dijk) ID}
 \item{country}{Address of incorp. - Country}
 \item{sales}{Sales}
-\item{japan}{Whether the firm is froom Japan or not}
+\item{japan}{Whether the firm is from Japan or not}
 }
 }
 \source{
@@ -22,7 +22,7 @@ This dataset is from the following; Bureau van Dijk
 osiris
 }
 \description{
-The Osiris dataset contains information on listed, and major unlisted/delisted
+The Osiris dataset contains information on listed and major unlisted/delisted
 companies across the world from 2006 to 2018. This dataset only includes the year, ID,
 country, sales, and japan variables from the full Osiris dataset to give the user
 an example of the dataset format.

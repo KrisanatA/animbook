@@ -1,6 +1,6 @@
 #' Animate sigmoid path
 #'
-#' This function create a path from the starting point (x_start, y_start)
+#' This function creates a path from the starting point (x_start, y_start)
 #' to the ending point (x_end, y_end) with the sigmoid shape.
 #'
 #' @param x_start The x-coordinate of the starting point.
@@ -50,7 +50,7 @@ sigmoid <- function(x_start = 0,
 
 #' Animate sine path
 #'
-#' This function create a path from the starting point (x_start, y_start)
+#' This function creates a path from the starting point (x_start, y_start)
 #' to the ending point (x_end, y_end) with the sine shape.
 #'
 #' @param x_start The x-coordinate of the starting point.

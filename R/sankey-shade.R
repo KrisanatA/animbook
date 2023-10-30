@@ -4,9 +4,9 @@
 #'
 #' @param initial A numerical of initial values for the Sankey shade.
 #' @param proportion A vector of proportions corresponding to each group.
-#' @param y A numeric vector specifying the vertical position of the sankey diagram.
-#' @param position A character string specifying the side the of the Sankey diagram.
-#' This need to be either "left" (default) or "right"
+#' @param y A numeric vector specifying the vertical position of the Sankey diagram.
+#' @param position A character string specifying the side of the Sankey diagram.
+#' This needs to be either "left" (default) or "right".
 #'
 #' @return A data frame of the shaded Sankey diagram.
 #'

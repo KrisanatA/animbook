@@ -12,14 +12,14 @@
 #' @param breaks A vector of breaks for creating bins.
 #' @param group_scaling The column name that represents the grouping variable.
 #' @param color The column name to used in [ggplot2::aes()] for the plot function.
-#' @param time_dependent Logical. Should the visualization be time-dependent? Default is TRUE.
+#' @param time_dependent Logical. Should the visualization be time-dependent? The default is TRUE.
 #' @param scaling The scaling method to be used; "rank" or "absolute."
 #' @param runif_min The minimum value for random addition to frame numbers.
 #' @param runif_max The maximum value for random addition to frame numbers.
 #'
 #' @return An animbook object:
 #'   \item{data}{A data frame with prepared data for visualization.}
-#'   \item{settings}{A list of settings to be used in plot function, including gap, xbreaks, label, scaling, time_dependent,
+#'   \item{settings}{A list of settings to be used in the plot function, including gap, xbreaks, label, scaling, time_dependent,
 #'   runif_min, and runif_max.}
 #'
 #' @details
