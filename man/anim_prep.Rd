@@ -14,7 +14,7 @@ anim_prep(
   breaks = NULL,
   group_scaling = NULL,
   color = NULL,
-  time_dependent = TRUE,
+  time_dependent = FALSE,
   scaling = "rank",
   runif_min = 1,
   runif_max = 50
@@ -39,7 +39,7 @@ anim_prep(
 
 \item{color}{The column name to used in \code{\link[ggplot2:aes]{ggplot2::aes()}} for the plot function.}
 
-\item{time_dependent}{Logical. Should the visualization be time-dependent? The default is TRUE.}
+\item{time_dependent}{Logical. Should the visualization be time-dependent? The default is FALSE.}
 
 \item{scaling}{The scaling method to be used; "rank" or "absolute."}
 
