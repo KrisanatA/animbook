@@ -44,6 +44,7 @@ work:
 
 ``` r
 animbook <- anim_prep(osiris, ID, sales, year)
+#> You can now pass the object to the plot function.
 ```
 
 There are also additional options that allow the user to customize.
@@ -64,34 +65,38 @@ The function can calculate four different scales using these options.
 ``` r
 # rank scaling
 rank_scaling <- anim_prep(data = osiris, id = ID, values = sales, time = year)
+#> You can now pass the object to the plot function.
 
 # absolute scaling
 absolute_scaling <- anim_prep(data = osiris, id = ID, values = sales, time = year,
                               scaling = "absolute")
+#> You can now pass the object to the plot function.
 
 # rank scaling by group
 rank_group_scaling <- anim_prep(data = osiris, id = ID, values = sales, time = year, 
                                 group = country)
+#> You can now pass the object to the plot function.
 
 # absolute scaling by group
 absolute_group_scaling <- anim_prep(data = osiris, id = ID, values = sales, time = year,
                                     group = country, scaling = "absolute")
+#> You can now pass the object to the plot function.
 
 rank_scaling
 #> $data
-#> # A tibble: 10,270 × 4
-#>    id         time qtile frame
-#>    <fct>     <int> <dbl> <int>
-#>  1 AE30008GU  2006     1     1
-#>  2 AE30008GU  2007     1     2
-#>  3 AE30008GU  2008     1     3
-#>  4 AE30008GU  2009     1     4
-#>  5 AE30008GU  2010     1     5
-#>  6 AE30008GU  2011     1     6
-#>  7 AE30008GU  2012     1     7
-#>  8 AE30008GU  2013     1     8
-#>  9 AE30008GU  2014     1     9
-#> 10 AE30008GU  2015     1    10
+#> # A tibble: 10,270 × 3
+#>    id            time qtile
+#>    <fct>        <int> <dbl>
+#>  1 AE30008GU     2006     1
+#>  2 AT9110050653  2006     3
+#>  3 AU001150849   2006     5
+#>  4 AU004085330   2006     1
+#>  5 AU006624228   2006     2
+#>  6 AU008720223   2006     5
+#>  7 AU009066648   2006     5
+#>  8 AU009134114   2006     3
+#>  9 AU009213754   2006     4
+#> 10 AU009219809   2006     2
 #> # ℹ 10,260 more rows
 #> 
 #> $settings
@@ -104,21 +109,15 @@ rank_scaling
 #> $settings$label
 #> [1] "5" "4" "3" "2" "1" "0"
 #> 
-#> $settings$scaling
+#> $settings$breaks_scales
 #> [1] 0.0 0.2 0.4 0.6 0.8 1.0
 #> 
 #> $settings$time_dependent
-#> [1] TRUE
-#> 
-#> $settings$runif_min
-#> [1] 1
-#> 
-#> $settings$runif_max
-#> [1] 50
+#> [1] FALSE
 #> 
 #> 
 #> attr(,"class")
-#> [1] "animbook"
+#> [1] "categorized"
 ```
 
 This function will return an `animbook` object containing a list of the
@@ -138,9 +137,12 @@ available in this package:
 label <- c("Top 20%", "20-40", "40-60", "60-80", "80-100", "not listed")
 
 animbook <- anim_prep(data = osiris, id = ID, values = sales, time = year, color = japan, label = label)
+#> You can now pass the object to the plot function.
 
 # kangaroo plot
 kangaroo_plot(animbook)
+#> You can now used the animbook::anim_animate() function to transforemd it
+#>           to an animated object.
 ```
 
 <img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
@@ -149,6 +151,8 @@ kangaroo_plot(animbook)
 
 # wallaby plot
 wallaby_plot(animbook)
+#> You can now used the animbook::anim_animate() function to transformed it
+#>           to an animated object.
 ```
 
 <img src="man/figures/README-unnamed-chunk-5-2.png" width="100%" />
@@ -173,8 +177,11 @@ can be passed on to the function.
 
 ``` r
 animbook <- anim_prep_cat(data = aeles, id = id, values = party, time = year, color = gender, time_dependent = FALSE)
+#> You can now pass the object to the plot function.
 
 p <- wallaby_plot(animbook)
+#> You can now used the animbook::anim_animate() function to transformed it
+#>           to an animated object.
 
 p2 <- anim_animate(p)
 #> You can now pass it to gganimate::animate()

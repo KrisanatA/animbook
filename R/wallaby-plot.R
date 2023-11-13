@@ -1,9 +1,9 @@
-#' Turn the data into a Sankey flow plot for animate function
+#' Turn the data into a subset plot for animate function
 #'
 #' This function takes in the data which has been prepared by the [anim_prep()] or [anim_prep_cat()]
 #' and return the ggplot object. The user can still modify the plot the same as normal ggplot.
 #'
-#' @param object The animbook object returned from the prep function
+#' @param object The categorized object returned from the prep function
 #' @param group_palette The vector of the palette used by the function to supply the color to each group.
 #' @param shade_palette The vector of the palette used by the function to supply the color to the shaded area.
 #' @param rendering The choice of method used to create and display the plot, either gganimate or
@@ -14,6 +14,7 @@
 #' or "many_one."
 #' @param total_point The number of points the users want for the wallaby plot. The default is NULL, the number
 #' of the point is equal to the original number of points.
+#' @param x_lab The label for the x-axis.
 #' @param ... Additional arguments for customization, see details for more information.
 #'
 #' @return Return a ggplot object
@@ -40,6 +41,7 @@ wallaby_plot <- function(object,
                          subset = "top",
                          relation = "one_many",
                          total_point = NULL,
+                         x_lab = NULL,
                          ...) {
 
   col_group <- group_palette
@@ -47,10 +49,31 @@ wallaby_plot <- function(object,
 
   rendering_choice <- c("ggplot", "plotly")
 
-  stopifnot("Please use the anim_prep function to convert data into an animbook class object" =
-              class(object) == "animbook",
+  stopifnot("Please use the anim_prep function to convert data into an categorized class object" =
+              class(object) == "categorized",
             "The rendering argument can only be either ggplot or plotly" =
               rendering %in% rendering_choice)
+
+  if (is.null(x_lab)) {
+    x_lab <- c("", "")
+  }
+
+  if (length(x_lab) > 2) {
+    x_lab <- x_lab[1:2]
+
+    warning("The length of the x_lab provided is greater than 2,
+            the function only take the first two elements")
+  }
+
+  if (length(x_lab) == 2) {
+    x_lab <- x_lab
+  }
+
+  if (length(x_lab) < 2) {
+    x_lab <- c("", "")
+
+    warning("The length of the x_lab provided is less than 2")
+  }
 
 
 # ... arguments -----------------------------------------------------------
@@ -152,7 +175,7 @@ wallaby_plot <- function(object,
     ggplot2::geom_point(data = object[["data"]],
                         mapping = ggplot2::aes(!!!aes_list),
                         size = size
-                         ) |>
+    ) |>
     suppressWarnings()
 
   # the shaded area + label
@@ -175,7 +198,8 @@ wallaby_plot <- function(object,
 
   # plot settings
   anim <- australia +
-    ggplot2::scale_x_continuous(breaks = object[["settings"]]$xbreaks) +
+    ggplot2::scale_x_continuous(breaks = c(0, 1),
+                                label = x_lab) +
     ggplot2::coord_cartesian(clip = "off") +
     ggplot2::theme(panel.background = element_blank(),
                    axis.title.y = element_blank(),
@@ -184,12 +208,16 @@ wallaby_plot <- function(object,
                    axis.line.y = element_blank(),
                    axis.title.x = element_blank(),
                    axis.ticks.x = element_blank(),
-                   axis.text.x = element_blank(),
                    legend.position = "bottom",
                    legend.title = element_blank()) +
     ggplot2::guides(fill = "none") +
     ggplot2::scale_fill_manual(values = col_shade) +
     ggplot2::scale_colour_manual(values = col_group)
+
+  message("You can now used the animbook::anim_animate() function to transformed it
+          to an animated object.")
+
+  class(anim) <- c("ggplot", "gg", "animated", "wallaby")
 
   return(anim)
 
@@ -207,28 +235,12 @@ wallaby_plot <- function(object,
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #' Wallaby plot data
 #'
 #' This function performs data manipulation and formatting tasks
-#' from the original object with additional data components for labeling and shading.
+#' from the categorized data to animated format with additional data components for labeling and shading.
 #'
-#' @param object An animbook object
+#' @param object An categorized object
 #' @param subset A character string specifying the variable used for subsetting the data. The "top"
 #' and "bottom" strings can also be used in this argument.
 #' @param relation The choice of relationship for the values to display on the plot, either "one_many."
@@ -238,9 +250,9 @@ wallaby_plot <- function(object,
 #' @param total_point The number of points the users want for the wallaby plot. The default is NULL, the number
 #' of the point is equal to the original number of points.
 #'
-#' @return A modified animbook object with additional data components
+#' @return An animated object with additional data components
 #'
-#' @details The function takes the animbook object and then subsets the data based on the users.
+#' @details The function takes the categorized object and then subsets the data based on the users.
 #' Additionally, it creates a label data and shading data for the [wallaby_plot()] function. All
 #' of this then replaced the original data and appended new data to the object.
 #'
@@ -259,7 +271,9 @@ wallaby_data <- function(object,
 # stop --------------------------------------------------------------------
 
   stopifnot("height argument only accepted proportion between 0 and 1" =
-              dplyr::between(height, 0, 1))
+              dplyr::between(height, 0, 1),
+            "Please use the prep function to convert the data into categorized class object" =
+              class(object) == "categorized")
 
 # subset choice -----------------------------------------------------------
 
@@ -504,7 +518,7 @@ wallaby_data <- function(object,
   }
 
 
-# create sine path -----------------------------------------------------
+# create path -------------------------------------------------------------
 
   path <- new_data |>
     tidyr::pivot_wider(id_cols = id,
@@ -513,8 +527,8 @@ wallaby_data <- function(object,
     dplyr::mutate(xstart = 0, xend = 1) |>
     dplyr::group_by(id) |>
     dplyr::mutate(path = purrr::map(.data, ~sine(xstart, xend,
-                                                    `0`, `1`,
-                                                    n = 40))) |>
+                                                 `0`, `1`,
+                                                 n = 40))) |>
     dplyr::select(id, path) |>
     tidyr::unnest(cols = path)
 
@@ -533,8 +547,8 @@ wallaby_data <- function(object,
       dplyr::mutate(
         frame = dplyr::row_number(),
         frame = frame + floor(stats::runif(1,
-                                    object[["settings"]]$runif_min,
-                                    width))
+                                           1,
+                                           width))
       )
   }
 
@@ -567,14 +581,6 @@ wallaby_data <- function(object,
   return(wallaby)
 
 }
-
-
-
-
-
-
-
-
 
 
 

@@ -24,10 +24,10 @@
 
 anim_animate <- function(plot, modify = FALSE) {
 
-  check <- names(plot$labels[4:5]) %in% c("ids", "frame")
+  stopifnot("This function only accepted an animated object." =
+              "animated" %in% class(plot))
 
-  plotly <- all(check == TRUE)
-
+  plotly <- all(c("ids", "frame") %in% names(plot$labels))
 
   if (plotly == TRUE) {
 

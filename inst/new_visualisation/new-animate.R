@@ -114,6 +114,13 @@ draw <- function(df) {
 
 # draw --------------------------------------------------------------------
 
+full_data %>%
+  arrange(firmID, year) %>%
+  mutate(end = lead(start, n = 1),
+         year_end = lead(year, n = 1),
+         path = purrr::map(.data, ~sigmoid(year, year_end, start, end, 5, 100)))
+
+
 map <- full_data %>%
   group_nest(firmID) %>%
   mutate(draw = map(data, ~draw(.)))

@@ -35,8 +35,8 @@ funnel_web_plot <- function(object,
 
   rendering_choice <- c("ggplot", "plotly")
 
-  stopifnot("Use the anim_prep function to convert data into an animbook class object" =
-              class(object) == "animbook",
+  stopifnot("Use the anim_prep function to convert data into an categorized class object" =
+              class(object) == "categorized",
             "The rendering argument can only be either ggplot or plotly" =
               rendering %in% rendering_choice)
 

@@ -43,7 +43,9 @@ osiris4 <- anim_prep(data = osiris,
 osiris_p <- wallaby_plot(object = osiris1,
                          group_palette = RColorBrewer::brewer.pal(8, "Paired"),
                          shade_palette = RColorBrewer::brewer.pal(9, "Set1"),
-                         subset = "top")
+                         subset = "top",
+                         rendering = "ggplot",
+                         x_lab = c("start", "end"))
 
 osiris_anim <- anim_animate(osiris_p)
 
@@ -53,7 +55,8 @@ plotly::ggplotly(osiris_anim)
 
 osiris_us <- osiris %>%
   mutate(usa = ifelse(country == "US", "usa", "others")) %>%
-  mutate(lsales = log(sales))
+  mutate(lsales = log(sales)) |>
+  filter(between(year, 2006, 2008))
 
 osiris5 <- anim_prep(data = osiris_us,
                      id = ID,

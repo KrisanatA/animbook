@@ -63,34 +63,6 @@ anim_prep_cat <- function(data,
             "The time column needs to be an integer variable" =
               type[[rlang::as_label(qtime)]] == "integer")
 
-
-# assign the frames -------------------------------------------------------
-
-  if (time_dependent == FALSE) {
-
-    data_frame <- data |>
-      dplyr::arrange(!!qid, !!qtime) |>
-      dplyr::group_by(!!qid) |>
-      dplyr::mutate(
-        frame = dplyr::row_number(),
-        frame = frame + floor(stats::runif(1, runif_min, runif_max))
-      ) |>
-      dplyr::ungroup()
-
-  }
-
-  if (time_dependent == TRUE) {
-
-    data_frame <- data |>
-      dplyr::arrange(!!qid, !!qtime) |>
-      dplyr::group_by(!!qid) |>
-      dplyr::mutate(
-        frame = dplyr::row_number()
-      ) |>
-      dplyr::ungroup()
-
-  }
-
 # order -------------------------------------------------------------------
 
   n_group <- nrow(unique(data[, rlang::as_label(qvalues)]))
@@ -123,7 +95,7 @@ anim_prep_cat <- function(data,
 
  # assign the qtile --------------------------------------------------------
 
-  book <- data_frame |>
+  book <- data |>
     dplyr::mutate(
       qtile = factor(!!qvalues, levels = rev(order)),
       qtile = ifelse(is.na(qtile), 0, as.numeric(qtile)),
@@ -135,8 +107,7 @@ anim_prep_cat <- function(data,
 
   args_select <- c(rlang::as_label(qid),
                    rlang::as_label(qtime),
-                   "qtile",
-                   "frame")
+                   "qtile")
 
   if (rlang::as_label(qcolor) != "NULL") {
 
@@ -196,7 +167,9 @@ anim_prep_cat <- function(data,
                    runif_max = runif_max
                  ))
 
-  class(object) <- "animbook"
+  class(object) <- "categorized"
+
+  message("You can now pass the object to the plot function.")
 
   return(object)
 

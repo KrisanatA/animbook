@@ -4,7 +4,7 @@
 \alias{kangaroo_data}
 \title{Kangaroo plot data}
 \usage{
-kangaroo_data(object)
+kangaroo_data(object, height = 0.6, width = 50)
 }
 \arguments{
 \item{object}{An animbook object}

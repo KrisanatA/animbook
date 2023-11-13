@@ -16,6 +16,7 @@ utils::globalVariables(
     "point",
     "0",
     "1",
-    "normalize"
+    "normalize",
+    "draw"
   )
   )

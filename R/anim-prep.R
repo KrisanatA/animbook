@@ -1,31 +1,29 @@
-#' Prepare Numerical Data for Visualizations
+#' Prepare Numerical Data into categorized data
 #'
-#' This function prepares the numerical data into the format the plot function required by assigning frames,
+#' This function prepares the numerical data into the categorized format by
 #' grouping data, scaling values, and creating necessary data and settings for the plot function.
 #'
 #' @param data A data frame containing the data to be prepared for visualization.
 #' @param id The column name that represents the unique identifier variable.
 #' @param values The column name that contains the numeric values to be visualized.
-#' @param time The column name represents the time variable.
-#' @param label A vector of labels to be used for the y-axis in the visualization.
+#' @param time The column name the represents the time variable.
 #' @param ngroup The number of groups or categories to create for scaling values.
 #' @param breaks A vector of breaks for creating bins.
 #' @param group_scaling The column name that represents the grouping variable.
-#' @param color The column name to used in [ggplot2::aes()] for the plot function.
-#' @param time_dependent Logical. Should the visualization be time-dependent? The default is FALSE.
-#' @param scaling The scaling method to be used; "rank" or "absolute."
-#' @param runif_min The minimum value for random addition to frame numbers.
-#' @param runif_max The maximum value for random addition to frame numbers.
+#' @param scaling The scaling method to be used; "rank" or "absolute".
+#' @param time_dependent Logical. Should the visualization be time-dependent? The default is FALSE
+#' @param color The column name to be used in [ggplot2::aes()] for the plot function.
+#' @param label A vector of labels to represented each values.
 #'
 #' @return An animbook object:
-#'   \item{data}{A data frame with prepared data for visualization.}
-#'   \item{settings}{A list of settings to be used in the plot function, including gap, xbreaks, label, scaling, time_dependent,
-#'   runif_min, and runif_max.}
+#'  \item{data}{A data frame in the categorized format}
+#'  \item{settings}{A list of settings to be used in the plot function, including gap,
+#'  xbreaks, label, scaling, time_dependent}
 #'
 #' @details
 #' The function takes the input data and performs several operations to prepare it for visualizations.
-#' It assigns frames, groups data, scales values, and creates necessary data and settings for the plot
-#' function.
+#' It groups data, scales values, and transformed it to categorized data along with the settings
+#' for the plot function.
 #'
 #' @examples
 #' anim_prep(data = osiris, id = ID, values = sales, time = year)
@@ -45,15 +43,13 @@ anim_prep <- function(data,
                       id = NULL,
                       values = NULL,
                       time = NULL,
-                      label = NULL,
                       ngroup = 5L,
                       breaks = NULL,
                       group_scaling = NULL,
-                      color = NULL,
-                      time_dependent = FALSE,
                       scaling = "rank",
-                      runif_min = 1,
-                      runif_max = 50) {
+                      time_dependent = FALSE,
+                      color = NULL,
+                      label = NULL) {
 
 
 # enquo -------------------------------------------------------------------
@@ -82,7 +78,7 @@ anim_prep <- function(data,
               type[[rlang::as_label(qtime)]] == "integer")
 
 
-# scaling choice ----------------------------------------------------------
+# scaling choices ---------------------------------------------------------
 
   scaling_choice <- c("rank", "absolute")
 
@@ -90,36 +86,7 @@ anim_prep <- function(data,
               scaling %in% c(scaling_choice))
 
 
-# assign the frames -------------------------------------------------------
-
-  if (time_dependent == FALSE) {
-
-    data_frame <- data |>
-      dplyr::arrange(!!qid, !!qtime) |>
-      dplyr::group_by(!!qid) |>
-      dplyr::mutate(
-        frame = dplyr::row_number(),
-        frame = frame + floor(stats::runif(1, runif_min, runif_max))
-      ) |>
-      ungroup()
-
-  }
-
-  if (time_dependent == TRUE) {
-
-    data_frame <- data |>
-      dplyr::arrange(!!qid, !!qtime) |>
-      dplyr::group_by(!!qid) |>
-      dplyr::mutate(
-        frame = dplyr::row_number()
-      ) |>
-      dplyr::ungroup()
-
-  }
-
-
-# group_scaling scale -------------------------------------------------------------
-
+# group_scaling scale -----------------------------------------------------
 
   if (rlang::as_label(qgroup_scaling) != "NULL") {
 
@@ -128,14 +95,14 @@ anim_prep <- function(data,
 
     if (scaling == "rank") {
 
-      gdata_frame <- data_frame |>
+      gdata_frame <- data |>
         dplyr::group_by(!!qgroup_scaling, !!qtime)
 
     }
 
     if (scaling == "absolute") {
 
-      gdata_frame <- data_frame |>
+      gdata_frame <- data |>
         dplyr::group_by(!!qgroup_scaling)
 
     }
@@ -146,19 +113,18 @@ anim_prep <- function(data,
 
     if (scaling == "rank") {
 
-      gdata_frame <- data_frame |>
+      gdata_frame <- data |>
         dplyr::group_by(!!qtime)
 
     }
 
     if (scaling == "absolute") {
 
-      gdata_frame <- data_frame
+      gdata_frame <- data
 
     }
 
   }
-
 
 
 # assign the qtile --------------------------------------------------------
@@ -245,7 +211,7 @@ anim_prep <- function(data,
                   !is.na(breaks),
                 "The breaks values must be between 0 and 1" =
                   all(dplyr::between(breaks, 0, 1))
-                )
+      )
 
       breaks <- sort(breaks)
 
@@ -270,21 +236,19 @@ anim_prep <- function(data,
   }
 
 
-# return the selected columns with name changes ---------------------------
+# return the selected columns with the name changes -----------------------
 
   name <- tibble::tibble(
     old = c(rlang::as_label(qid), rlang::as_label(qtime),
             rlang::as_label(qgroup_scaling), rlang::as_label(qcolor)),
     new = c("id", "time", "group", "color")
-  )
+    )
 
   rename_vec <- stats::setNames(name$old, name$new)
 
-
   args_select <- c(rlang::as_label(qid),
                    rlang::as_label(qtime),
-                   "qtile",
-                   "frame")
+                   "qtile")
 
   # if group_scaling is not the same as color
   if (rlang::as_label(qgroup_scaling) != rlang::as_label(qcolor)) {
@@ -363,22 +327,21 @@ anim_prep <- function(data,
   }
 
 
-# return a list -----------------------------------------------------------
+# return an animbook object -----------------------------------------------
 
   object <- list(data = animbook,
                  settings = list(
                    gap = gap,
                    xbreaks = x,
                    label = as.character(label),
-                   scaling = breaks,
-                   time_dependent = time_dependent,
-                   runif_min = runif_min,
-                   runif_max = runif_max
+                   breaks_scales = breaks,
+                   time_dependent = time_dependent
                  ))
 
-  class(object) <- "animbook"
+  class(object) <- "categorized"
+
+  message("You can now pass the object to the plot function.")
 
   return(object)
 
 }
-

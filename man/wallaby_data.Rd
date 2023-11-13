@@ -14,7 +14,7 @@ wallaby_data(
 )
 }
 \arguments{
-\item{object}{An animbook object}
+\item{object}{An categorized object}
 
 \item{subset}{A character string specifying the variable used for subsetting the data. The "top"
 and "bottom" strings can also be used in this argument.}
@@ -30,14 +30,14 @@ or "many_one."}
 of the point is equal to the original number of points.}
 }
 \value{
-A modified animbook object with additional data components
+An animated object with additional data components
 }
 \description{
 This function performs data manipulation and formatting tasks
-from the original object with additional data components for labeling and shading.
+from the categorized data to animated format with additional data components for labeling and shading.
 }
 \details{
-The function takes the animbook object and then subsets the data based on the users.
+The function takes the categorized object and then subsets the data based on the users.
 Additionally, it creates a label data and shading data for the \code{\link[=wallaby_plot]{wallaby_plot()}} function. All
 of this then replaced the original data and appended new data to the object.
 }

@@ -35,8 +35,8 @@ kangaroo_plot <- function(object,
 
   rendering_choice <- c("ggplot", "plotly")
 
-  stopifnot("Use the anim_prep function to convert data into an animbook class object" =
-              class(object) == "animbook",
+  stopifnot("Use the anim_prep function to convert data into an categorized class object" =
+              class(object) == "categorized",
             "The rendering argument can only be either ggplot or plotly" =
               rendering %in% rendering_choice)
 
@@ -46,14 +46,14 @@ kangaroo_plot <- function(object,
   args <- list(...)
 
   # height settings for geom_jitter
-  height <- 0.2
+  height <- 0.6
 
   if (!is.null(args[["height"]])) {
     height <- args[["height"]]
   }
 
   # width settings for geom_jitter
-  width <- 0
+  width <- 50L
 
   if (!is.null(args[["width"]])) {
     width <- args[["width"]]
@@ -83,7 +83,7 @@ kangaroo_plot <- function(object,
 
 # format data -------------------------------------------------------------
 
-  object <- kangaroo_data(object)
+  object <- kangaroo_data(object, height = height, width = width)
 
 
 # variable main aes() -----------------------------------------------------
@@ -92,8 +92,8 @@ kangaroo_plot <- function(object,
 
     if ("color" %in% colnames(object[["data"]])) {
       aes_list <- list(
-        x = quote(time),
-        y = quote(qtile),
+        x = quote(x),
+        y = quote(y),
         group = quote(id),
         color = quote(color)
       )
@@ -101,8 +101,8 @@ kangaroo_plot <- function(object,
 
     else {
       aes_list <- list(
-        x = quote(time),
-        y = quote(qtile),
+        x = quote(x),
+        y = quote(y),
         group = quote(id)
       )
     }
@@ -112,8 +112,8 @@ kangaroo_plot <- function(object,
 
     if ("color" %in% colnames(object[["data"]])) {
       aes_list <- list(
-        x = quote(time),
-        y = quote(qtile),
+        x = quote(x),
+        y = quote(y),
         color = quote(color),
         ids = quote(id),
         frame = quote(frame)
@@ -122,8 +122,8 @@ kangaroo_plot <- function(object,
 
     else {
       aes_list <- list(
-        x = quote(time),
-        y = quote(qtile),
+        x = quote(x),
+        y = quote(y),
         ids = quote(id),
         frame = quote(frame)
       )
@@ -137,7 +137,8 @@ kangaroo_plot <- function(object,
   australia <- ggplot2::ggplot() +
     ggplot2::geom_jitter(data = object[["data"]],
                          mapping = ggplot2::aes(!!!aes_list),
-                         height = height, width = width, size = size) |>
+                         size = size
+                         ) |>
     suppressWarnings()
 
   # the shaded area + label
@@ -169,6 +170,11 @@ kangaroo_plot <- function(object,
                    legend.title = element_blank()) +
     ggplot2::scale_colour_manual(values = col_val)
 
+  message("You can now used the animbook::anim_animate() function to transforemd it
+          to an animated object.")
+
+  class(anim) <- c("ggplot", "gg", "animated", "kangaroo")
+
   return(anim)
 
 }
@@ -198,17 +204,25 @@ kangaroo_plot <- function(object,
 #'
 #' @keywords internal
 
-kangaroo_data <- function(object) {
+kangaroo_data <- function(object,
+                          height = 0.6,
+                          width = 50) {
 
-  data <- object[["data"]]
 
-  x <- unique(data$time)
+# stop --------------------------------------------------------------------
 
-  y <- sort(unique(data$qtile), decreasing = TRUE)
+  stopifnot("height argument only accepted proportion between 0 and 1" =
+              dplyr::between(height, 0, 1),
+            "Please use the prep function to convert the data into categorized class object" =
+              class(object) == "categorized")
+
+  pre_data <- object[["data"]]
+
+  x <- unique(pre_data$time)
+
+  y <- sort(unique(pre_data$qtile), decreasing = TRUE)
 
   gap <- object[["settings"]]$gap
-
-  unique_qtiles <- unique(data$qtile)
 
 # Create label data -------------------------------------------------------
 
@@ -230,11 +244,96 @@ kangaroo_data <- function(object) {
   )
 
 
+# create a path -----------------------------------------------------------
+
+  path <- pre_data |>
+    dplyr::group_nest(id) |>
+    dplyr::mutate(draw = purrr::map(data, ~kangaroo_draw(.))) |>
+    dplyr::select(id, draw) |>
+    tidyr::unnest(cols = draw) |>
+    dplyr::group_by(id)
+
+
+# calculate frame ---------------------------------------------------------
+
+  if (object[["settings"]]$time_dependent == TRUE) {
+    data <- path
+  }
+
+  if (object[["settings"]]$time_dependent == FALSE) {
+    data <- path |>
+      dplyr::mutate(
+        frame = frame + floor(stats::runif(1,
+                                           1,
+                                           width*10))
+      )
+  }
+
+
+# join the missing information --------------------------------------------
+
+  information <- pre_data |>
+    dplyr::select(-c(time, qtile)) |>
+    dplyr::distinct() |>
+    stats::na.omit()
+
+  kangaroo_data <- data |>
+    dplyr::left_join(information,
+                     by = "id") |>
+    dplyr::mutate(y = y + stats::runif(1, -0.5 * (height/2), 0.5 * (height/2)))
+
+
+# output ------------------------------------------------------------------
+
+  object[["data"]] <- kangaroo_data
+
   kangaroo <- append(object, list(label_data, shade_data))
 
   names(kangaroo) <- c("data", "settings", "label_data", "shade_data")
 
   return(kangaroo)
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#' Kangaroo path map
+#'
+#' This function is used to interpolate the path for the kangaroo plot.
+#'
+#' @param df A data frame
+#'
+#' @return A mapped data
+#'
+#' @keywords internal
+
+kangaroo_draw <- function(df) {
+
+  data <- df |>
+    dplyr::arrange(time) |>
+    dplyr::mutate(next_qtile = dplyr::lead(qtile, n = 1),
+                  time_end = dplyr::lead(time, n = 1)) |>
+    stats::na.omit()
+
+  map <- purrr::map_dfr(seq_len(nrow(data)),
+                 ~ sigmoid(as.numeric(data[.x, "time"]), as.numeric(data[.x, "time_end"]),
+                        as.numeric(data[.x, "qtile"]), as.numeric(data[.x, "next_qtile"]),
+                        n = 100) |>
+                   dplyr::mutate(path_id = .x)) |>
+    dplyr::mutate(frame = dplyr::row_number())
+
+  return(map)
 
 }
 

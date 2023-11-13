@@ -2,22 +2,20 @@
 % Please edit documentation in R/anim-prep.R
 \name{anim_prep}
 \alias{anim_prep}
-\title{Prepare Numerical Data for Visualizations}
+\title{Prepare Numerical Data into categorized data}
 \usage{
 anim_prep(
   data,
   id = NULL,
   values = NULL,
   time = NULL,
-  label = NULL,
   ngroup = 5L,
   breaks = NULL,
   group_scaling = NULL,
-  color = NULL,
-  time_dependent = FALSE,
   scaling = "rank",
-  runif_min = 1,
-  runif_max = 50
+  time_dependent = FALSE,
+  color = NULL,
+  label = NULL
 )
 }
 \arguments{
@@ -27,9 +25,7 @@ anim_prep(
 
 \item{values}{The column name that contains the numeric values to be visualized.}
 
-\item{time}{The column name represents the time variable.}
-
-\item{label}{A vector of labels to be used for the y-axis in the visualization.}
+\item{time}{The column name the represents the time variable.}
 
 \item{ngroup}{The number of groups or categories to create for scaling values.}
 
@@ -37,30 +33,28 @@ anim_prep(
 
 \item{group_scaling}{The column name that represents the grouping variable.}
 
-\item{color}{The column name to used in \code{\link[ggplot2:aes]{ggplot2::aes()}} for the plot function.}
+\item{scaling}{The scaling method to be used; "rank" or "absolute".}
 
-\item{time_dependent}{Logical. Should the visualization be time-dependent? The default is FALSE.}
+\item{time_dependent}{Logical. Should the visualization be time-dependent? The default is FALSE}
 
-\item{scaling}{The scaling method to be used; "rank" or "absolute."}
+\item{color}{The column name to be used in \code{\link[ggplot2:aes]{ggplot2::aes()}} for the plot function.}
 
-\item{runif_min}{The minimum value for random addition to frame numbers.}
-
-\item{runif_max}{The maximum value for random addition to frame numbers.}
+\item{label}{A vector of labels to represented each values.}
 }
 \value{
 An animbook object:
-\item{data}{A data frame with prepared data for visualization.}
-\item{settings}{A list of settings to be used in the plot function, including gap, xbreaks, label, scaling, time_dependent,
-runif_min, and runif_max.}
+\item{data}{A data frame in the categorized format}
+\item{settings}{A list of settings to be used in the plot function, including gap,
+xbreaks, label, scaling, time_dependent}
 }
 \description{
-This function prepares the numerical data into the format the plot function required by assigning frames,
+This function prepares the numerical data into the categorized format by
 grouping data, scaling values, and creating necessary data and settings for the plot function.
 }
 \details{
 The function takes the input data and performs several operations to prepare it for visualizations.
-It assigns frames, groups data, scales values, and creates necessary data and settings for the plot
-function.
+It groups data, scales values, and transformed it to categorized data along with the settings
+for the plot function.
 }
 \examples{
 anim_prep(data = osiris, id = ID, values = sales, time = year)

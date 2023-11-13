@@ -2,7 +2,7 @@
 % Please edit documentation in R/wallaby-plot.R
 \name{wallaby_plot}
 \alias{wallaby_plot}
-\title{Turn the data into a Sankey flow plot for animate function}
+\title{Turn the data into a subset plot for animate function}
 \usage{
 wallaby_plot(
   object,
@@ -12,11 +12,12 @@ wallaby_plot(
   subset = "top",
   relation = "one_many",
   total_point = NULL,
+  x_lab = NULL,
   ...
 )
 }
 \arguments{
-\item{object}{The animbook object returned from the prep function}
+\item{object}{The categorized object returned from the prep function}
 
 \item{group_palette}{The vector of the palette used by the function to supply the color to each group.}
 
@@ -33,6 +34,8 @@ or "many_one."}
 
 \item{total_point}{The number of points the users want for the wallaby plot. The default is NULL, the number
 of the point is equal to the original number of points.}
+
+\item{x_lab}{The label for the x-axis.}
 
 \item{...}{Additional arguments for customization, see details for more information.}
 }
