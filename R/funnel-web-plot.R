@@ -3,10 +3,8 @@
 #' This function takes in the data which has been prepared by either [anim_prep()] or [anim_prep_cat()] and
 #' return the ggplot object. The user can still modify the plot the same as normal using the ggplot2 function.
 #'
-#' @param object The animbook object returned from the prep function.
-#' @param palette The vector of the palette used by the function to supply the color to each group.
-#' @param rendering The choice of method used to create and display the plot, either gganimate or
-#' plotly.
+#' @param data The animbook object returned from the prep function.
+#' @param group_palette The vector of the palette used by the function to supply the color to each group.
 #' @param ... Additional arguments for customization, see details for more information.
 #'
 #' @return Return a ggplot object
@@ -19,7 +17,7 @@
 #' to control the appearance. For the shading area, the alpha argument can be used.
 #'
 #' @examples
-#' animbook <- anim_prep(data = osiris, id = ID, values = sales, time = year, color = japan)
+#' animbook <- anim_prep(data = osiris, id = ID, values = sales, time = year, group = japan)
 #'
 #' funnel_web_plot(animbook)
 #'
@@ -27,18 +25,19 @@
 #'
 #' @export
 
-funnel_web_plot <- function(object,
-                            palette = RColorBrewer::brewer.pal(9, "Set1"),
-                            rendering = "ggplot",
+funnel_web_plot <- function(data,
+                            group_palette = NULL,
                             ...) {
-  col_val <- palette
 
-  rendering_choice <- c("ggplot", "plotly")
+  # group color palette -----------------------------------------------------
 
-  stopifnot("Use the anim_prep function to convert data into an categorized class object" =
-              class(object) == "categorized",
-            "The rendering argument can only be either ggplot or plotly" =
-              rendering %in% rendering_choice)
+  if (is.null(group_palette)) {
+    group_palette <- RColorBrewer::brewer.pal(9, "Set1")
+  }
+
+  if (!is.null(group_palette)) {
+    group_palette <- group_palette
+  }
 
 
 # ... arguments -----------------------------------------------------------
@@ -76,17 +75,17 @@ funnel_web_plot <- function(object,
 
 # format data -------------------------------------------------------------
 
-  object <- funnel_web_spider_data(object)
+  object <- funnel_web_spider_data(data)
 
 
 # variable main aes() -----------------------------------------------------
 
-  if ("color" %in% colnames(object[["data"]])) {
+  if ("group" %in% colnames(object[["data"]])) {
     aes_list <- list(
       x = quote(time),
       y = quote(qtile),
       group = quote(id),
-      color = quote(color)
+      color = quote(group)
     )
   }
 
@@ -112,7 +111,7 @@ funnel_web_plot <- function(object,
 
   # plot settings
   anim <- australia +
-    ggplot2::scale_x_continuous(breaks = object[["settings"]]$xbreaks) +
+    ggplot2::scale_x_continuous(breaks = object[["xbreaks"]]) +
     ggplot2::coord_cartesian(clip = "off") +
     ggplot2::theme(panel.background = element_blank(),
                    axis.title.y = element_blank(),
@@ -123,65 +122,7 @@ funnel_web_plot <- function(object,
                    axis.ticks.x = element_blank(),
                    legend.position = "bottom",
                    legend.title = element_blank()) +
-    ggplot2::scale_colour_manual(values = col_val)
+    ggplot2::scale_colour_manual(values = group_palette)
 
   return(anim)
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#' Funnel web spider plot data
-#'
-#' This function performs data manipulation for facetting.
-#'
-#' @param object An animbook object
-#'
-#' @return A modified animbook object
-#'
-#' @details The function takes the animbook object and manipulates the data into the
-#' format where it can be further facetting.
-#'
-#' @keywords internal
-
-funnel_web_spider_data <- function(object) {
-
-  data <- object[["data"]]
-
-
-# Change the data format --------------------------------------------------
-
-  start <- data |>
-    dplyr::filter(time > min(time)) |>
-    dplyr::group_by(id) |>
-    dplyr::mutate(facet = dplyr::row_number())
-
-  end <- data |>
-    dplyr::filter(time < max(time)) |>
-    dplyr::group_by(id) |>
-    dplyr::mutate(facet = dplyr::row_number())
-
-  full <- rbind(start, end) |>
-    dplyr::arrange(id, time)
-
-
-  object[["data"]] <- full
-
-  return(object)
-}
-

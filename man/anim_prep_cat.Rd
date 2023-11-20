@@ -2,55 +2,44 @@
 % Please edit documentation in R/anim-prep-cat.R
 \name{anim_prep_cat}
 \alias{anim_prep_cat}
-\title{Prepare Category Data for Visualizations}
+\title{Transformed category data into categorized format}
 \usage{
 anim_prep_cat(
   data,
   id = NULL,
   values = NULL,
   time = NULL,
-  label = NULL,
+  group = NULL,
   order = NULL,
-  color = NULL,
-  time_dependent = TRUE,
-  runif_min = 1,
-  runif_max = 50
+  label = NULL
 )
 }
 \arguments{
-\item{data}{A data frame containing the category values to be prepared for visualization.}
+\item{data}{A data frame contained the category values.}
 
-\item{id}{The column name that represents the unique identifier variable.}
+\item{id}{The column name that represents the identifiers variable.}
 
-\item{values}{The column name that contains the categorical values to be visualized.}
+\item{values}{The column name the contains the category values.}
 
-\item{time}{The column name represents the time variable.}
+\item{time}{The column name that represents the time variable.}
 
-\item{label}{A vector of labels to be used for the y-axis in the visualization.}
+\item{group}{The column name that represents the distinguish group between
+the values}
 
 \item{order}{A vector of order for sorting the category values.}
 
-\item{color}{The column name to be used in \code{\link[ggplot2:aes]{ggplot2::aes()}} for the plot function.}
-
-\item{time_dependent}{Logical. Should the visualization be time-dependent? The default is TRUE.}
-
-\item{runif_min}{The minimum value for random addition to frame numbers.}
-
-\item{runif_max}{The maximum value for random addition to frame numbers.}
+\item{label}{A vector of labels to represented the qtile}
 }
 \value{
-An animbook object:
-\item{data}{A data frame with prepared data for visualization.}
-\item{settings}{A list of settings to be used in the plot function, including gap, xbreaks, label, scaling, time_dependent,
-runif_min, and runif_max}
+A categorized data
 }
 \description{
-This function prepares the category data into the format the plot function required
-by assigning frames and creating necessary data and settings for the plot function.
+This function transformed the category data in the categorized format by
+ordering the values.
 }
 \details{
-The function takes the input data and performs several operations to prepare it for visualizations.
-It assigns frames and creates necessary data and settings for the plot function.
+The function takes the input data, ordering the values, and assigning the
+variable names.
 }
 \examples{
 anim_prep_cat(data = aeles, id = id, values = party, time = year)

@@ -1,27 +1,22 @@
-#' Prepare Category Data for Visualizations
+#' Transformed category data into categorized format
 #'
-#' This function prepares the category data into the format the plot function required
-#' by assigning frames and creating necessary data and settings for the plot function.
+#' This function transformed the category data in the categorized format by
+#' ordering the values.
 #'
-#' @param data A data frame containing the category values to be prepared for visualization.
-#' @param id The column name that represents the unique identifier variable.
-#' @param values The column name that contains the categorical values to be visualized.
-#' @param time The column name represents the time variable.
-#' @param label A vector of labels to be used for the y-axis in the visualization.
+#' @param data A data frame contained the category values.
+#' @param id The column name that represents the identifiers variable.
+#' @param values The column name the contains the category values.
+#' @param time The column name that represents the time variable.
+#' @param group The column name that represents the distinguish group between
+#' the values
 #' @param order A vector of order for sorting the category values.
-#' @param color The column name to be used in [ggplot2::aes()] for the plot function.
-#' @param time_dependent Logical. Should the visualization be time-dependent? The default is TRUE.
-#' @param runif_min The minimum value for random addition to frame numbers.
-#' @param runif_max The maximum value for random addition to frame numbers.
+#' @param label A vector of labels to represented the qtile
 #'
-#' @return An animbook object:
-#'   \item{data}{A data frame with prepared data for visualization.}
-#'   \item{settings}{A list of settings to be used in the plot function, including gap, xbreaks, label, scaling, time_dependent,
-#'   runif_min, and runif_max}
+#' @return A categorized data
 #'
 #' @details
-#' The function takes the input data and performs several operations to prepare it for visualizations.
-#' It assigns frames and creates necessary data and settings for the plot function.
+#' The function takes the input data, ordering the values, and assigning the
+#' variable names.
 #'
 #' @examples
 #' anim_prep_cat(data = aeles, id = id, values = party, time = year)
@@ -29,25 +24,23 @@
 #' @export
 
 anim_prep_cat <- function(data,
-                          id = NULL,
+                          id  = NULL,
                           values = NULL,
                           time = NULL,
-                          label = NULL,
+                          group = NULL,
                           order = NULL,
-                          color = NULL,
-                          time_dependent = TRUE,
-                          runif_min = 1,
-                          runif_max = 50) {
+                          label = NULL) {
 
-# enquo -------------------------------------------------------------------
+
+  # enquo -------------------------------------------------------------------
 
   qid <- rlang::enquo(id)
   qvalues <- rlang::enquo(values)
   qtime <- rlang::enquo(time)
-  qcolor <- rlang::enquo(color)
+  qgroup <- rlang::enquo(group)
 
 
-# check column class ------------------------------------------------------
+  # check column class ------------------------------------------------------
 
   type <- sapply(data, class)
 
@@ -57,18 +50,21 @@ anim_prep_cat <- function(data,
               rlang::as_label(qtime) != "NULL",
             "The id column needs to be a factor variable" =
               type[[rlang::as_label(qid)]] == "factor",
-            "The values column needs to be a factor variable. If the values
-            column is a numerical variable, try the anim_prep function" =
+            "The values column needs to be a factor variable. If the values column is a
+            numerical variable, try using the anim_prep function" =
               type[[rlang::as_label(qvalues)]] == "factor",
             "The time column needs to be an integer variable" =
               type[[rlang::as_label(qtime)]] == "integer")
 
-# order -------------------------------------------------------------------
 
-  n_group <- nrow(unique(data[, rlang::as_label(qvalues)]))
+  # order -------------------------------------------------------------------
 
+  ncat <- nrow(unique(data[, rlang::as_label(qvalues)]))
+
+  # if order is NULL
   if (is.null(order)) {
 
+    # order based on number of observation
     order <- data |>
       dplyr::count(!!qvalues) |>
       dplyr::arrange(dplyr::desc(n)) |>
@@ -76,16 +72,18 @@ anim_prep_cat <- function(data,
 
   }
 
+  # if order is not NULL
   else {
 
+    # check
     stopifnot("The order argument only accepted vector" =
                 is.vector(order),
               "The order vector must have the same number as the unique values element" =
-                length(order) == n_group,
+                length(order) == ncat,
               "The order vector should not contain NA" =
                 !is.na(order),
               "The order vector must be the elements of the values column" =
-                all(order %in% dplyr::pull(data, !!qvalues))
+                all(order %in% unique(dplyr::pull(data, !!qvalues)))
     )
 
     order <- order
@@ -93,9 +91,10 @@ anim_prep_cat <- function(data,
   }
 
 
- # assign the qtile --------------------------------------------------------
+  # assign the qtile --------------------------------------------------------
 
-  book <- data |>
+  # order the qtile
+  order_data <- data |>
     dplyr::mutate(
       qtile = factor(!!qvalues, levels = rev(order)),
       qtile = ifelse(is.na(qtile), 0, as.numeric(qtile)),
@@ -103,74 +102,64 @@ anim_prep_cat <- function(data,
     )
 
 
- # return the selected columns with name changes ---------------------------
+  # labels ------------------------------------------------------------------
+
+  # if label is NULL
+  if (is.null(label)) {
+    label <- as.character(order)
+  }
+
+  # if label length is greater than number of category
+  if (length(label) >= length(order)) {
+    label <- label[1:length(order)]
+  }
+
+  # if label length is less than number of category
+  if (length(label) < length(order)) {
+    label <- as.character(order)
+
+    warning("The length of the label provided is less than number of category")
+  }
+
+  label_lookup <- tibble::tibble(
+    qtile = sort(unique(order_data$qtile), decreasing = TRUE),
+    label = label
+  )
+
+  lab_data <- order_data |>
+    dplyr::left_join(label_lookup,
+                     by = "qtile")
+
+
+  # return the selected columns with name changes ---------------------------
 
   args_select <- c(rlang::as_label(qid),
                    rlang::as_label(qtime),
-                   "qtile")
+                   "qtile",
+                   "label")
 
-  if (rlang::as_label(qcolor) != "NULL") {
+  # if group is not NULL
+  if (rlang::as_label(qgroup) != "NULL") {
 
-    args_select <- c(args_select, rlang::as_label(qcolor))
+    args_select <- c(args_select, rlang::as_label(qgroup))
 
   }
 
   name <- tibble::tibble(
     old = c(rlang::as_label(qid), rlang::as_label(qtime),
-            rlang::as_label(qcolor)),
-    new = c("id", "time", "color")
+            rlang::as_label(qgroup)),
+    new = c("id", "time", "group")
   )
 
   rename_vec <- stats::setNames(name$old, name$new)
 
-  animbook <- book |>
+  # categorized data
+  categorized <- lab_data |>
     dplyr::select(args_select) |>
     dplyr::rename(tidyselect::any_of(rename_vec))
 
+  class(categorized) <- c("tbl_df", "tbl", "data.frame", "categorized")
 
-# gap settings ------------------------------------------------------------
-
-  x <- dplyr::pull(unique(book[, rlang::as_label(qtime)]))
-
-  gap <- 0.1 * (length(x) - 1)
-
-
-# labels ------------------------------------------------------------------
-
-  y <- sort(unique(animbook$qtile), decreasing = TRUE)
-
-  if (is.null(label)) {
-    label <- order
-  }
-
-  if (length(label) >= length(y)) {
-    label <- label[1:length(y)]
-  }
-
-  if (length(label) < length(y)) {
-    label <- order
-
-    warning("The length of the label provided is less than the length of y")
-  }
-
-
- # return a list -----------------------------------------------------------
-
-  object <- list(data = animbook,
-                 settings = list(
-                   gap = gap,
-                   xbreaks = x,
-                   label = as.character(label),
-                   order = as.character(order),
-                   time_dependent = time_dependent,
-                   runif_min = runif_min,
-                   runif_max = runif_max
-                 ))
-
-  class(object) <- "categorized"
-
-  message("You can now pass the object to the plot function.")
-
-  return(object)
+  return(categorized)
 
 }

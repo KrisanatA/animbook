@@ -2,69 +2,69 @@
 % Please edit documentation in R/anim-prep.R
 \name{anim_prep}
 \alias{anim_prep}
-\title{Prepare Numerical Data into categorized data}
+\title{Transformed numerical into categorized data}
 \usage{
 anim_prep(
   data,
   id = NULL,
   values = NULL,
   time = NULL,
-  ngroup = 5L,
+  group = NULL,
+  ncat = 5L,
   breaks = NULL,
+  label = NULL,
   group_scaling = NULL,
-  scaling = "rank",
-  time_dependent = FALSE,
-  color = NULL,
-  label = NULL
+  scaling = "rank"
 )
 }
 \arguments{
-\item{data}{A data frame containing the data to be prepared for visualization.}
+\item{data}{A data frame contained the numerical values.}
 
-\item{id}{The column name that represents the unique identifier variable.}
+\item{id}{The column name that represents the identifiers variable.}
 
-\item{values}{The column name that contains the numeric values to be visualized.}
+\item{values}{The column name the contains the numeric values.}
 
-\item{time}{The column name the represents the time variable.}
+\item{time}{The column name that represents the time variable.}
 
-\item{ngroup}{The number of groups or categories to create for scaling values.}
+\item{group}{The column name that represents the distinguish group between
+the values}
+
+\item{ncat}{The number of categories to be created for scaling values.}
 
 \item{breaks}{A vector of breaks for creating bins.}
 
-\item{group_scaling}{The column name that represents the grouping variable.}
+\item{label}{A vector of labels to represented the qtile}
+
+\item{group_scaling}{The column name that will be used for grouping the
+variable before scaling.}
 
 \item{scaling}{The scaling method to be used; "rank" or "absolute".}
-
-\item{time_dependent}{Logical. Should the visualization be time-dependent? The default is FALSE}
-
-\item{color}{The column name to be used in \code{\link[ggplot2:aes]{ggplot2::aes()}} for the plot function.}
-
-\item{label}{A vector of labels to represented each values.}
 }
 \value{
-An animbook object:
-\item{data}{A data frame in the categorized format}
-\item{settings}{A list of settings to be used in the plot function, including gap,
-xbreaks, label, scaling, time_dependent}
+A categorized data
 }
 \description{
-This function prepares the numerical data into the categorized format by
-grouping data, scaling values, and creating necessary data and settings for the plot function.
+This function transformed the numerical data into the categorized format by
+grouping data and scaling values.
 }
 \details{
-The function takes the input data and performs several operations to prepare it for visualizations.
-It groups data, scales values, and transformed it to categorized data along with the settings
-for the plot function.
+The function takes the input data and performs several operations to
+transformed it into categorized format. It is done by groups data, scales
+values, and assigned the qtile.
 }
 \examples{
+# rank scaling
 anim_prep(data = osiris, id = ID, values = sales, time = year)
 
+# group_rank scaling
 anim_prep(data = osiris, id = ID, values = sales, time = year,
 group_scaling = country)
 
+# absolute scaling
 anim_prep(data = osiris, id = ID, values = sales, time = year,
 scaling = "absolute")
 
+# group_absolute scaling
 anim_prep(data = osiris, id = ID, values = sales, time = year,
 group_scaling = country, scaling = "absolute")
 

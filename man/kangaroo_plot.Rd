@@ -5,38 +5,51 @@
 \title{Turn the data into a ggplot object for the animate function}
 \usage{
 kangaroo_plot(
-  object,
-  palette = RColorBrewer::brewer.pal(9, "Set1"),
-  rendering = "ggplot",
+  data,
+  group_palette = NULL,
+  shade_palette = NULL,
+  rendering = "gganimate",
+  time_dependent = FALSE,
   ...
 )
 }
 \arguments{
-\item{object}{The animbook object returned from the prep function.}
+\item{data}{The categorized data.}
 
-\item{palette}{The vector of the palette used by the function to supply the color to each group.}
+\item{group_palette}{The vector of the palette used by the function to supply
+the color to each group.}
 
-\item{rendering}{The choice of method used to create and display the plot, either gganimate or
-plotly.}
+\item{shade_palette}{The vector of the palette used by the function to supply
+the color to the shaded area.}
 
-\item{...}{Additional arguments for customization, see details for more information.}
+\item{rendering}{The choice of method used to create and display the plot,
+either gganimate or plotly.}
+
+\item{time_dependent}{Logical. Should the visualization be time-dependent?
+The default is FALSE}
+
+\item{...}{Additional arguments for customization, see datails for more
+information.}
 }
 \value{
 Return a ggplot object
 }
 \description{
-This function takes in the data which has been prepared by the \code{\link[=anim_prep]{anim_prep()}} or \code{\link[=anim_prep_cat]{anim_prep_cat()}}
-and return the ggplot object. The user can still modify the plot the same as normal.
+This function takes in the data which has been prepared by the \code{\link[=anim_prep]{anim_prep()}}
+or \code{\link[=anim_prep_cat]{anim_prep_cat()}} and return the ggplot object. The user can still modify
+the plot the same as normal.
 }
 \details{
-This function takes prepared data and generates a ggplot object.
-The kangaroo plot is the plot that shows the movement between groups over time.
-The jitter point can be controlled using additional arguments such as height, width, and size
-to control the appearance. For the shading area, the alpha argument can be used.
+This function takes categorized data and generates a ggplot object.
+The kangaroo plot is the plot that shows the movement between group over
+time. The point position and point size in the shaded area can be controlled
+using additional arguments such as height, width, and size. For the shading
+area, the alpha argument can be used.
 }
 \examples{
-animbook <- anim_prep(data = osiris, id = ID, values = sales, time = year, color = japan)
+example <- anim_prep(data = dbl_change, id = id, values = values,
+time = time, group = gp)
 
-kangaroo_plot(animbook)
+kangaroo_plot(example)
 
 }

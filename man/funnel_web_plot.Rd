@@ -4,20 +4,12 @@
 \alias{funnel_web_plot}
 \title{Turn the data into a facetted plot}
 \usage{
-funnel_web_plot(
-  object,
-  palette = RColorBrewer::brewer.pal(9, "Set1"),
-  rendering = "ggplot",
-  ...
-)
+funnel_web_plot(data, group_palette = NULL, ...)
 }
 \arguments{
-\item{object}{The animbook object returned from the prep function.}
+\item{data}{The animbook object returned from the prep function.}
 
-\item{palette}{The vector of the palette used by the function to supply the color to each group.}
-
-\item{rendering}{The choice of method used to create and display the plot, either gganimate or
-plotly.}
+\item{group_palette}{The vector of the palette used by the function to supply the color to each group.}
 
 \item{...}{Additional arguments for customization, see details for more information.}
 }
@@ -36,7 +28,7 @@ The line jitter can be controlled using additional arguments such as height and 
 to control the appearance. For the shading area, the alpha argument can be used.
 }
 \examples{
-animbook <- anim_prep(data = osiris, id = ID, values = sales, time = year, color = japan)
+animbook <- anim_prep(data = osiris, id = ID, values = sales, time = year, group = japan)
 
 funnel_web_plot(animbook)
 

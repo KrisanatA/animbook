@@ -79,105 +79,93 @@
 <p>The inspiration for this package comes from the NY Times animated
 plot. The challenge of reproducing the animation is the amount of code
 required. This package tries to solve that by reducing it to only three
-steps. This package also adds a new element of proportional Sankey
-shaded area.</p>
+steps. This package also adds a new element of proportional shaded
+area.</p>
 <div class="section level3">
 <h3 id="first-stage-prepare-the-data">First stage: Prepare the data<a class="anchor" aria-label="anchor" href="#first-stage-prepare-the-data"></a>
 </h3>
-<p>In this stage, we first need to prepare the data structure to a
-specific format. This function will assign a frame, calculate the
-scaling, and create the necessary data and settings for the next
-stage.</p>
+<p>In this stage, we first need to transformed the data into the
+categorized format. This function will calculate the scaling based on
+the argument the user provided.</p>
 <p>The data needs to contain the following variable for the function to
 work:</p>
 <ul>
-<li>id: <code>ID</code>, it needs to be a factor variable.</li>
-<li>values: <code>sales</code>, needs to be a numeric variable.</li>
-<li>time: <code>year</code>, it needs to be an integer variable.</li>
+<li>data: <code>dbl_change</code>, A data frame that contained the
+numerical values.</li>
+<li>id: <code>id</code>, it needs to be a factor variable.</li>
+<li>values: <code>values</code>, needs to be a numeric variable.</li>
+<li>time: <code>time</code>, it needs to be an integer variable.</li>
 </ul>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">animbook</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/anim_prep.html">anim_prep</a></span><span class="op">(</span><span class="va">osiris</span>, <span class="va">ID</span>, <span class="va">sales</span>, <span class="va">year</span><span class="op">)</span></span>
-<span><span class="co">#&gt; You can now pass the object to the plot function.</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">categorized_dbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/anim_prep.html">anim_prep</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dbl_change</span>, </span>
+<span>                             id <span class="op">=</span> <span class="va">id</span>, </span>
+<span>                             values <span class="op">=</span> <span class="va">values</span>,</span>
+<span>                             time <span class="op">=</span> <span class="va">time</span><span class="op">)</span></span></code></pre></div>
 <p>There are also additional options that allow the user to
 customize.</p>
 <ul>
-<li>label: group labeling.</li>
-<li>ngroup: number of groups we want to split the values into.</li>
-<li>breaks: the group bins size (prototype)</li>
-<li>group_scaling: the grouping variable for the bins calculations.</li>
-<li>color: the variable used to color the observations.</li>
-<li>time_dependent: logical. Whether we want the observations to start
-at the same time or not.</li>
-<li>scaling: the scaling method, either <code>rank</code> or
-<code>absolute</code>.</li>
-<li>runif_min: minimum value for random addition to frame numbers</li>
-<li>runif_max: maximum value for random addition to frame numbers</li>
+<li>group: the column name that distinguish between the values
+group.</li>
+<li>ncat: the number of categories to be created for scaling
+values.</li>
+<li>breaks: a vector for creating a bins.</li>
+<li>label: a vector to provided a label to the qtile.</li>
+<li>group_scaling: the column name used for grouping the variable before
+scaling.</li>
+<li>scaling: the scaling method.</li>
 </ul>
 <p>The function can calculate four different scales using these
 options.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># rank scaling</span></span>
-<span><span class="va">rank_scaling</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/anim_prep.html">anim_prep</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">osiris</span>, id <span class="op">=</span> <span class="va">ID</span>, values <span class="op">=</span> <span class="va">sales</span>, time <span class="op">=</span> <span class="va">year</span><span class="op">)</span></span>
-<span><span class="co">#&gt; You can now pass the object to the plot function.</span></span>
+<span><span class="va">rank_scaling</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/anim_prep.html">anim_prep</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dbl_change</span>, </span>
+<span>                             id <span class="op">=</span> <span class="va">id</span>, </span>
+<span>                             values <span class="op">=</span> <span class="va">values</span>,</span>
+<span>                             time <span class="op">=</span> <span class="va">time</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># absolute scaling</span></span>
-<span><span class="va">absolute_scaling</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/anim_prep.html">anim_prep</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">osiris</span>, id <span class="op">=</span> <span class="va">ID</span>, values <span class="op">=</span> <span class="va">sales</span>, time <span class="op">=</span> <span class="va">year</span>,</span>
-<span>                              scaling <span class="op">=</span> <span class="st">"absolute"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; You can now pass the object to the plot function.</span></span>
+<span><span class="va">absolute_scaling</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/anim_prep.html">anim_prep</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dbl_change</span>, </span>
+<span>                             id <span class="op">=</span> <span class="va">id</span>, </span>
+<span>                             values <span class="op">=</span> <span class="va">values</span>,</span>
+<span>                             time <span class="op">=</span> <span class="va">time</span>,</span>
+<span>                             scaling <span class="op">=</span> <span class="st">"absolute"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># rank scaling by group</span></span>
-<span><span class="va">rank_group_scaling</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/anim_prep.html">anim_prep</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">osiris</span>, id <span class="op">=</span> <span class="va">ID</span>, values <span class="op">=</span> <span class="va">sales</span>, time <span class="op">=</span> <span class="va">year</span>, </span>
-<span>                                group <span class="op">=</span> <span class="va">country</span><span class="op">)</span></span>
-<span><span class="co">#&gt; You can now pass the object to the plot function.</span></span>
+<span><span class="va">rank_group_scaling</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/anim_prep.html">anim_prep</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dbl_change</span>, </span>
+<span>                             id <span class="op">=</span> <span class="va">id</span>, </span>
+<span>                             values <span class="op">=</span> <span class="va">values</span>,</span>
+<span>                             time <span class="op">=</span> <span class="va">time</span>,</span>
+<span>                             group_scaling <span class="op">=</span> <span class="va">gp</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># absolute scaling by group</span></span>
-<span><span class="va">absolute_group_scaling</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/anim_prep.html">anim_prep</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">osiris</span>, id <span class="op">=</span> <span class="va">ID</span>, values <span class="op">=</span> <span class="va">sales</span>, time <span class="op">=</span> <span class="va">year</span>,</span>
-<span>                                    group <span class="op">=</span> <span class="va">country</span>, scaling <span class="op">=</span> <span class="st">"absolute"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; You can now pass the object to the plot function.</span></span>
+<span><span class="va">absolute_group_scaling</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/anim_prep.html">anim_prep</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dbl_change</span>, </span>
+<span>                             id <span class="op">=</span> <span class="va">id</span>, </span>
+<span>                             values <span class="op">=</span> <span class="va">values</span>,</span>
+<span>                             time <span class="op">=</span> <span class="va">time</span>,</span>
+<span>                             group_scaling <span class="op">=</span> <span class="va">gp</span>,</span>
+<span>                             scaling <span class="op">=</span> <span class="st">"absolute"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">rank_scaling</span></span>
-<span><span class="co">#&gt; $data</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 10,270 × 3</span></span></span>
-<span><span class="co">#&gt;    id            time qtile</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> AE30008GU     <span style="text-decoration: underline;">2</span>006     1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> AT9110050653  <span style="text-decoration: underline;">2</span>006     3</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> AU001150849   <span style="text-decoration: underline;">2</span>006     5</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> AU004085330   <span style="text-decoration: underline;">2</span>006     1</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> AU006624228   <span style="text-decoration: underline;">2</span>006     2</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> AU008720223   <span style="text-decoration: underline;">2</span>006     5</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> AU009066648   <span style="text-decoration: underline;">2</span>006     5</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> AU009134114   <span style="text-decoration: underline;">2</span>006     3</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> AU009213754   <span style="text-decoration: underline;">2</span>006     4</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> AU009219809   <span style="text-decoration: underline;">2</span>006     2</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 10,260 more rows</span></span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $settings</span></span>
-<span><span class="co">#&gt; $settings$gap</span></span>
-<span><span class="co">#&gt; [1] 1.2</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $settings$xbreaks</span></span>
-<span><span class="co">#&gt;  [1] 2006 2007 2008 2009 2010 2011 2012 2013 2014 2015 2016 2017 2018</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $settings$label</span></span>
-<span><span class="co">#&gt; [1] "5" "4" "3" "2" "1" "0"</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $settings$breaks_scales</span></span>
-<span><span class="co">#&gt; [1] 0.0 0.2 0.4 0.6 0.8 1.0</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $settings$time_dependent</span></span>
-<span><span class="co">#&gt; [1] FALSE</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; attr(,"class")</span></span>
-<span><span class="co">#&gt; [1] "categorized"</span></span></code></pre></div>
-<p>This function will return an <code>animbook</code> object containing
-a list of the formatted data and settings.</p>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 400 × 4</span></span></span>
+<span><span class="co">#&gt;    id     time qtile label</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 1      <span style="text-decoration: underline;">2</span>020     3 3    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 2      <span style="text-decoration: underline;">2</span>020     2 2    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> 3      <span style="text-decoration: underline;">2</span>020     4 4    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> 4      <span style="text-decoration: underline;">2</span>020     3 3    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> 5      <span style="text-decoration: underline;">2</span>020     2 2    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> 6      <span style="text-decoration: underline;">2</span>020     2 2    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> 7      <span style="text-decoration: underline;">2</span>020     4 4    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> 8      <span style="text-decoration: underline;">2</span>020     4 4    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 9      <span style="text-decoration: underline;">2</span>020     3 3    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 10     <span style="text-decoration: underline;">2</span>020     4 4    </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 390 more rows</span></span></span></code></pre></div>
+<p>This function will return a <code>categorized</code> data.</p>
 </div>
 <div class="section level3">
 <h3 id="second-stage-plotting-the-data">Second stage: Plotting the data<a class="anchor" aria-label="anchor" href="#second-stage-plotting-the-data"></a>
 </h3>
-<p>After preparing the data, we can not plot it. There are three plots
+<p>After preparing the data, we can now plot it. There are three plots
 available in this package:</p>
 <ul>
 <li>
@@ -192,27 +180,28 @@ after the observational period.</li>
 variable.</li>
 </ul>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">label</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Top 20%"</span>, <span class="st">"20-40"</span>, <span class="st">"40-60"</span>, <span class="st">"60-80"</span>, <span class="st">"80-100"</span>, <span class="st">"not listed"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">animbook</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/anim_prep.html">anim_prep</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">osiris</span>, id <span class="op">=</span> <span class="va">ID</span>, values <span class="op">=</span> <span class="va">sales</span>, time <span class="op">=</span> <span class="va">year</span>, color <span class="op">=</span> <span class="va">japan</span>, label <span class="op">=</span> <span class="va">label</span><span class="op">)</span></span>
-<span><span class="co">#&gt; You can now pass the object to the plot function.</span></span>
+<code class="sourceCode R"><span><span class="va">dbl_categorized</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/anim_prep.html">anim_prep</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dbl_change</span>, </span>
+<span>                             id <span class="op">=</span> <span class="va">id</span>, </span>
+<span>                             values <span class="op">=</span> <span class="va">values</span>,</span>
+<span>                             time <span class="op">=</span> <span class="va">time</span>,</span>
+<span>                             group <span class="op">=</span> <span class="va">gp</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># kangaroo plot</span></span>
-<span><span class="fu"><a href="../reference/kangaroo_plot.html">kangaroo_plot</a></span><span class="op">(</span><span class="va">animbook</span><span class="op">)</span></span>
-<span><span class="co">#&gt; You can now used the animbook::anim_animate() function to transforemd it</span></span>
-<span><span class="co">#&gt;           to an animated object.</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/kangaroo_plot.html">kangaroo_plot</a></span><span class="op">(</span><span class="va">dbl_categorized</span><span class="op">)</span></span>
+<span><span class="co">#&gt; You can now used the animbook::anim_animate() function to transformed</span></span>
+<span><span class="co">#&gt;           it to an animated object</span></span></code></pre></div>
 <p><img src="animbook_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># wallaby plot</span></span>
-<span><span class="fu"><a href="../reference/wallaby_plot.html">wallaby_plot</a></span><span class="op">(</span><span class="va">animbook</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/wallaby_plot.html">wallaby_plot</a></span><span class="op">(</span><span class="va">dbl_categorized</span><span class="op">)</span></span>
 <span><span class="co">#&gt; You can now used the animbook::anim_animate() function to transformed it</span></span>
 <span><span class="co">#&gt;           to an animated object.</span></span></code></pre></div>
 <p><img src="animbook_files/figure-html/unnamed-chunk-4-2.png" width="700"></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>            </span>
 <span><span class="co"># funnel web spider plot</span></span>
-<span><span class="fu"><a href="../reference/funnel_web_plot.html">funnel_web_plot</a></span><span class="op">(</span><span class="va">animbook</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/funnel_web_plot.html">funnel_web_plot</a></span><span class="op">(</span><span class="va">dbl_categorized</span><span class="op">)</span></span></code></pre></div>
 <p><img src="animbook_files/figure-html/unnamed-chunk-4-3.png" width="700"></p>
 <p>The <code>kangaroo</code> and <code>wallaby</code> plots can be
 animated using the function of the next stage.
@@ -226,9 +215,9 @@ plotly.</p>
 <p>To animate the plot, we need to save the plot into an object, which
 then can be passed on to the function.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">animbook</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/anim_prep_cat.html">anim_prep_cat</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">aeles</span>, id <span class="op">=</span> <span class="va">id</span>, values <span class="op">=</span> <span class="va">party</span>, time <span class="op">=</span> <span class="va">year</span>, color <span class="op">=</span> <span class="va">gender</span>, time_dependent <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">aeles_cat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/anim_prep_cat.html">anim_prep_cat</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">aeles</span>, id <span class="op">=</span> <span class="va">id</span>, values <span class="op">=</span> <span class="va">party</span>, time <span class="op">=</span> <span class="va">year</span>, group <span class="op">=</span> <span class="va">gender</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/wallaby_plot.html">wallaby_plot</a></span><span class="op">(</span><span class="va">animbook</span><span class="op">)</span></span>
+<span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/wallaby_plot.html">wallaby_plot</a></span><span class="op">(</span><span class="va">aeles_cat</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/anim_animate.html">anim_animate</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span>
 <span></span>

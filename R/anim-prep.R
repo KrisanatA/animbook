@@ -1,39 +1,41 @@
-#' Prepare Numerical Data into categorized data
+#' Transformed numerical into categorized data
 #'
-#' This function prepares the numerical data into the categorized format by
-#' grouping data, scaling values, and creating necessary data and settings for the plot function.
+#' This function transformed the numerical data into the categorized format by
+#' grouping data and scaling values.
 #'
-#' @param data A data frame containing the data to be prepared for visualization.
-#' @param id The column name that represents the unique identifier variable.
-#' @param values The column name that contains the numeric values to be visualized.
-#' @param time The column name the represents the time variable.
-#' @param ngroup The number of groups or categories to create for scaling values.
+#' @param data A data frame contained the numerical values.
+#' @param id The column name that represents the identifiers variable.
+#' @param values The column name the contains the numeric values.
+#' @param time The column name that represents the time variable.
+#' @param group The column name that represents the distinguish group between
+#' the values
+#' @param ncat The number of categories to be created for scaling values.
 #' @param breaks A vector of breaks for creating bins.
-#' @param group_scaling The column name that represents the grouping variable.
+#' @param label A vector of labels to represented the qtile
+#' @param group_scaling The column name that will be used for grouping the
+#' variable before scaling.
 #' @param scaling The scaling method to be used; "rank" or "absolute".
-#' @param time_dependent Logical. Should the visualization be time-dependent? The default is FALSE
-#' @param color The column name to be used in [ggplot2::aes()] for the plot function.
-#' @param label A vector of labels to represented each values.
 #'
-#' @return An animbook object:
-#'  \item{data}{A data frame in the categorized format}
-#'  \item{settings}{A list of settings to be used in the plot function, including gap,
-#'  xbreaks, label, scaling, time_dependent}
+#' @return A categorized data
 #'
 #' @details
-#' The function takes the input data and performs several operations to prepare it for visualizations.
-#' It groups data, scales values, and transformed it to categorized data along with the settings
-#' for the plot function.
+#' The function takes the input data and performs several operations to
+#' transformed it into categorized format. It is done by groups data, scales
+#' values, and assigned the qtile.
 #'
 #' @examples
+#' # rank scaling
 #' anim_prep(data = osiris, id = ID, values = sales, time = year)
 #'
+#' # group_rank scaling
 #' anim_prep(data = osiris, id = ID, values = sales, time = year,
 #' group_scaling = country)
 #'
+#' # absolute scaling
 #' anim_prep(data = osiris, id = ID, values = sales, time = year,
 #' scaling = "absolute")
 #'
+#' # group_absolute scaling
 #' anim_prep(data = osiris, id = ID, values = sales, time = year,
 #' group_scaling = country, scaling = "absolute")
 #'
@@ -43,25 +45,24 @@ anim_prep <- function(data,
                       id = NULL,
                       values = NULL,
                       time = NULL,
-                      ngroup = 5L,
+                      group = NULL,
+                      ncat = 5L,
                       breaks = NULL,
+                      label = NULL,
                       group_scaling = NULL,
-                      scaling = "rank",
-                      time_dependent = FALSE,
-                      color = NULL,
-                      label = NULL) {
+                      scaling = "rank") {
 
 
-# enquo -------------------------------------------------------------------
+  # enquo -------------------------------------------------------------------
 
   qid <- rlang::enquo(id)
   qvalues <- rlang::enquo(values)
   qtime <- rlang::enquo(time)
+  qgroup <- rlang::enquo(group)
   qgroup_scaling <- rlang::enquo(group_scaling)
-  qcolor <- rlang::enquo(color)
 
 
-# check column class ------------------------------------------------------
+  # check column class ------------------------------------------------------
 
   type <- sapply(data, class)
 
@@ -71,14 +72,14 @@ anim_prep <- function(data,
               rlang::as_label(qtime) != "NULL",
             "The id column needs to be a factor variable" =
               type[[rlang::as_label(qid)]] == "factor",
-            "The values column needs to be a numeric variable. If the values
-            the column is a category variable, try the anim_prep_cat function" =
+            "The values column needs to be a numeric variable. If the values column is a
+            category variable, try using the anim_prep_cat function" =
               type[[rlang::as_label(qvalues)]] == "numeric",
             "The time column needs to be an integer variable" =
               type[[rlang::as_label(qtime)]] == "integer")
 
 
-# scaling choices ---------------------------------------------------------
+  # scaling choices ---------------------------------------------------------
 
   scaling_choice <- c("rank", "absolute")
 
@@ -86,13 +87,16 @@ anim_prep <- function(data,
               scaling %in% c(scaling_choice))
 
 
-# group_scaling scale -----------------------------------------------------
+  # group_scaling scale -----------------------------------------------------
 
+  # if group scaling is provided
   if (rlang::as_label(qgroup_scaling) != "NULL") {
 
+    # check
     stopifnot("The group_scaling column needs to be a factor variable" =
                 type[[rlang::as_label(qgroup_scaling)]] == "factor")
 
+    # group_rank scaling
     if (scaling == "rank") {
 
       gdata_frame <- data |>
@@ -100,6 +104,7 @@ anim_prep <- function(data,
 
     }
 
+    # group_absolute scaling
     if (scaling == "absolute") {
 
       gdata_frame <- data |>
@@ -109,8 +114,10 @@ anim_prep <- function(data,
 
   }
 
+  # if group_scaling is not provided
   if (rlang::as_label(qgroup_scaling) == "NULL") {
 
+    # rank scaling
     if (scaling == "rank") {
 
       gdata_frame <- data |>
@@ -118,6 +125,7 @@ anim_prep <- function(data,
 
     }
 
+    # absolute scaling
     if (scaling == "absolute") {
 
       gdata_frame <- data
@@ -127,37 +135,38 @@ anim_prep <- function(data,
   }
 
 
-# assign the qtile --------------------------------------------------------
+  # assign the qtile --------------------------------------------------------
 
   # rank scaling
   if (scaling == "rank") {
 
-    book <- gdata_frame |>
-      # ranking the variable of interest
+    # ranking the variable of interest
+    rank <- gdata_frame |>
       dplyr::mutate(
         rank = as.integer(rank(!!qvalues)),
         rank = ifelse(is.na(!!qvalues), NA, rank),
         .keep = "unused"
       )
 
-    # default setting for breaks
+    # default settings for breaks
     if (is.null(breaks)) {
 
       min <- 0
       max <- 1
 
-      breaks <- seq(min, max, by = (max - min)/ngroup)
+      breaks <- seq(min, max, by = (max - min)/ncat)
 
     }
 
     # if the breaks vector is provided
-    else {
+    if (!is.null(breaks)) {
 
+      # check the vector
       stopifnot("The breaks argument only accepted vector" =
                   is.vector(breaks),
-                "The breaks vector must have the same number of groups as ngroup argument" =
-                  length(breaks) - 1 == ngroup,
-                "The breaks vector should not contain NA" =
+                "The breaks vector must have the same number of gouprs as ncat argument" =
+                  length(breaks) - 1 == ncat,
+                "The breaks vector should not contained NA" =
                   !is.na(breaks),
                 "The breaks values must be between 0 and 1" =
                   all(dplyr::between(breaks, 0, 1))
@@ -167,19 +176,20 @@ anim_prep <- function(data,
 
     }
 
-    book <- book |>
+    # rank categorized
+    scaling_data <- rank |>
       dplyr::mutate(
         min = ifelse(is.na(rank), NA, min(rank, na.rm = TRUE)),
         max = ifelse(is.na(rank), NA, max(rank, na.rm = TRUE)),
         normalize = (rank - min) / (max - min)
       ) |>
       dplyr::ungroup(!!qtime) |>
-      # split the rank into equal size bins
+      # splite the rank into bins
       dplyr::mutate(
         qtile = cut(normalize,
                     breaks,
                     include.lowest = TRUE,
-                    labels = rev(seq(1, ngroup, 1))),
+                    labels = rev(seq(1, ncat, 1))),
         qtile = ifelse(is.na(qtile), 0, as.integer(levels(qtile)[qtile])),
         .keep = "unused"
       ) |>
@@ -190,24 +200,25 @@ anim_prep <- function(data,
   # absolute scaling
   if (scaling == "absolute") {
 
-    # default setting for breaks
+    # default settings for breaks
     if (is.null(breaks)) {
 
       min <- 0
       max <- 1
 
-      breaks <- seq(min, max, by = (max - min)/ngroup)
+      breaks <- seq(min, max, by = (max - min)/ncat)
 
     }
 
     # if the breaks vector is provided
-    else {
+    if (!is.null(breaks)) {
 
+      # check the vector
       stopifnot("The breaks argument only accepted vector" =
                   is.vector(breaks),
-                "The breaks vector must have the same number of groups as ngroup argument" =
-                  length(breaks) - 1 == ngroup,
-                "The breaks vector should not contain NA" =
+                "The breaks vector must have the same number of gouprs as ncat argument" =
+                  length(breaks) - 1 == ncat,
+                "The breaks vector should not contained NA" =
                   !is.na(breaks),
                 "The breaks values must be between 0 and 1" =
                   all(dplyr::between(breaks, 0, 1))
@@ -217,17 +228,19 @@ anim_prep <- function(data,
 
     }
 
-    book <- gdata_frame |>
+    # absolute categorized
+    scaling_data <- gdata_frame |>
       dplyr::mutate(
         min = min(!!qvalues, na.rm = TRUE),
         max = max(!!qvalues, na.rm = TRUE),
         normalize = (!!qvalues - min) / (max - min)
       ) |>
+      # split the values into bins
       dplyr::mutate(
         qtile = cut(normalize,
                     breaks,
                     include.lowest = TRUE,
-                    labels = rev(seq(1, ngroup, 1))),
+                    labels = rev(seq(1, ncat, 1))),
         qtile = ifelse(is.na(qtile), 0, as.integer(levels(qtile)[qtile])),
         .keep = "unused"
       ) |>
@@ -235,113 +248,105 @@ anim_prep <- function(data,
 
   }
 
+  # labels ------------------------------------------------------------------
 
-# return the selected columns with the name changes -----------------------
+  y <- sort(unique(scaling_data$qtile), decreasing = TRUE)
+
+  # if label is NULL
+  if (is.null(label)) {
+    label <- as.character(y)
+  }
+
+  # if label length is greater than number of category
+  if (length(label) >= length(y)) {
+    label <- label[1:length(y)]
+  }
+
+  # if label length is less than number of category
+  if (length(label) < length(y)) {
+    label <- as.character(y)
+
+    warning("The length of the label provided is less than number of category")
+  }
+
+  label_lookup <- tibble::tibble(
+    qtile = sort(unique(scaling_data$qtile), decreasing = TRUE),
+    label = label
+  )
+
+  lab_data <- scaling_data |>
+    dplyr::left_join(label_lookup,
+                     by = "qtile")
+
+
+  # return the selected columns with the name changes -----------------------
 
   name <- tibble::tibble(
     old = c(rlang::as_label(qid), rlang::as_label(qtime),
-            rlang::as_label(qgroup_scaling), rlang::as_label(qcolor)),
-    new = c("id", "time", "group", "color")
-    )
+            rlang::as_label(qgroup), rlang::as_label(qgroup_scaling)),
+    new = c("id", "time", "group", "group_scaling")
+  )
 
   rename_vec <- stats::setNames(name$old, name$new)
 
   args_select <- c(rlang::as_label(qid),
                    rlang::as_label(qtime),
-                   "qtile")
+                   "qtile",
+                   "label")
 
-  # if group_scaling is not the same as color
-  if (rlang::as_label(qgroup_scaling) != rlang::as_label(qcolor)) {
+  # if group_scaling is not the same as group
+  if (rlang::as_label(qgroup_scaling) != rlang::as_label(qgroup)) {
 
-    # check if group_scaling is null or not
+    # if group_scaling is not NULL
     if (rlang::as_label(qgroup_scaling) != "NULL") {
 
       args_select <- c(args_select, rlang::as_label(qgroup_scaling))
 
     }
 
-    # check if color is null or not
-    if (rlang::as_label(qcolor) != "NULL") {
+    # if group is not NULL
+    if (rlang::as_label(qgroup) != "NULL") {
 
-      args_select <- c(args_select, rlang::as_label(qcolor))
+      args_select <- c(args_select, rlang::as_label(qgroup))
 
     }
 
-    # return animbook
-    animbook <- book |>
+    # categorized data
+    categorized <- lab_data |>
       dplyr::select(args_select) |>
       dplyr::rename(tidyselect::any_of(rename_vec))
 
   }
 
-  # if group_scaling is the same as color
-  if (rlang::as_label(qgroup_scaling) == rlang::as_label(qcolor)) {
+  # if group_scaling is the same as group
+  if (rlang::as_label(qgroup_scaling) == rlang::as_label(qgroup)) {
 
-    # if both is null
+    # if both is NULL
     if (rlang::as_label(qgroup_scaling) == "NULL") {
 
-      animbook <- book |>
+      # categorized data
+      categorized <- lab_data |>
         dplyr::select(args_select) |>
         dplyr::rename(tidyselect::any_of(rename_vec))
 
     }
 
-    # if both is not null
-    else {
+    # if both is not NULL
+    if (rlang::as_label(qgroup_scaling) != "NULL") {
 
       args_select <- c(args_select, rlang::as_label(qgroup_scaling))
 
-      animbook <- book |>
+      # categorized data
+      categorized <- lab_data |>
         dplyr::select(args_select) |>
         dplyr::rename(tidyselect::any_of(rename_vec)) |>
-        dplyr::mutate(color = group)
+        dplyr::mutate(group = group_scaling)
 
     }
-
   }
 
+  class(categorized) <- c("tbl_df", "tbl", "data.frame", "categorized")
 
-# gap settings ------------------------------------------------------------
-
-  x <- dplyr::pull(unique(book[, rlang::as_label(qtime)]))
-
-  gap <- 0.1 * (length(x) - 1)
-
-
-# labels ------------------------------------------------------------------
-
-  y <- sort(unique(animbook$qtile), decreasing = TRUE)
-
-  if (is.null(label)) {
-    label <- as.character(y)
-  }
-
-  if (length(label) >= length(y)) {
-    label <- label[1:length(y)]
-  }
-
-  if (length(label) < length(y)) {
-    label <- as.character(y)
-
-    warning("The length of the label provided is less than the length of y")
-  }
-
-
-# return an animbook object -----------------------------------------------
-
-  object <- list(data = animbook,
-                 settings = list(
-                   gap = gap,
-                   xbreaks = x,
-                   label = as.character(label),
-                   breaks_scales = breaks,
-                   time_dependent = time_dependent
-                 ))
-
-  class(object) <- "categorized"
-
-  message("You can now pass the object to the plot function.")
-
-  return(object)
+  return(categorized)
 
 }

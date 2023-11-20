@@ -1,5 +1,6 @@
 utils::globalVariables(
   c(
+    "object",
     "frame",
     "qtile",
     "group",
@@ -17,6 +18,7 @@ utils::globalVariables(
     "0",
     "1",
     "normalize",
-    "draw"
+    "draw",
+    "unique_qtiles"
   )
   )

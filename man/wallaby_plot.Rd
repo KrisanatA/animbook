@@ -5,10 +5,11 @@
 \title{Turn the data into a subset plot for animate function}
 \usage{
 wallaby_plot(
-  object,
-  group_palette = RColorBrewer::brewer.pal(9, "Set1"),
-  shade_palette = RColorBrewer::brewer.pal(9, "Set1"),
-  rendering = "ggplot",
+  data,
+  group_palette = NULL,
+  shade_palette = NULL,
+  rendering = "gganimate",
+  time_dependent = FALSE,
   subset = "top",
   relation = "one_many",
   total_point = NULL,
@@ -17,43 +18,52 @@ wallaby_plot(
 )
 }
 \arguments{
-\item{object}{The categorized object returned from the prep function}
+\item{data}{The categorized data.}
 
-\item{group_palette}{The vector of the palette used by the function to supply the color to each group.}
+\item{group_palette}{The vector of palette used by the function to supply
+the color of each group.}
 
-\item{shade_palette}{The vector of the palette used by the function to supply the color to the shaded area.}
+\item{shade_palette}{The vector of palette used by the function to supply
+the color of each shaded area.}
 
-\item{rendering}{The choice of method used to create and display the plot, either gganimate or
-plotly.}
+\item{rendering}{The choice of method used to create and disply the plot,
+either gganimate or plotly.}
 
-\item{subset}{A character string specifying the variable used for subsetting the data. The "top"
-and "bottom" strings can also be used in this argument.}
+\item{time_dependent}{Logical. Should the visualization be time-dependent?
+The default is FALSE}
 
-\item{relation}{The choice of relationship for the values to display on the plot, either "one_many."
-or "many_one."}
+\item{subset}{A character string specifying the variable used for subsetting
+the data. The "top" and "bottom" strings can also be used in this argument.}
 
-\item{total_point}{The number of points the users want for the wallaby plot. The default is NULL, the number
-of the point is equal to the original number of points.}
+\item{relation}{The choice of relationship for the values to display on the
+plot, either "one_many" or "many_one."}
+
+\item{total_point}{The number of points the users want for the wallaby plot.
+The default is NULL, the number of the point is equal to the original number
+of points.}
 
 \item{x_lab}{The label for the x-axis.}
 
-\item{...}{Additional arguments for customization, see details for more information.}
+\item{...}{Additional arguments for customization, see datails for more
+information.}
 }
 \value{
 Return a ggplot object
 }
 \description{
-This function takes in the data which has been prepared by the \code{\link[=anim_prep]{anim_prep()}} or \code{\link[=anim_prep_cat]{anim_prep_cat()}}
-and return the ggplot object. The user can still modify the plot the same as normal ggplot.
+This function takes in the data which has been prepared by the \code{\link[=anim_prep]{anim_prep()}}
+or \code{\link[=anim_prep_cat]{anim_prep_cat()}} and return the ggplot object. The user can still modify
+the plot the same as normal.
 }
 \details{
-This function takes prepared data and generates a ggplot object.
-The wallaby plot is the Sankey flow plot that shows the movement of the subset data.
-The point position and point size in the shaded area can be controlled using additional arguments such
-height, width, and size. For the shading area, the alpha argument can be used.
+This function takes categorized data and generated a ggplot object.
+The wallaby plot is the plot that shows the movement of the subset data
+between the start and end of observable period. The point position and point
+size in the shaded area can be controlled using additional arguments such as
+height, width, and size. For the shadeing area, the alpha argument can be used.
 }
 \examples{
-animbook <- anim_prep(data = osiris, id = ID, values = sales, time = year, color = japan)
+animbook <- anim_prep(data = osiris, id = ID, values = sales, time = year, group = japan)
 
 wallaby_plot(animbook)
 

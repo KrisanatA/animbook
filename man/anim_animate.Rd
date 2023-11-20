@@ -4,24 +4,21 @@
 \alias{anim_animate}
 \title{Modified the ggplot object}
 \usage{
-anim_animate(plot, modify = FALSE)
+anim_animate(plot)
 }
 \arguments{
 \item{plot}{ggplot object}
-
-\item{modify}{Default is FALSE, which supplied the function needed for the rendering
-package.}
 }
 \value{
 A gganimate object if the rendering is gganimate or a ggplot object if
 the rendering is plotly.
 }
 \description{
-This function, by default will modify the ggplot object before the user can
+This function will modify the ggplot object before the user can
 pass it to the rendering of choice.
 }
 \examples{
-animbook <- anim_prep(data = osiris, id = ID, values = sales, time = year, color = japan)
+animbook <- anim_prep(data = osiris, id = ID, values = sales, time = year, group = japan)
 
 plot <- wallaby_plot(animbook)
 

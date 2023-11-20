@@ -55,7 +55,7 @@
 #'
 #' @examples
 #' d <- anim_prep_cat(cat_change, id = id, values = qnt,
-#' time = time, color = gp, time_dependent = FALSE)
+#' time = time, group = gp)
 #'
 #' d_p <- wallaby_plot(d, height = 1)
 #'
@@ -78,7 +78,7 @@
 #'
 #' @examples
 #' d <- anim_prep(dbl_change, id = id, values = values,
-#' time = time, color = gp, time_dependent = FALSE)
+#' time = time, group = gp)
 #'
 #' d_p <- wallaby_plot(d, height = 1)
 #'

@@ -1,17 +1,15 @@
 #' Modified the ggplot object
 #'
-#' This function, by default will modify the ggplot object before the user can
+#' This function will modify the ggplot object before the user can
 #' pass it to the rendering of choice.
 #'
 #' @param plot ggplot object
-#' @param modify Default is FALSE, which supplied the function needed for the rendering
-#' package.
 #'
 #' @return A gganimate object if the rendering is gganimate or a ggplot object if
 #' the rendering is plotly.
 #'
 #' @examples
-#' animbook <- anim_prep(data = osiris, id = ID, values = sales, time = year, color = japan)
+#' animbook <- anim_prep(data = osiris, id = ID, values = sales, time = year, group = japan)
 #'
 #' plot <- wallaby_plot(animbook)
 #'
@@ -22,59 +20,46 @@
 #' @import gganimate plotly
 #' @export
 
-anim_animate <- function(plot, modify = FALSE) {
+anim_animate <- function(plot) {
 
   stopifnot("This function only accepted an animated object." =
               "animated" %in% class(plot))
 
-  plotly <- all(c("ids", "frame") %in% names(plot$labels))
+  if (any("gganimate" %in% class(plot)) & any("kangaroo" %in% class(plot))) {
 
-  if (plotly == TRUE) {
+    width <- plot$plot_env$width
 
-    if (modify == FALSE) {
+    x <- unique(plot$plot_env$data$time)
 
-      message("You can now pass it to plotly::ggplotly()")
+    nframes <- (width * (length(x) - 1)) + 40
 
-      return(
-        plot |>
-          plotly::animation_opts(1000)
-      )
+    message(paste0("You can now pass it to gganimate::animate(). The recommend
+            settings for nframes is ", nframes - 1, "."))
 
-    }
-
-    if (modify == TRUE) {
-
-      message("Please supply plotly function before pass it to plotly::ggplotly()")
-
-      return(
-        plot
-      )
-    }
-
-
+    return(plot +
+             gganimate::transition_time(frame))
   }
 
-  if (plotly == FALSE) {
+  if (any("gganimate" %in% class(plot)) & any("wallaby" %in% class(plot))) {
 
-    if (modify == FALSE) {
+    width <- plot$plot_env$width
 
-      message("You can now pass it to gganimate::animate()")
+    nframes <- width + 40
 
-      return(
-        plot +
-          gganimate::transition_time(frame)
-      )
-    }
+    message(paste0("You can now pass it to gganimate::animate(). The recommend
+            settings for nframes is ", nframes - 1, "."))
 
-    if (modify == TRUE) {
+    return(plot +
+             gganimate::transition_time(frame))
+  }
 
-      message("Please supply gganimate function before pass it to gganimate::animate()")
+  if (any("plotly" %in% class(plot))) {
+    message("You can now pass it to plotly::ggplotly()")
 
-      return(
-        plot
-      )
-    }
-
+    return(
+      plot |>
+        plotly::animation_opts(1000)
+    )
   }
 
 }

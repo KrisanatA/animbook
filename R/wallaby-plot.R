@@ -1,32 +1,40 @@
 #' Turn the data into a subset plot for animate function
 #'
-#' This function takes in the data which has been prepared by the [anim_prep()] or [anim_prep_cat()]
-#' and return the ggplot object. The user can still modify the plot the same as normal ggplot.
+#' This function takes in the data which has been prepared by the [anim_prep()]
+#' or [anim_prep_cat()] and return the ggplot object. The user can still modify
+#' the plot the same as normal.
 #'
-#' @param object The categorized object returned from the prep function
-#' @param group_palette The vector of the palette used by the function to supply the color to each group.
-#' @param shade_palette The vector of the palette used by the function to supply the color to the shaded area.
-#' @param rendering The choice of method used to create and display the plot, either gganimate or
-#' plotly.
-#' @param subset A character string specifying the variable used for subsetting the data. The "top"
-#' and "bottom" strings can also be used in this argument.
-#' @param relation The choice of relationship for the values to display on the plot, either "one_many."
-#' or "many_one."
-#' @param total_point The number of points the users want for the wallaby plot. The default is NULL, the number
-#' of the point is equal to the original number of points.
+#' @param data The categorized data.
+#' @param group_palette The vector of palette used by the function to supply
+#' the color of each group.
+#' @param shade_palette The vector of palette used by the function to supply
+#' the color of each shaded area.
+#' @param rendering The choice of method used to create and disply the plot,
+#' either gganimate or plotly.
+#' @param time_dependent Logical. Should the visualization be time-dependent?
+#' The default is FALSE
+#' @param subset A character string specifying the variable used for subsetting
+#' the data. The "top" and "bottom" strings can also be used in this argument.
+#' @param relation The choice of relationship for the values to display on the
+#' plot, either "one_many" or "many_one."
+#' @param total_point The number of points the users want for the wallaby plot.
+#' The default is NULL, the number of the point is equal to the original number
+#' of points.
 #' @param x_lab The label for the x-axis.
-#' @param ... Additional arguments for customization, see details for more information.
+#' @param ... Additional arguments for customization, see datails for more
+#' information.
 #'
 #' @return Return a ggplot object
 #'
 #' @details
-#' This function takes prepared data and generates a ggplot object.
-#' The wallaby plot is the Sankey flow plot that shows the movement of the subset data.
-#' The point position and point size in the shaded area can be controlled using additional arguments such
-#' height, width, and size. For the shading area, the alpha argument can be used.
+#' This function takes categorized data and generated a ggplot object.
+#' The wallaby plot is the plot that shows the movement of the subset data
+#' between the start and end of observable period. The point position and point
+#' size in the shaded area can be controlled using additional arguments such as
+#' height, width, and size. For the shadeing area, the alpha argument can be used.
 #'
 #' @examples
-#' animbook <- anim_prep(data = osiris, id = ID, values = sales, time = year, color = japan)
+#' animbook <- anim_prep(data = osiris, id = ID, values = sales, time = year, group = japan)
 #'
 #' wallaby_plot(animbook)
 #'
@@ -34,25 +42,27 @@
 #'
 #' @export
 
-wallaby_plot <- function(object,
-                         group_palette = RColorBrewer::brewer.pal(9, "Set1"),
-                         shade_palette = RColorBrewer::brewer.pal(9, "Set1"),
-                         rendering = "ggplot",
-                         subset = "top",
-                         relation = "one_many",
-                         total_point = NULL,
-                         x_lab = NULL,
-                         ...) {
+wallaby_plot <- function(data,
+                        group_palette = NULL,
+                        shade_palette = NULL,
+                        rendering = "gganimate",
+                        time_dependent = FALSE,
+                        subset = "top",
+                        relation = "one_many",
+                        total_point = NULL,
+                        x_lab = NULL,
+                        ...) {
 
-  col_group <- group_palette
-  col_shade <- shade_palette
 
-  rendering_choice <- c("ggplot", "plotly")
+  # check -------------------------------------------------------------------
 
-  stopifnot("Please use the anim_prep function to convert data into an categorized class object" =
-              class(object) == "categorized",
-            "The rendering argument can only be either ggplot or plotly" =
+  rendering_choice <- c("gganimate", "plotly")
+
+  stopifnot("The rendering argument can only be either gganimate or plotly" =
               rendering %in% rendering_choice)
+
+
+  # x label -----------------------------------------------------------------
 
   if (is.null(x_lab)) {
     x_lab <- c("", "")
@@ -76,7 +86,37 @@ wallaby_plot <- function(object,
   }
 
 
-# ... arguments -----------------------------------------------------------
+  # group color palette -----------------------------------------------------
+
+  if (is.null(group_palette)) {
+    group_palette <- RColorBrewer::brewer.pal(9, "Set1")
+  }
+
+  if (!is.null(group_palette)) {
+    group_palette <- group_palette
+  }
+
+
+  # shade color palette -----------------------------------------------------
+
+  if (is.null(shade_palette)) {
+    shade_palette <- c("#bbbbbb",
+                       "#aaaaaa",
+                       "#999999",
+                       "#888888",
+                       "#777777",
+                       "#666666",
+                       "#555555",
+                       "#444444",
+                       "#333333")
+  }
+
+  if (!is.null(shade_palette)) {
+    shade_palette <- shade_palette
+  }
+
+
+  # ... arguments -----------------------------------------------------------
 
   args <- list(...)
 
@@ -91,7 +131,7 @@ wallaby_plot <- function(object,
   width <- 50L
 
   if (!is.null(args[["width"]])) {
-    width <- args[["width"]]
+    width <- as.integer(args[["width"]])
   }
 
   # alpha settings for paths shading
@@ -101,7 +141,7 @@ wallaby_plot <- function(object,
     alpha <- args[["alpha"]]
   }
 
-  # size settings for geom_point
+  # size settings for point
   size <- 2
 
   if (!is.null(args[["size"]])) {
@@ -116,23 +156,27 @@ wallaby_plot <- function(object,
   }
 
 
-# format data -------------------------------------------------------------
+  # format data -------------------------------------------------------------
 
-  object <- wallaby_data(object, subset = subset, relation = relation,
-                         height = height, width = width,
-                         total_point = total_point)
+  object <- wallaby_data(data = data,
+                        subset = subset,
+                        relation = relation,
+                        time_dependent = time_dependent,
+                        height = height,
+                        width = width,
+                        total_point = total_point)
 
 
-# variable main aes() -----------------------------------------------------
+  # variable main aes() -----------------------------------------------------
 
-  if (rendering == "ggplot") {
+  if (rendering == "gganimate") {
 
-    if ("color" %in% colnames(object[["data"]])) {
+    if ("group" %in% colnames(object[["data"]])) {
       aes_list <- list(
         x = quote(x),
         y = quote(y),
         group = quote(id),
-        color = quote(color)
+        color = quote(group)
       )
     }
 
@@ -147,11 +191,11 @@ wallaby_plot <- function(object,
 
   if (rendering == "plotly") {
 
-    if ("color" %in% colnames(object[["data"]])) {
+    if ("group" %in% colnames(object[["data"]])) {
       aes_list <- list(
         x = quote(x),
         y = quote(y),
-        color = quote(color),
+        color = quote(group),
         ids = quote(id),
         frame = quote(frame)
       )
@@ -168,7 +212,7 @@ wallaby_plot <- function(object,
   }
 
 
-# draw plot ---------------------------------------------------------------
+  # draw plot ---------------------------------------------------------------
 
   # the data point
   australia <- ggplot2::ggplot() +
@@ -186,11 +230,11 @@ wallaby_plot <- function(object,
                                        group = id,
                                        fill = as.factor(id)),
                           alpha = alpha) +
-    ggplot2::geom_text(data = object[["label_data"]]$right,
+    ggplot2::geom_text(data = object[["left_data"]],
                        ggplot2::aes(x = x,
                                     y = y,
                                     label = label)) +
-    ggplot2::geom_text(data = object[["label_data"]]$left,
+    ggplot2::geom_text(data = object[["right_data"]],
                        ggplot2::aes(x = x,
                                     y = y,
                                     label = label)) |>
@@ -211,378 +255,14 @@ wallaby_plot <- function(object,
                    legend.position = "bottom",
                    legend.title = element_blank()) +
     ggplot2::guides(fill = "none") +
-    ggplot2::scale_fill_manual(values = col_shade) +
-    ggplot2::scale_colour_manual(values = col_group)
+    ggplot2::scale_fill_manual(values = shade_palette) +
+    ggplot2::scale_colour_manual(values = group_palette)
 
   message("You can now used the animbook::anim_animate() function to transformed it
           to an animated object.")
 
-  class(anim) <- c("ggplot", "gg", "animated", "wallaby")
+  class(anim) <- c("ggplot", "gg", "animated", "wallaby", rendering)
 
   return(anim)
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-#' Wallaby plot data
-#'
-#' This function performs data manipulation and formatting tasks
-#' from the categorized data to animated format with additional data components for labeling and shading.
-#'
-#' @param object An categorized object
-#' @param subset A character string specifying the variable used for subsetting the data. The "top"
-#' and "bottom" strings can also be used in this argument.
-#' @param relation The choice of relationship for the values to display on the plot, either "one_many."
-#' or "many_one."
-#' @param height The proportion the point takes in the shaded area.
-#' @param width The number that controls the runif_max to specify how far apart each point is.
-#' @param total_point The number of points the users want for the wallaby plot. The default is NULL, the number
-#' of the point is equal to the original number of points.
-#'
-#' @return An animated object with additional data components
-#'
-#' @details The function takes the categorized object and then subsets the data based on the users.
-#' Additionally, it creates a label data and shading data for the [wallaby_plot()] function. All
-#' of this then replaced the original data and appended new data to the object.
-#'
-#' @importFrom rlang .data
-#'
-#' @keywords internal
-
-wallaby_data <- function(object,
-                         subset = "top",
-                         relation = "one_many",
-                         height = 0.6,
-                         width = 50,
-                         total_point = NULL) {
-
-
-# stop --------------------------------------------------------------------
-
-  stopifnot("height argument only accepted proportion between 0 and 1" =
-              dplyr::between(height, 0, 1),
-            "Please use the prep function to convert the data into categorized class object" =
-              class(object) == "categorized")
-
-# subset choice -----------------------------------------------------------
-
-  choice <- as.character(object[["settings"]]$label)
-
-  subset_choice <- c("top", "bottom", choice)
-
-  if (!(subset %in% subset_choice)) {
-    stop(paste0("subset can only be the following: ",
-                paste0(subset_choice, collapse = ", ")))
-  }
-
-
-# relation choice ---------------------------------------------------------
-
-  relation_choice <- c("one_many", "many_one")
-
-  stopifnot("relation can only be the following: one_many, many_one" =
-              relation %in% relation_choice)
-
-
-# data --------------------------------------------------------------------
-
-  data <- object[["data"]]
-
-  unique_qtiles <- as.numeric(sort(unique(data$qtile), decreasing = TRUE))
-
-  y_label <- object[["settings"]]$label
-
-  match_table <- tibble::tibble(unique_qtiles = unique_qtiles,
-                                y_label = y_label)
-
-
-# subset argument ---------------------------------------------------------
-
-  if (subset == "top") {
-    subset_qtile <- max(unique_qtiles)
-
-    label_subset <- y_label[1]
-  }
-
-  if (subset == "bottom") {
-    subset_qtile <- min(unique_qtiles)
-
-    label_subset <- y_label[length(y_label)]
-  }
-
-  if (subset %in% choice) {
-    subset_qtile <- match_table |>
-      dplyr::filter(y_label == subset) |>
-      dplyr::pull(unique_qtiles)
-
-    label_subset <- subset
-  }
-
-
-# relation argument -------------------------------------------------------
-
-  if (relation == "one_many") {
-    time_subset <- min(data$time)
-
-    y_left <- subset_qtile
-
-    y_right <- unique_qtiles
-
-    label_left <- label_subset
-
-    label_right <- y_label
-
-    position <- "left"
-  }
-
-  if (relation == "many_one") {
-    time_subset <- max(data$time)
-
-    y_left <- unique_qtiles
-
-    y_right <- subset_qtile
-
-    label_left <- y_label
-
-    label_right <- label_subset
-
-    position <- "right"
-  }
-
-
-# filter data -------------------------------------------------------------
-
-  subset_id <- data |>
-    dplyr::filter(time == time_subset,
-                  qtile == subset_qtile) |>
-    dplyr::pull(id)
-
-  filter_data <- data |>
-    dplyr::filter(id %in% subset_id) |>
-    dplyr::mutate(time = dplyr::case_when(time == min(time) ~ 0,
-                                          time == max(time) ~ 1)) |>
-    stats::na.omit()
-
-  object[["settings"]]$xbreaks <- c(0, 1)
-
-
-# create label data -------------------------------------------------------
-
-  gap <- 0.1 * length(unique(filter_data$time) - 1)
-
-  object[["settings"]]$gap <- gap
-
-  left <- tibble::tibble(
-    x = min(filter_data$time) - gap,
-    y = y_left,
-    label = label_left
-  )
-
-  right <- tibble::tibble(
-    x = max(filter_data$time) + gap,
-    y = y_right,
-    label = label_right
-  )
-
-  label_data <- list(left, right)
-
-
-# calculate proportion ----------------------------------------------------
-
-  if (relation == "one_many") {
-    prop_time <- max(filter_data$time)
-
-    x_point <- min(filter_data$time)
-  }
-
-  if (relation == "many_one") {
-    prop_time <- min(filter_data$time)
-
-    x_point <- max(filter_data$time)
-  }
-
-  prop_table <- filter_data |>
-    dplyr::filter(time == prop_time) |>
-    dplyr::count(qtile) |>
-    dplyr::mutate(prop = n/sum(n),
-                  prop = ifelse(prop < 0.1, 0.1, prop)) |>
-    dplyr::arrange(dplyr::desc(qtile))
-
-  prop <- dplyr::pull(prop_table, prop)
-
-
-# create shading data -----------------------------------------------------
-
-  initial <- subset_qtile + sum(prop)/2
-
-  shading_y <- dplyr::pull(prop_table, qtile) + (prop/2)
-
-  shade_data <- sankey_shade(initial = initial,
-                             proportion = prop,
-                             y = shading_y,
-                             position = position)
-
-
-# interpolate data --------------------------------------------------------
-
-  if ("color" %in% colnames(object[["data"]])) {
-    count_list <- list(
-      quote(qtile),
-      quote(color)
-    )
-  }
-
-  else {
-    count_list <- list(
-      quote(qtile)
-    )
-  }
-
-  if (is.null(total_point)) {
-    total_point <- nrow(filter_data)
-  }
-
-  if (!is.null(total_point) & total_point <= nrow(filter_data)) {
-    total_point <- nrow(filter_data)
-  }
-
-  if (!is.null(total_point) & total_point > nrow(filter_data)) {
-    total_point <- total_point
-  }
-
-  count_data <- filter_data |>
-    dplyr::filter(time == prop_time) |>
-    dplyr::count(!!!count_list) |>
-    dplyr::arrange(dplyr::desc(n))
-
-  n_point <- count_data |>
-    dplyr::mutate(prop = n/sum(n),
-                  n_point = ceiling(total_point * prop)) |>
-    dplyr::pull(n_point)
-
-  interpolate_data <- count_data |>
-    dplyr::select(-n) |>
-    dplyr::slice(rep(1:dplyr::n(), times = n_point)) |>
-    dplyr::mutate(id = dplyr::row_number())
-
-
-# change the start or end point of the subset data ------------------------
-
-  new_point <- shade_data |>
-    dplyr::group_by(id) |>
-    dplyr::filter(x == x_point) |>
-    dplyr::summarise(point = mean(y)) |>
-    dplyr::arrange(point) |>
-    dplyr::select(point)
-
-  qtile <- filter_data |>
-    dplyr::filter(time == prop_time) |>
-    dplyr::distinct(qtile) |>
-    dplyr::arrange(qtile)
-
-  lookup_newpoint <- tibble::tibble(cbind(qtile, new_point))
-
-  if (relation == "one_many") {
-    new_data <- interpolate_data |>
-      dplyr::left_join(lookup_newpoint,
-                       by = "qtile") |>
-      dplyr::rename(`0` = point,
-                    `1` = qtile) |>
-      tidyr::pivot_longer(c(`0`, `1`),
-                          names_to = "time",
-                          values_to = "qtile") |>
-      dplyr::mutate(time = as.numeric(time))
-  }
-
-  if (relation == "many_one") {
-    new_data <- interpolate_data |>
-      dplyr::left_join(lookup_newpoint,
-                       by = "qtile") |>
-      dplyr::rename(`1` = point,
-                    `0` = qtile) |>
-      tidyr::pivot_longer(c(`0`, `1`),
-                          names_to = "time",
-                          values_to = "qtile") |>
-      dplyr::mutate(time = as.numeric(time))
-  }
-
-
-# create path -------------------------------------------------------------
-
-  path <- new_data |>
-    tidyr::pivot_wider(id_cols = id,
-                       names_from = time,
-                       values_from = qtile) |>
-    dplyr::mutate(xstart = 0, xend = 1) |>
-    dplyr::group_by(id) |>
-    dplyr::mutate(path = purrr::map(.data, ~sine(xstart, xend,
-                                                 `0`, `1`,
-                                                 n = 40))) |>
-    dplyr::select(id, path) |>
-    tidyr::unnest(cols = path)
-
-
-# calculate frame ---------------------------------------------------------
-
-  if (object[["settings"]]$time_dependent == TRUE) {
-    data <- path |>
-      dplyr::mutate(
-        frame = dplyr::row_number()
-      )
-  }
-
-  if (object[["settings"]]$time_dependent == FALSE) {
-    data <- path |>
-      dplyr::mutate(
-        frame = dplyr::row_number(),
-        frame = frame + floor(stats::runif(1,
-                                           1,
-                                           width))
-      )
-  }
-
-
-# join the missing information --------------------------------------------
-
-  information <- new_data |>
-    dplyr::select(-time) |>
-    dplyr::left_join(prop_table, by = "qtile") |>
-    dplyr::select(-c(qtile, n)) |>
-    dplyr::distinct() |>
-    stats::na.omit()
-
-  wallaby_data <- data |>
-    dplyr::left_join(information,
-                     by = "id") |>
-    dplyr::mutate(y = y + stats::runif(1, -prop * (height/2), prop * (height/2)))
-
-
-# output ------------------------------------------------------------------
-
-  object[["data"]] <- wallaby_data
-
-  wallaby <- append(object, list(label_data, shade_data))
-
-  names(wallaby) <- c("data", "settings", "label_data", "shade_data")
-
-  names(wallaby$label_data) <- c("left", "right")
-
-  return(wallaby)
-
-}
-
-
-
-
-
