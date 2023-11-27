@@ -339,8 +339,7 @@ anim_prep <- function(data,
       # categorized data
       categorized <- lab_data |>
         dplyr::select(args_select) |>
-        dplyr::rename(tidyselect::any_of(rename_vec)) |>
-        dplyr::mutate(group = group_scaling)
+        dplyr::rename(tidyselect::any_of(rename_vec))
 
     }
   }
