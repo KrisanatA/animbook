@@ -7,10 +7,10 @@
 kangaroo_draw(df)
 }
 \arguments{
-\item{df}{A data frame}
+\item{df}{A data frame.}
 }
 \value{
-A mapped data
+A mapped data.
 }
 \description{
 This function is used to interpolate the path for the kangaroo plot.

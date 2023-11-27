@@ -1,17 +1,17 @@
-#' Sankey shade data
+#' Proportional shaded data
 #'
-#' This function creates a shaded Sankey using the specified parameters.
+#' This function creates a proportional shaded data using the specified parameters.
 #'
-#' @param initial A numerical of initial values for the Sankey shade.
+#' @param initial A numerical of initial values for the proportional shade.
 #' @param proportion A vector of proportions corresponding to each group.
-#' @param y A numeric vector specifying the vertical position of the Sankey diagram.
-#' @param position A character string specifying the side of the Sankey diagram.
+#' @param y A numeric vector specifying the vertical position of the shade diagram.
+#' @param position A character string specifying the side of the shade diagram.
 #' This needs to be either "left" (default) or "right".
 #'
-#' @return A data frame of the shaded Sankey diagram.
+#' @return A data frame of the proportional shaded diagram.
 #'
 #' @examples
-#' data <- sankey_shade(4, c(0.4, 0.3, 0.2, 0.1), c(4, 3, 2, 1))
+#' data <- proportional_shade(4, c(0.4, 0.3, 0.2, 0.1), c(4, 3, 2, 1))
 #'
 #' ggplot2::ggplot(data = data, ggplot2::aes(x = x, y = y, group = id, fill = as.factor(id))) +
 #'   ggplot2::geom_polygon(alpha = 0.1)
@@ -20,7 +20,7 @@
 #'
 #' @export
 
-sankey_shade <- function(initial = NULL,
+proportional_shade <- function(initial = NULL,
                          proportion = NULL,
                          y = NULL,
                          position = "left") {

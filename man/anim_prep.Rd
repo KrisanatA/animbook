@@ -22,18 +22,18 @@ anim_prep(
 
 \item{id}{The column name that represents the identifiers variable.}
 
-\item{values}{The column name the contains the numeric values.}
+\item{values}{The column name contains the numeric values.}
 
 \item{time}{The column name that represents the time variable.}
 
-\item{group}{The column name that represents the distinguish group between
-the values}
+\item{group}{The column name that represents the distinguished group between
+the values.}
 
 \item{ncat}{The number of categories to be created for scaling values.}
 
 \item{breaks}{A vector of breaks for creating bins.}
 
-\item{label}{A vector of labels to represented the qtile}
+\item{label}{A vector of labels to represent the qtile.}
 
 \item{group_scaling}{The column name that will be used for grouping the
 variable before scaling.}
@@ -41,7 +41,7 @@ variable before scaling.}
 \item{scaling}{The scaling method to be used; "rank" or "absolute".}
 }
 \value{
-A categorized data
+A categorized data.
 }
 \description{
 This function transformed the numerical data into the categorized format by
@@ -49,7 +49,7 @@ grouping data and scaling values.
 }
 \details{
 The function takes the input data and performs several operations to
-transformed it into categorized format. It is done by groups data, scales
+transformed it into categorized format. It is done by grouping data, scales
 values, and assigned the qtile.
 }
 \examples{

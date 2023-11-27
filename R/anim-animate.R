@@ -22,7 +22,7 @@
 
 anim_animate <- function(plot) {
 
-  stopifnot("This function only accepted an animated object." =
+  stopifnot("This function only accepted an animated object" =
               "animated" %in% class(plot))
 
   if (any("gganimate" %in% class(plot)) & any("kangaroo" %in% class(plot))) {
@@ -31,10 +31,10 @@ anim_animate <- function(plot) {
 
     x <- unique(plot$plot_env$data$time)
 
-    nframes <- (width * (length(x) - 1)) + 40
+    nframes <- (width * (length(x) - 1)) + 15
 
-    message(paste0("You can now pass it to gganimate::animate(). The recommend
-            settings for nframes is ", nframes - 1, "."))
+    message(paste0("You can now pass it to gganimate::animate().
+                   The recommended setting is nframes = ", nframes - 1))
 
     return(plot +
              gganimate::transition_time(frame))
@@ -46,8 +46,8 @@ anim_animate <- function(plot) {
 
     nframes <- width + 40
 
-    message(paste0("You can now pass it to gganimate::animate(). The recommend
-            settings for nframes is ", nframes - 1, "."))
+    message(paste0("You can now pass it to gganimate::animate().
+                   The recommended setting is nframes = ", nframes - 1))
 
     return(plot +
              gganimate::transition_time(frame))

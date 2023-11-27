@@ -15,7 +15,7 @@ wallaby_data(
 )
 }
 \arguments{
-\item{data}{The categorized data}
+\item{data}{The categorized data.}
 
 \item{subset}{A character string specifying the variable used for subsetting
 the data. The "top" and "bottom" strings can also be used in this argument.}
@@ -23,8 +23,8 @@ the data. The "top" and "bottom" strings can also be used in this argument.}
 \item{relation}{The choice of relationship for the values to display on the
 plot, either "one_many" or "many_one."}
 
-\item{time_dependent}{Logical. Should the visualizations be time_dependent?
-The default is FALSE}
+\item{time_dependent}{Logical. Should the visualizations be time-dependent?
+The default is FALSE.}
 
 \item{height}{The proportion the point takes in the shaded area.}
 
@@ -32,19 +32,19 @@ The default is FALSE}
 each point is.}
 
 \item{total_point}{The number of points the users want for the wallaby plot.
-The default is NULL, the number of the point is equal to the original number
-of points}
+The default is NULL, where the number of the point is equal to the original number
+of points.}
 }
 \value{
 An object contained the modified data with additional data components.
 }
 \description{
-This function preforms data manipulation and path interpolation of the
-categorized data. This incldes additional data componnts for labeling and
+This function performs data manipulation and path interpolation of the
+categorized data. This includes additional data components for labeling and
 shading.
 }
 \details{
-The function takes the categorized object and interpolated the path
-for each observation. Additionall the label and shading data are created.
+The function takes the categorized object and interpolates the path
+for each observation. Additionally, the label and shading data are created.
 }
 \keyword{internal}

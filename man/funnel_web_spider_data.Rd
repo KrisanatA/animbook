@@ -7,10 +7,10 @@
 funnel_web_spider_data(data)
 }
 \arguments{
-\item{object}{An animbook object}
+\item{object}{An animbook object.}
 }
 \value{
-A modified animbook object
+A modified animbook object.
 }
 \description{
 This function performs data manipulation for facetting.

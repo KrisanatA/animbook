@@ -7,10 +7,10 @@
 kangaroo_data(data, time_dependent = FALSE, height = 0.6, width = 50L)
 }
 \arguments{
-\item{data}{The categorized data}
+\item{data}{The categorized data.}
 
 \item{time_dependent}{Logical. Should the visualization be time-dependent?
-The default is FALSE}
+The default is FALSE.}
 
 \item{height}{The proportion the point takes in the shaded area.}
 
@@ -26,7 +26,7 @@ categorized data. This includes additional data components for labeling
 and shading.
 }
 \details{
-The function takes the categorized object and interpolated the path
-for each observation. Additionally the label and shading data are created.
+The function takes the categorized object and interpolates the path
+for each observation. Additionally, the label and shading data are created.
 }
 \keyword{internal}

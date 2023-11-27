@@ -1,18 +1,18 @@
-#' Transformed category data into categorized format
+#' Transformed category data into a categorized format
 #'
 #' This function transformed the category data in the categorized format by
 #' ordering the values.
 #'
 #' @param data A data frame contained the category values.
 #' @param id The column name that represents the identifiers variable.
-#' @param values The column name the contains the category values.
+#' @param values The column name contains the category values.
 #' @param time The column name that represents the time variable.
-#' @param group The column name that represents the distinguish group between
-#' the values
+#' @param group The column name that represents the distinguished group between
+#' the values.
 #' @param order A vector of order for sorting the category values.
-#' @param label A vector of labels to represented the qtile
+#' @param label A vector of labels to represent the qtile.
 #'
-#' @return A categorized data
+#' @return A categorized data.
 #'
 #' @details
 #' The function takes the input data, ordering the values, and assigning the
@@ -118,7 +118,7 @@ anim_prep_cat <- function(data,
   if (length(label) < length(order)) {
     label <- as.character(order)
 
-    warning("The length of the label provided is less than number of category")
+    warning("The length of the label provided is less than the number of category")
   }
 
   label_lookup <- tibble::tibble(

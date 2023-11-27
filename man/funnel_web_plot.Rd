@@ -11,10 +11,10 @@ funnel_web_plot(data, group_palette = NULL, ...)
 
 \item{group_palette}{The vector of the palette used by the function to supply the color to each group.}
 
-\item{...}{Additional arguments for customization, see details for more information.}
+\item{...}{Additional arguments for customization. See details for more information.}
 }
 \value{
-Return a ggplot object
+Return a ggplot object.
 }
 \description{
 This function takes in the data which has been prepared by either \code{\link[=anim_prep]{anim_prep()}} or \code{\link[=anim_prep_cat]{anim_prep_cat()}} and

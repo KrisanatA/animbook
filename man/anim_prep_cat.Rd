@@ -2,7 +2,7 @@
 % Please edit documentation in R/anim-prep-cat.R
 \name{anim_prep_cat}
 \alias{anim_prep_cat}
-\title{Transformed category data into categorized format}
+\title{Transformed category data into a categorized format}
 \usage{
 anim_prep_cat(
   data,
@@ -19,19 +19,19 @@ anim_prep_cat(
 
 \item{id}{The column name that represents the identifiers variable.}
 
-\item{values}{The column name the contains the category values.}
+\item{values}{The column name contains the category values.}
 
 \item{time}{The column name that represents the time variable.}
 
-\item{group}{The column name that represents the distinguish group between
-the values}
+\item{group}{The column name that represents the distinguished group between
+the values.}
 
 \item{order}{A vector of order for sorting the category values.}
 
-\item{label}{A vector of labels to represented the qtile}
+\item{label}{A vector of labels to represent the qtile.}
 }
 \value{
-A categorized data
+A categorized data.
 }
 \description{
 This function transformed the category data in the categorized format by

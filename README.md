@@ -59,12 +59,12 @@ p <- wallaby_plot(accounting,
                   size = 2,
                   width = 100,
                   total_point = 1000)
-#> You can now used the animbook::anim_animate() function to transformed it
-#>           to an animated object.
+#> You can now use the animbook::anim_animate() function to
+#>           transform it into an animated object
 
 p2 <- anim_animate(p)
-#> You can now pass it to gganimate::animate(). The recommend
-#>             settings for nframes is 139.
+#> You can now pass it to gganimate::animate().
+#>                    The recommended setting is nframes = 139
 
 gganimate::animate(p2, nframes = 139)
 ```
@@ -95,12 +95,12 @@ p_voter <- wallaby_plot(data = voter,
                   size = 2.5,
                   width = 100,
                   total_point = 1000)
-#> You can now used the animbook::anim_animate() function to transformed it
-#>           to an animated object.
+#> You can now use the animbook::anim_animate() function to
+#>           transform it into an animated object
 
 p2_voter <- anim_animate(p_voter)
-#> You can now pass it to gganimate::animate(). The recommend
-#>             settings for nframes is 139.
+#> You can now pass it to gganimate::animate().
+#>                    The recommended setting is nframes = 139
 
 gganimate::animate(p2_voter, nframes = 139)
 ```

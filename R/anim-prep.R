@@ -5,22 +5,22 @@
 #'
 #' @param data A data frame contained the numerical values.
 #' @param id The column name that represents the identifiers variable.
-#' @param values The column name the contains the numeric values.
+#' @param values The column name contains the numeric values.
 #' @param time The column name that represents the time variable.
-#' @param group The column name that represents the distinguish group between
-#' the values
+#' @param group The column name that represents the distinguished group between
+#' the values.
 #' @param ncat The number of categories to be created for scaling values.
 #' @param breaks A vector of breaks for creating bins.
-#' @param label A vector of labels to represented the qtile
+#' @param label A vector of labels to represent the qtile.
 #' @param group_scaling The column name that will be used for grouping the
 #' variable before scaling.
 #' @param scaling The scaling method to be used; "rank" or "absolute".
 #'
-#' @return A categorized data
+#' @return A categorized data.
 #'
 #' @details
 #' The function takes the input data and performs several operations to
-#' transformed it into categorized format. It is done by groups data, scales
+#' transformed it into categorized format. It is done by grouping data, scales
 #' values, and assigned the qtile.
 #'
 #' @examples
@@ -164,9 +164,9 @@ anim_prep <- function(data,
       # check the vector
       stopifnot("The breaks argument only accepted vector" =
                   is.vector(breaks),
-                "The breaks vector must have the same number of gouprs as ncat argument" =
+                "The breaks vector must have the same number of groups as ncat argument" =
                   length(breaks) - 1 == ncat,
-                "The breaks vector should not contained NA" =
+                "The breaks vector should not contain NA" =
                   !is.na(breaks),
                 "The breaks values must be between 0 and 1" =
                   all(dplyr::between(breaks, 0, 1))
@@ -216,9 +216,9 @@ anim_prep <- function(data,
       # check the vector
       stopifnot("The breaks argument only accepted vector" =
                   is.vector(breaks),
-                "The breaks vector must have the same number of gouprs as ncat argument" =
+                "The breaks vector must have the same number of groups as ncat argument" =
                   length(breaks) - 1 == ncat,
-                "The breaks vector should not contained NA" =
+                "The breaks vector should not contain NA" =
                   !is.na(breaks),
                 "The breaks values must be between 0 and 1" =
                   all(dplyr::between(breaks, 0, 1))
@@ -266,7 +266,7 @@ anim_prep <- function(data,
   if (length(label) < length(y)) {
     label <- as.character(y)
 
-    warning("The length of the label provided is less than number of category")
+    warning("The length of the label provided is less than the number of category")
   }
 
   label_lookup <- tibble::tibble(

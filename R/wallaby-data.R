@@ -1,27 +1,27 @@
 #' Wallaby plot data
 #'
-#' This function preforms data manipulation and path interpolation of the
-#' categorized data. This incldes additional data componnts for labeling and
+#' This function performs data manipulation and path interpolation of the
+#' categorized data. This includes additional data components for labeling and
 #' shading.
 #'
-#' @param data The categorized data
+#' @param data The categorized data.
 #' @param subset A character string specifying the variable used for subsetting
 #' the data. The "top" and "bottom" strings can also be used in this argument.
 #' @param relation The choice of relationship for the values to display on the
 #' plot, either "one_many" or "many_one."
-#' @param time_dependent Logical. Should the visualizations be time_dependent?
-#' The default is FALSE
+#' @param time_dependent Logical. Should the visualizations be time-dependent?
+#' The default is FALSE.
 #' @param height The proportion the point takes in the shaded area.
 #' @param width The number that controls the runif_max to specify how far apart
 #' each point is.
 #' @param total_point The number of points the users want for the wallaby plot.
-#' The default is NULL, the number of the point is equal to the original number
-#' of points
+#' The default is NULL, where the number of the point is equal to the original number
+#' of points.
 #'
 #' @return An object contained the modified data with additional data components.
 #'
-#' @details The function takes the categorized object and interpolated the path
-#' for each observation. Additionall the label and shading data are created.
+#' @details The function takes the categorized object and interpolates the path
+#' for each observation. Additionally, the label and shading data are created.
 #'
 #' @keywords internal
 #'
@@ -40,7 +40,7 @@ wallaby_data <- function(data,
 
   stopifnot("height argument only accepted proportion between 0 and 1" =
               dplyr::between(height, 0, 1),
-            "Please use the prep function to convert the data into categorized format" =
+            "Please use the prep function to convert the data into a categorized format" =
               any("categorized" %in% class(data)))
 
   class(data) <- c("tbl_df", "tbl", "data.frame")
@@ -76,7 +76,7 @@ wallaby_data <- function(data,
 
   relation_choice <- c("one_many", "many_one")
 
-  stopifnot("relation can only be the following: one_many, many_one" =
+  stopifnot("relation argument can only be either one_many or many_one" =
               relation %in% relation_choice)
 
   y_label <- label
@@ -197,7 +197,7 @@ wallaby_data <- function(data,
 
   shading_y <- dplyr::pull(prop_table, qtile) + (prop/2)
 
-  shade_data <- sankey_shade(initial = initial,
+  shade_data <- proportional_shade(initial = initial,
                              proportion = prop,
                              y = shading_y,
                              position = position)

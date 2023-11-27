@@ -4,17 +4,17 @@
 #' categorized data. This includes additional data components for labeling
 #' and shading.
 #'
-#' @param data The categorized data
+#' @param data The categorized data.
 #' @param time_dependent Logical. Should the visualization be time-dependent?
-#' The default is FALSE
+#' The default is FALSE.
 #' @param height The proportion the point takes in the shaded area.
 #' @param width The number that controls the runif_max to specify how far apart
 #' each point is.
 #'
 #' @return An object contained the modified data with additional data components.
 #'
-#' @details The function takes the categorized object and interpolated the path
-#' for each observation. Additionally the label and shading data are created.
+#' @details The function takes the categorized object and interpolates the path
+#' for each observation. Additionally, the label and shading data are created.
 #'
 #' @keywords internal
 
@@ -28,7 +28,7 @@ kangaroo_data <- function(data,
 
   stopifnot("height argument only accepted proportion between 0 and 1" =
               dplyr::between(height, 0, 1),
-            "Please use the prep function to convert the data into categorized format" =
+            "Please use the prep function to convert the data into a categorized format" =
               any("categorized" %in% class(data)))
 
   class(data) <- c("tbl_df", "tbl", "data.frame")
@@ -135,9 +135,9 @@ kangaroo_data <- function(data,
 #'
 #' This function is used to interpolate the path for the kangaroo plot.
 #'
-#' @param df A data frame
+#' @param df A data frame.
 #'
-#' @return A mapped data
+#' @return A mapped data.
 #'
 #' @keywords internal
 
@@ -152,7 +152,7 @@ kangaroo_draw <- function(df) {
   map <- purrr::map_dfr(seq_len(nrow(data)),
                         ~ sigmoid(as.numeric(data[.x, "time"]), as.numeric(data[.x, "time_end"]),
                                   as.numeric(data[.x, "qtile"]), as.numeric(data[.x, "next_qtile"]),
-                                  n = 40) |>
+                                  n = 15) |>
                           dplyr::mutate(path_id = .x))
 
   return(map)

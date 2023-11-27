@@ -2,9 +2,9 @@
 #'
 #' This function performs data manipulation for facetting.
 #'
-#' @param object An animbook object
+#' @param object An animbook object.
 #'
-#' @return A modified animbook object
+#' @return A modified animbook object.
 #'
 #' @details The function takes the animbook object and manipulates the data into the
 #' format where it can be further facetting.
@@ -16,7 +16,7 @@ funnel_web_spider_data <- function(data) {
 
   # check -------------------------------------------------------------------
 
-  stopifnot("Please use the prep function to convert the data into categorized format" =
+  stopifnot("Please use the prep function to convert the data into a categorized format" =
               any("categorized" %in% class(data)))
 
   class(data) <- c("tbl_df", "tbl", "data.frame")

@@ -84,7 +84,7 @@ area.</p>
 <div class="section level3">
 <h3 id="first-stage-prepare-the-data">First stage: Prepare the data<a class="anchor" aria-label="anchor" href="#first-stage-prepare-the-data"></a>
 </h3>
-<p>In this stage, we first need to transformed the data into the
+<p>In this stage, we first need to transform the data into the
 categorized format. This function will calculate the scaling based on
 the argument the user provided.</p>
 <p>The data needs to contain the following variable for the function to
@@ -92,9 +92,9 @@ work:</p>
 <ul>
 <li>data: <code>dbl_change</code>, A data frame that contained the
 numerical values.</li>
-<li>id: <code>id</code>, it needs to be a factor variable.</li>
+<li>id: <code>id</code>, needs to be a factor variable.</li>
 <li>values: <code>values</code>, needs to be a numeric variable.</li>
-<li>time: <code>time</code>, it needs to be an integer variable.</li>
+<li>time: <code>time</code>, needs to be an integer variable.</li>
 </ul>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">categorized_dbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/anim_prep.html">anim_prep</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dbl_change</span>, </span>
@@ -104,12 +104,12 @@ numerical values.</li>
 <p>There are also additional options that allow the user to
 customize.</p>
 <ul>
-<li>group: the column name that distinguish between the values
+<li>group: the column name that distinguishes between the values
 group.</li>
 <li>ncat: the number of categories to be created for scaling
 values.</li>
 <li>breaks: a vector for creating a bins.</li>
-<li>label: a vector to provided a label to the qtile.</li>
+<li>label: a vector to provide a label to the qtile.</li>
 <li>group_scaling: the column name used for grouping the variable before
 scaling.</li>
 <li>scaling: the scaling method.</li>
@@ -188,15 +188,15 @@ variable.</li>
 <span></span>
 <span><span class="co"># kangaroo plot</span></span>
 <span><span class="fu"><a href="../reference/kangaroo_plot.html">kangaroo_plot</a></span><span class="op">(</span><span class="va">dbl_categorized</span><span class="op">)</span></span>
-<span><span class="co">#&gt; You can now used the animbook::anim_animate() function to transformed</span></span>
-<span><span class="co">#&gt;           it to an animated object</span></span></code></pre></div>
+<span><span class="co">#&gt; You can now use the animbook::anim_animate() function to</span></span>
+<span><span class="co">#&gt;           transform it into an animated object</span></span></code></pre></div>
 <p><img src="animbook_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># wallaby plot</span></span>
 <span><span class="fu"><a href="../reference/wallaby_plot.html">wallaby_plot</a></span><span class="op">(</span><span class="va">dbl_categorized</span><span class="op">)</span></span>
-<span><span class="co">#&gt; You can now used the animbook::anim_animate() function to transformed it</span></span>
-<span><span class="co">#&gt;           to an animated object.</span></span></code></pre></div>
+<span><span class="co">#&gt; You can now use the animbook::anim_animate() function to</span></span>
+<span><span class="co">#&gt;           transform it into an animated object</span></span></code></pre></div>
 <p><img src="animbook_files/figure-html/unnamed-chunk-4-2.png" width="700"></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>            </span>

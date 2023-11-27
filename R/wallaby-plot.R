@@ -2,36 +2,36 @@
 #'
 #' This function takes in the data which has been prepared by the [anim_prep()]
 #' or [anim_prep_cat()] and return the ggplot object. The user can still modify
-#' the plot the same as normal.
+#' the plot as usual.
 #'
 #' @param data The categorized data.
-#' @param group_palette The vector of palette used by the function to supply
+#' @param group_palette The vector of the palette used by the function to supply
 #' the color of each group.
-#' @param shade_palette The vector of palette used by the function to supply
+#' @param shade_palette The vector of the palette used by the function to supply
 #' the color of each shaded area.
-#' @param rendering The choice of method used to create and disply the plot,
+#' @param rendering The choice of method used to create and display the plot,
 #' either gganimate or plotly.
 #' @param time_dependent Logical. Should the visualization be time-dependent?
-#' The default is FALSE
+#' The default is FALSE.
 #' @param subset A character string specifying the variable used for subsetting
 #' the data. The "top" and "bottom" strings can also be used in this argument.
 #' @param relation The choice of relationship for the values to display on the
 #' plot, either "one_many" or "many_one."
 #' @param total_point The number of points the users want for the wallaby plot.
-#' The default is NULL, the number of the point is equal to the original number
+#' The default is NULL, where the number of the point is equal to the original number
 #' of points.
 #' @param x_lab The label for the x-axis.
-#' @param ... Additional arguments for customization, see datails for more
+#' @param ... Additional arguments for customization. See details for more
 #' information.
 #'
-#' @return Return a ggplot object
+#' @return Return a ggplot object.
 #'
 #' @details
-#' This function takes categorized data and generated a ggplot object.
+#' This function takes categorized data and generates a ggplot object.
 #' The wallaby plot is the plot that shows the movement of the subset data
-#' between the start and end of observable period. The point position and point
+#' between the start and end of the observable period. The point position and point
 #' size in the shaded area can be controlled using additional arguments such as
-#' height, width, and size. For the shadeing area, the alpha argument can be used.
+#' height, width, and size. For the shading area, the alpha argument can be used.
 #'
 #' @examples
 #' animbook <- anim_prep(data = osiris, id = ID, values = sales, time = year, group = japan)
@@ -71,8 +71,8 @@ wallaby_plot <- function(data,
   if (length(x_lab) > 2) {
     x_lab <- x_lab[1:2]
 
-    warning("The length of the x_lab provided is greater than 2,
-            the function only take the first two elements")
+    warning("The length of the x_lab provided is greater than 2, the function
+            only takes the first two elements")
   }
 
   if (length(x_lab) == 2) {
@@ -258,8 +258,8 @@ wallaby_plot <- function(data,
     ggplot2::scale_fill_manual(values = shade_palette) +
     ggplot2::scale_colour_manual(values = group_palette)
 
-  message("You can now used the animbook::anim_animate() function to transformed it
-          to an animated object.")
+  message("You can now use the animbook::anim_animate() function to
+          transform it into an animated object")
 
   class(anim) <- c("ggplot", "gg", "animated", "wallaby", rendering)
 

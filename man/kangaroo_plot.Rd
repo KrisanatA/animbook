@@ -17,7 +17,7 @@ kangaroo_plot(
 \item{data}{The categorized data.}
 
 \item{group_palette}{The vector of the palette used by the function to supply
-the color to each group.}
+the color of each group.}
 
 \item{shade_palette}{The vector of the palette used by the function to supply
 the color to the shaded area.}
@@ -26,22 +26,22 @@ the color to the shaded area.}
 either gganimate or plotly.}
 
 \item{time_dependent}{Logical. Should the visualization be time-dependent?
-The default is FALSE}
+The default is FALSE.}
 
-\item{...}{Additional arguments for customization, see datails for more
+\item{...}{Additional arguments for customization. See details for more
 information.}
 }
 \value{
-Return a ggplot object
+Return a ggplot object.
 }
 \description{
 This function takes in the data which has been prepared by the \code{\link[=anim_prep]{anim_prep()}}
 or \code{\link[=anim_prep_cat]{anim_prep_cat()}} and return the ggplot object. The user can still modify
-the plot the same as normal.
+the plot as usual.
 }
 \details{
 This function takes categorized data and generates a ggplot object.
-The kangaroo plot is the plot that shows the movement between group over
+The kangaroo plot is the plot that shows the movement between groups over
 time. The point position and point size in the shaded area can be controlled
 using additional arguments such as height, width, and size. For the shading
 area, the alpha argument can be used.

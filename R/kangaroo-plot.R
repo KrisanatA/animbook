@@ -2,25 +2,25 @@
 #'
 #' This function takes in the data which has been prepared by the [anim_prep()]
 #' or [anim_prep_cat()] and return the ggplot object. The user can still modify
-#' the plot the same as normal.
+#' the plot as usual.
 #'
 #' @param data The categorized data.
 #' @param group_palette The vector of the palette used by the function to supply
-#' the color to each group.
+#' the color of each group.
 #' @param shade_palette The vector of the palette used by the function to supply
 #' the color to the shaded area.
 #' @param rendering The choice of method used to create and display the plot,
 #' either gganimate or plotly.
 #' @param time_dependent Logical. Should the visualization be time-dependent?
-#' The default is FALSE
-#' @param ... Additional arguments for customization, see datails for more
+#' The default is FALSE.
+#' @param ... Additional arguments for customization. See details for more
 #' information.
 #'
-#' @return Return a ggplot object
+#' @return Return a ggplot object.
 #'
 #' @details
 #' This function takes categorized data and generates a ggplot object.
-#' The kangaroo plot is the plot that shows the movement between group over
+#' The kangaroo plot is the plot that shows the movement between groups over
 #' time. The point position and point size in the shaded area can be controlled
 #' using additional arguments such as height, width, and size. For the shading
 #' area, the alpha argument can be used.
@@ -47,7 +47,7 @@ kangaroo_plot <- function(data,
 
   rendering_choice <- c("gganimate", "plotly")
 
-  stopifnot("The rendering argument can only by either gganimate or plotly" =
+  stopifnot("The rendering argument can only be either gganimate or plotly" =
               rendering %in% rendering_choice)
 
 
@@ -216,8 +216,8 @@ kangaroo_plot <- function(data,
     ggplot2::scale_color_manual(values = group_palette) +
     ggplot2::scale_fill_manual(values = shade_palette)
 
-  message("You can now used the animbook::anim_animate() function to transformed
-          it to an animated object")
+  message("You can now use the animbook::anim_animate() function to
+          transform it into an animated object")
 
   class(anim) <- c("ggplot", "gg", "animated", "kangaroo", rendering)
 

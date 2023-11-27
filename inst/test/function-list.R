@@ -48,7 +48,7 @@ osiris_p <- wallaby_plot(data = osiris1,
 
 osiris_anim <- anim_animate(osiris_p)
 
-gganimate::animate(osiris_anim)
+gganimate::animate(osiris_anim, nframes = 89)
 
 plotly::ggplotly(osiris_anim)
 
@@ -69,7 +69,7 @@ osiris5 <- anim_prep(data = osiris_us,
 osiris_p <- wallaby_plot(data = osiris5,
                          group_palette = RColorBrewer::brewer.pal(8, "Dark2"),
                          shade_palette = RColorBrewer::brewer.pal(9, "Set1"),
-                         subset = "top",
+                         subset = "bottom",
                          size = 5)
 
 osiris_anim <- anim_animate(osiris_p)
@@ -131,7 +131,7 @@ p <- wallaby_plot(data = object,
 
 p2 <- anim_animate(p)
 
-gganimate::animate(p2)
+gganimate::animate(p2, nframes = 139)
 
 plotly::ggplotly(p2)
 

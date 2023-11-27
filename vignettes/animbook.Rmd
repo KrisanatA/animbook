@@ -24,14 +24,14 @@ The inspiration for this package comes from the NY Times animated plot. The chal
 
 ### First stage: Prepare the data
 
-In this stage, we first need to transformed the data into the categorized format. This function will calculate the scaling based on the argument the user provided.
+In this stage, we first need to transform the data into the categorized format. This function will calculate the scaling based on the argument the user provided.
 
 The data needs to contain the following variable for the function to work:
 
 - data: `dbl_change`, A data frame that contained the numerical values.
-- id: `id`, it needs to be a factor variable.
+- id: `id`, needs to be a factor variable.
 - values: `values`, needs to be a numeric variable.
-- time: `time`, it needs to be an integer variable.
+- time: `time`, needs to be an integer variable.
 
 ```{r}
 categorized_dbl <- anim_prep(data = dbl_change, 
@@ -42,10 +42,10 @@ categorized_dbl <- anim_prep(data = dbl_change,
 
 There are also additional options that allow the user to customize.
 
-- group: the column name that distinguish between the values group.
+- group: the column name that distinguishes between the values group.
 - ncat: the number of categories to be created for scaling values.
 - breaks: a vector for creating a bins.
-- label: a vector to provided a label to the qtile.
+- label: a vector to provide a label to the qtile.
 - group_scaling: the column name used for grouping the variable before scaling.
 - scaling: the scaling method.
 

@@ -5,9 +5,9 @@
 #'
 #' @param data The animbook object returned from the prep function.
 #' @param group_palette The vector of the palette used by the function to supply the color to each group.
-#' @param ... Additional arguments for customization, see details for more information.
+#' @param ... Additional arguments for customization. See details for more information.
 #'
-#' @return Return a ggplot object
+#' @return Return a ggplot object.
 #'
 #' @details
 #' This function takes prepared data and generates a ggplot object.
