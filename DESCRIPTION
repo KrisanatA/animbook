@@ -1,12 +1,18 @@
 Package: animbook
 Title: Visualizing Changes in Performance Measures and Demographic Affiliations using Animation
-Version: 0.0.0.9000
+Version: 1.0.0
 Authors@R: c(
-    person("Krisanat", "Anukarnsakulchularp", email = "krisanat.anu@gmail.com", role = c("aut", "cre", "cph"),
-           comment = c(ORCID = "0009-0008-5638-7124")),
-    person("Dianne", "Cook", email = "dicook@monash.edu", role = c("aut"),
-           comment = c(ORCID = "0000-0002-3813-7155"))
-)
+    person(
+    "Krisanat", "Anukarnsakulchularp",
+    email = "krisanat.anu@gmail.com",
+    role = c("aut", "cre", "cph"),
+    comment = c(ORCID = "0009-0008-5638-7124")
+    ),
+    person(
+    "Dianne", "Cook",
+    email = "dicook@monash.edu",
+    role = c("aut"),
+    comment = c(ORCID = "0000-0002-3813-7155")))
 Description: Create an interactive visualization to be used for communication purposes. Providing the function for preparing, plotting, and animating the data.
 License: MIT + file LICENSE
 Encoding: UTF-8
