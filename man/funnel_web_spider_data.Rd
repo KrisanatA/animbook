@@ -7,16 +7,16 @@
 funnel_web_spider_data(data)
 }
 \arguments{
-\item{object}{An animbook object.}
+\item{data}{The categorized data.}
 }
 \value{
-A modified animbook object.
+An object contained the modified data with additional data components.
 }
 \description{
 This function performs data manipulation for facetting.
 }
 \details{
-The function takes the animbook object and manipulates the data into the
+The function takes the categorized data and manipulates the data into the
 format where it can be further facetting.
 }
 \keyword{internal}

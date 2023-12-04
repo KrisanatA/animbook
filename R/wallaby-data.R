@@ -20,7 +20,7 @@
 #'
 #' @return An object contained the modified data with additional data components.
 #'
-#' @details The function takes the categorized object and interpolates the path
+#' @details The function takes the categorized data and interpolates the path
 #' for each observation. Additionally, the label and shading data are created.
 #'
 #' @keywords internal

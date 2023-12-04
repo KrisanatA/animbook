@@ -44,7 +44,7 @@ categorized data. This includes additional data components for labeling and
 shading.
 }
 \details{
-The function takes the categorized object and interpolates the path
+The function takes the categorized data and interpolates the path
 for each observation. Additionally, the label and shading data are created.
 }
 \keyword{internal}

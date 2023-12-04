@@ -2,11 +2,11 @@
 #'
 #' This function performs data manipulation for facetting.
 #'
-#' @param object An animbook object.
+#' @param data The categorized data.
 #'
-#' @return A modified animbook object.
+#' @return An object contained the modified data with additional data components.
 #'
-#' @details The function takes the animbook object and manipulates the data into the
+#' @details The function takes the categorized data and manipulates the data into the
 #' format where it can be further facetting.
 #'
 #' @keywords internal
