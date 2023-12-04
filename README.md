@@ -16,8 +16,7 @@ You can install the development version of animbook from
 [GitHub](https://github.com/KrisanatA/animbook) with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("KrisanatA/animbook")
+install.packages("animbook")
 ```
 
 ## Examples

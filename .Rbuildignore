@@ -9,3 +9,4 @@
 ^inst/test$
 ^inst/test.gif$
 ^inst/new_visualisation$
+^cran-comments\.md$
