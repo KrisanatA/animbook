@@ -16,6 +16,11 @@
 #' @details The function takes the categorized data and interpolates the path
 #' for each observation. Additionally, the label and shading data are created.
 #'
+#' @references
+#' Recreate - Sankey flow chart. (n.d.). Emil Hvitfeldt.
+#'  Retrieved April 13, 2023, from
+#'  https://www.emilhvitfeldt.com/post/2018-03-20-recreate-sankey-flow-chart/
+#'
 #' @keywords internal
 
 kangaroo_data <- function(data,
