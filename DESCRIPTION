@@ -1,6 +1,6 @@
 Package: animbook
 Title: Visualizing Changes in Performance Measures and Demographic Affiliations using Animation
-Version: 1.0.0
+Version: 1.0.0.9000
 Authors@R: c(
     person(
     "Krisanat", "Anukarnsakulchularp",
