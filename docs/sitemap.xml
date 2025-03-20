@@ -1,90 +1,32 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>/404.html</loc>
-  </url>
-  <url>
-    <loc>/articles/animbook.html</loc>
-  </url>
-  <url>
-    <loc>/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>/authors.html</loc>
-  </url>
-  <url>
-    <loc>/index.html</loc>
-  </url>
-  <url>
-    <loc>/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>/news/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/aeles.html</loc>
-  </url>
-  <url>
-    <loc>/reference/aes.html</loc>
-  </url>
-  <url>
-    <loc>/reference/anim_animate.html</loc>
-  </url>
-  <url>
-    <loc>/reference/anim_plot.html</loc>
-  </url>
-  <url>
-    <loc>/reference/anim_prep.html</loc>
-  </url>
-  <url>
-    <loc>/reference/anim_prep_cat.html</loc>
-  </url>
-  <url>
-    <loc>/reference/cat_change.html</loc>
-  </url>
-  <url>
-    <loc>/reference/dbl_change.html</loc>
-  </url>
-  <url>
-    <loc>/reference/funnel_web_plot.html</loc>
-  </url>
-  <url>
-    <loc>/reference/funnel_web_spider_data.html</loc>
-  </url>
-  <url>
-    <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/kangaroo_data.html</loc>
-  </url>
-  <url>
-    <loc>/reference/kangaroo_draw.html</loc>
-  </url>
-  <url>
-    <loc>/reference/kangaroo_plot.html</loc>
-  </url>
-  <url>
-    <loc>/reference/osiris.html</loc>
-  </url>
-  <url>
-    <loc>/reference/proportional_shade.html</loc>
-  </url>
-  <url>
-    <loc>/reference/sankey_shade.html</loc>
-  </url>
-  <url>
-    <loc>/reference/sigmoid.html</loc>
-  </url>
-  <url>
-    <loc>/reference/sine.html</loc>
-  </url>
-  <url>
-    <loc>/reference/wallaby_data.html</loc>
-  </url>
-  <url>
-    <loc>/reference/wallaby_plot.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/LICENSE-text.html</loc></url>
+<url><loc>/LICENSE.html</loc></url>
+<url><loc>/articles/animbook.html</loc></url>
+<url><loc>/articles/index.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/news/index.html</loc></url>
+<url><loc>/reference/aeles.html</loc></url>
+<url><loc>/reference/aes.html</loc></url>
+<url><loc>/reference/anim_animate.html</loc></url>
+<url><loc>/reference/anim_plot.html</loc></url>
+<url><loc>/reference/anim_prep.html</loc></url>
+<url><loc>/reference/anim_prep_cat.html</loc></url>
+<url><loc>/reference/cat_change.html</loc></url>
+<url><loc>/reference/dbl_change.html</loc></url>
+<url><loc>/reference/funnel_web_plot.html</loc></url>
+<url><loc>/reference/funnel_web_spider_data.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/kangaroo_data.html</loc></url>
+<url><loc>/reference/kangaroo_draw.html</loc></url>
+<url><loc>/reference/kangaroo_plot.html</loc></url>
+<url><loc>/reference/osiris.html</loc></url>
+<url><loc>/reference/proportional_shade.html</loc></url>
+<url><loc>/reference/sankey_shade.html</loc></url>
+<url><loc>/reference/sigmoid.html</loc></url>
+<url><loc>/reference/sine.html</loc></url>
+<url><loc>/reference/wallaby_data.html</loc></url>
+<url><loc>/reference/wallaby_plot.html</loc></url>
 </urlset>
+
