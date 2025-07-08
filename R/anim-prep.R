@@ -164,7 +164,7 @@ anim_prep <- function(data,
       # check the vector
       stopifnot("The breaks argument only accepted vector" =
                   is.vector(breaks),
-                "The breaks vector must have the same number of groups as ncat argument" =
+                "The breaks vector must have the length of ncat argument + 1" =
                   length(breaks) - 1 == ncat,
                 "The breaks vector should not contain NA" =
                   !is.na(breaks),
@@ -216,7 +216,7 @@ anim_prep <- function(data,
       # check the vector
       stopifnot("The breaks argument only accepted vector" =
                   is.vector(breaks),
-                "The breaks vector must have the same number of groups as ncat argument" =
+                "The breaks vector must have the length of ncat argument + 1" =
                   length(breaks) - 1 == ncat,
                 "The breaks vector should not contain NA" =
                   !is.na(breaks),
