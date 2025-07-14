@@ -77,17 +77,9 @@
 </h3>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/KrisanatA/animbook" class="external-link">animbook</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Attaching package: 'dplyr'</span></span>
-<span><span class="co">#&gt; The following objects are masked from 'package:stats':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     filter, lag</span></span>
-<span><span class="co">#&gt; The following objects are masked from 'package:base':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
-<span></span>
-<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">osiris</span> <span class="op">|&gt;</span> </span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">osiris</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">country</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"US"</span>, <span class="st">"JP"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">label</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Top 25%"</span>, <span class="st">"25-50"</span>, <span class="st">"50-75"</span>, <span class="st">"75-100"</span>, <span class="st">"Not listed"</span><span class="op">)</span></span>
@@ -118,12 +110,12 @@
 <span><span class="co">#&gt;                    The recommended setting is nframes = 139</span></span>
 <span></span>
 <span><span class="fu">gganimate</span><span class="fu">::</span><span class="fu"><a href="https://gganimate.com/reference/animate.html" class="external-link">animate</a></span><span class="op">(</span><span class="va">p2</span>, nframes <span class="op">=</span> <span class="fl">139</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-2-1.gif" width="100%"></p>
+<p><img src="reference/figures/README-unnamed-chunk-3-1.gif" width="100%"></p>
 </div>
 <div class="section level3">
 <h3 id="voter-behavior">Voter behavior<a class="anchor" aria-label="anchor" href="#voter-behavior"></a>
 </h3>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/KrisanatA/animbook" class="external-link">animbook</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">voter</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/anim_prep_cat.html">anim_prep_cat</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">aeles</span>,</span>
@@ -153,7 +145,7 @@
 <span><span class="co">#&gt;                    The recommended setting is nframes = 139</span></span>
 <span></span>
 <span><span class="fu">gganimate</span><span class="fu">::</span><span class="fu"><a href="https://gganimate.com/reference/animate.html" class="external-link">animate</a></span><span class="op">(</span><span class="va">p2_voter</span>, nframes <span class="op">=</span> <span class="fl">139</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-3-1.gif" width="100%"></p>
+<p><img src="reference/figures/README-unnamed-chunk-4-1.gif" width="100%"></p>
 </div>
 </div>
 </div>
