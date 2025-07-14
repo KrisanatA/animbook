@@ -34,7 +34,9 @@ library(dplyr)
 #> The following objects are masked from 'package:base':
 #> 
 #>     intersect, setdiff, setequal, union
+```
 
+``` r
 data <- osiris |> 
   filter(country %in% c("US", "JP"))
 
@@ -68,7 +70,7 @@ p2 <- anim_animate(p)
 gganimate::animate(p2, nframes = 139)
 ```
 
-<img src="man/figures/README-unnamed-chunk-2-1.gif" width="100%" />
+<img src="man/figures/README-unnamed-chunk-3-1.gif" width="100%" />
 
 ### Voter behavior
 
@@ -104,4 +106,4 @@ p2_voter <- anim_animate(p_voter)
 gganimate::animate(p2_voter, nframes = 139)
 ```
 
-<img src="man/figures/README-unnamed-chunk-3-1.gif" width="100%" />
+<img src="man/figures/README-unnamed-chunk-4-1.gif" width="100%" />

@@ -37,7 +37,9 @@ install.packages("animbook")
 ```{r}
 library(animbook)
 library(dplyr)
+```
 
+```{r}
 data <- osiris |> 
   filter(country %in% c("US", "JP"))
 
