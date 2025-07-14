@@ -4,6 +4,7 @@
 # animbook <img src="man/figures/logo.png" align="right" height="160" alt="" />
 
 <!-- badges: start -->
+
 <!-- badges: end -->
 
 “animbook” is a package to help the user visualize the changes in
@@ -44,8 +45,8 @@ accounting <- anim_prep(data,
 
 p <- wallaby_plot(accounting,
                   group_palette = RColorBrewer::brewer.pal(9, "Set1"),
-                  shade_palette = c("#737373", "#969696", "#BDBDBD",
-                                    "#D9D9D9","#D9D9D9","#D9D9D9"),
+                  shade_palette = c("#777777", "#777777", "#777777",
+                                    "#777777", "#777777"),
                   subset = "bottom",
                   relation = "many_one",
                   height = 1,
@@ -64,6 +65,13 @@ gganimate::animate(p2, nframes = 139)
 
 <img src="man/figures/README-unnamed-chunk-3-1.gif" width="100%" />
 
+All the companies in the Top 25% were US companies. Any Japanese
+companies in the Top 25% in 2006 did not exit the market (Not listed).
+It is worth noting that in 2006, there were no Japanese companies in the
+Top 25%. It is also interesting that a large proportion of companies in
+the Top 25% are being de-listed, and the lower the quartile, the less
+likely the companies are to exit the market.
+
 ### Voter behavior
 
 ``` r
@@ -78,8 +86,8 @@ voter <- anim_prep_cat(data = aeles,
 
 p_voter <- wallaby_plot(data = voter,
                   group_palette = c("pink", "blue", "red"),
-                  shade_palette = c("#737373", "#969696", "#BDBDBD",
-                                    "#D9D9D9","#D9D9D9","#D9D9D9"),
+                  shade_palette = c("#777777", "#777777", "#777777",
+                                    "#777777", "#777777", "#777777"),
                   time_dependent = FALSE,
                   rendering = "gganimate",
                   subset = "top",
@@ -99,3 +107,7 @@ gganimate::animate(p2_voter, nframes = 139)
 ```
 
 <img src="man/figures/README-unnamed-chunk-4-1.gif" width="100%" />
+
+It reveals a pattern where individuals who identified their gender as
+‘others’ have shifted their voting preference from the Liberal Party,
+the leading party in 2006, to the Greens Party.
