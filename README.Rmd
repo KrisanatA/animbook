@@ -34,7 +34,7 @@ install.packages("animbook")
 
 ### Accounting database: osiris
 
-```{r}
+```{r, message=FALSE}
 library(animbook)
 library(dplyr)
 ```
