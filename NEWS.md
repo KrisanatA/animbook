@@ -1,4 +1,4 @@
-# animbook (development version)
+# animbook 1.0.1
 
 # animbook 1.0.0
 
