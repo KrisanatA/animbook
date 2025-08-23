@@ -16,7 +16,7 @@ A data frame with 10,270 rows and 5 variables
 }
 \source{
 This dataset is from the following; Bureau van Dijk
-\url{https://www.bvdinfo.com/en-gb/our-products/data/international/osiris}.
+\url{https://www.moodys.com/web/en/us/capabilities/company-reference-data/data-applications.html}.
 }
 \usage{
 osiris

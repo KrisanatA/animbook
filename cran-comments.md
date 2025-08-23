@@ -1,7 +1,11 @@
 ## R CMD check results
 
-0 errors | 0 warnings | 1 note
+0 errors | 0 warnings | 1 notes
 
-* This is a new release (My first submission to CRAN).
+* This is a new update for the new ggplot2 release.
 
-* There is nothing to cite yet, but I will add a citation if the paper is accepted in the R Journal.
+* Maintainer: ‘Krisanat Anukarnsakulchularp <krisanat.anu@gmail.com>’
+  
+  Size of tarball: 11580113 bytes
+  
+  This can be ignored.

@@ -15,7 +15,7 @@
 #' }
 #'
 #' @source This dataset is from the following; Bureau van Dijk
-#' \url{https://www.bvdinfo.com/en-gb/our-products/data/international/osiris}.
+#' \url{https://www.moodys.com/web/en/us/capabilities/company-reference-data/data-applications.html}.
 "osiris"
 
 

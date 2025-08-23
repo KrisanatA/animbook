@@ -261,7 +261,8 @@ wallaby_plot <- function(data,
   message("You can now use the animbook::anim_animate() function to
           transform it into an animated object")
 
-  class(anim) <- c("ggplot", "gg", "animated", "wallaby", rendering)
+  class(anim) <- c("ggplot2::ggplot", "ggplot", "ggplot2::gg", "S7_object", "gg",
+                   "animated", "wallaby", rendering)
 
   return(anim)
 

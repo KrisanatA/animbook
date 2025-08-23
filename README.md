@@ -4,7 +4,6 @@
 # animbook <img src="man/figures/logo.png" align="right" height="160" alt="" />
 
 <!-- badges: start -->
-
 <!-- badges: end -->
 
 “animbook” is a package to help the user visualize the changes in

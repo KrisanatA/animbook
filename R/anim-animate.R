@@ -36,8 +36,12 @@ anim_animate <- function(plot) {
     message(paste0("You can now pass it to gganimate::animate().
                    The recommended setting is nframes = ", nframes - 1))
 
-    return(plot +
-             gganimate::transition_time(frame))
+    animate <- plot +
+      gganimate::transition_time(frame)
+
+    class(animate) <- c("gganim", "ggplot2::ggplot", "ggplot", "ggplot2::gg", "S7_object", "gg")
+
+    return(animate)
   }
 
   if (any("gganimate" %in% class(plot)) & any("wallaby" %in% class(plot))) {
