@@ -59,7 +59,7 @@ p2 <- anim_animate(p)
 #> You can now pass it to gganimate::animate().
 #>                    The recommended setting is nframes = 139
 
-gganimate::animate(p2, nframes = 139)
+gganimate::animate(p2)
 ```
 
 <img src="man/figures/README-unnamed-chunk-3-1.gif" width="100%" />
@@ -102,7 +102,7 @@ p2_voter <- anim_animate(p_voter)
 #> You can now pass it to gganimate::animate().
 #>                    The recommended setting is nframes = 139
 
-gganimate::animate(p2_voter, nframes = 139)
+gganimate::animate(p2_voter)
 ```
 
 <img src="man/figures/README-unnamed-chunk-4-1.gif" width="100%" />

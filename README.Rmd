@@ -66,7 +66,7 @@ p <- wallaby_plot(accounting,
 
 p2 <- anim_animate(p)
 
-gganimate::animate(p2, nframes = 139)
+gganimate::animate(p2)
 ```
 
 All the companies in the Top 25% were US companies. Any Japanese companies in the Top 25% in 2006 did not exit the market (Not listed). It is worth noting that in 2006, there were no Japanese companies in the Top 25%. It is also interesting that a large proportion of companies in the Top 25% are being de-listed, and the lower the quartile, the less likely the companies are to exit the market.
@@ -98,7 +98,7 @@ p_voter <- wallaby_plot(data = voter,
 
 p2_voter <- anim_animate(p_voter)
 
-gganimate::animate(p2_voter, nframes = 139)
+gganimate::animate(p2_voter)
 ```
 
 It reveals a pattern where individuals who identified their gender as 'others' have shifted their voting preference from the Liberal Party, the leading party in 2006, to the Greens Party.
